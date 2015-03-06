@@ -29,6 +29,9 @@ public class FileMetadata {
 	@JsonProperty("modificationTime")
 	private LocalDateTime modificationTime;
 
+	@JsonProperty("type")
+	private String type;
+
 	public FileMetadata() {
 		super();
 	}
@@ -80,6 +83,15 @@ public class FileMetadata {
 
 	public LocalDateTime getCreationTime() {
 		return creationTime;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+
+	}
+
+	public String getType() {
+		return type;
 	}
 
 }

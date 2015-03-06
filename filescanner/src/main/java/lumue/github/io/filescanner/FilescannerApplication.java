@@ -13,9 +13,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
-import reactor.core.Environment;
-import reactor.core.Reactor;
-import reactor.core.spec.Reactors;
 import reactor.spring.context.config.EnableReactor;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -33,21 +30,6 @@ public class FilescannerApplication {
 	@Bean
 	public TaskExecutor taskExecutor() {
 		return new SimpleAsyncTaskExecutor();
-	}
-
-	@Bean
-	Environment env() {
-		return new Environment();
-	}
-
-	@Bean
-	Reactor createReactor(Environment env) {
-		Reactor reactor = Reactors.reactor()
-				.env(env)
-				.dispatcher(Environment.THREAD_POOL)
-				.get();
-
-		return reactor;
 	}
 
 	@Bean

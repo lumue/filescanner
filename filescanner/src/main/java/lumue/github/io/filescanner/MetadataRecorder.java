@@ -50,7 +50,7 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 
 	}
 
-	private void updateMetadata(FilesystemMetadataAccessor filesystemMetadataAccessor) {
+	private void updateMetadata(FilesystemMetadataAccessor filesystemMetadataAccessor) throws IOException {
 
 		LOGGER.debug("updating metadata for " + filesystemMetadataAccessor.getUrl());
 
@@ -59,6 +59,7 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 		fileMetadata.setLastAccessTime(filesystemMetadataAccessor.getLastAccessTime());
 		fileMetadata.setModificationTime(filesystemMetadataAccessor.getModificationTime());
 		fileMetadata.setSize(filesystemMetadataAccessor.getSize());
+		fileMetadata.setType(filesystemMetadataAccessor.getType());
 
 		metadataRepository.save(fileMetadata);
 	}
@@ -74,6 +75,7 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 		fileMetadata.setLastAccessTime(filesystemMetadataAccessor.getLastAccessTime());
 		fileMetadata.setModificationTime(filesystemMetadataAccessor.getModificationTime());
 		fileMetadata.setSize(filesystemMetadataAccessor.getSize());
+		fileMetadata.setType(filesystemMetadataAccessor.getType());
 
 		metadataRepository.save(fileMetadata);
 	}

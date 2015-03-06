@@ -46,4 +46,21 @@ public class FilesystemMetadataAccessor {
 		return path.toUri().toString();
 	}
 
+	public String getType() throws IOException {
+		return fromMimeType(getMimeType());
+	}
+
+	private static String fromMimeType(String mimeType) {
+		if (mimeType.startsWith("video"))
+			return "VIDEO";
+		if (mimeType.startsWith("audio"))
+			return "AUDIO";
+		if (mimeType.startsWith("image"))
+			return "IMAGE";
+		if (mimeType.startsWith("text") || mimeType.startsWith("application"))
+			return "DOCUMENT";
+
+		return "GENERIC";
+	}
+
 }
