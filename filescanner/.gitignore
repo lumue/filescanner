@@ -3,3 +3,6 @@ build
 .settings
 .classpath
 .springBeans
+data
+.gradle
+/bin/

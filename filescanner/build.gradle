@@ -15,7 +15,6 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea'
 apply plugin: 'spring-boot' 
 
 jar {
@@ -39,7 +38,15 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jersey")
     compile("org.springframework.boot:spring-boot-starter-remote-shell")
     compile("org.springframework.boot:spring-boot-starter-web")
+	compile("org.projectreactor.spring:reactor-spring-context")
     testCompile("org.springframework.boot:spring-boot-starter-test") 
+	
+	compile group: 'com.google.guava', name: 'guava', version: '12.0'
+	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
+	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.5.1'
+
+	
+	
 }
 
 eclipse {
