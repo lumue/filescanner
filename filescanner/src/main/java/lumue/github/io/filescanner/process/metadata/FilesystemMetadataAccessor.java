@@ -1,4 +1,4 @@
-package lumue.github.io.filescanner;
+package lumue.github.io.filescanner.process.metadata;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,7 +7,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
 
-public class FilesystemMetadataAccessor {
+class FilesystemMetadataAccessor {
 
 	private final BasicFileAttributes attrs;
 

@@ -1,4 +1,4 @@
-package lumue.github.io.filescanner;
+package lumue.github.io.filescanner.scan;
 
 
 import java.nio.file.DirectoryStream;

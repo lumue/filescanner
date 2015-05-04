@@ -1,6 +1,8 @@
-package lumue.github.io.filescanner;
+package lumue.github.io.filescanner.webapp;
 
 import java.util.Objects;
+
+import lumue.github.io.filescanner.scan.Filescanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

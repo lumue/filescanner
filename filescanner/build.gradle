@@ -33,6 +33,7 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-integration")
     compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.projectreactor.spring:reactor-spring-context:2.0.0.M1")
