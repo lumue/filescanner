@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
@@ -77,7 +79,7 @@ public class Pathmonitor implements Runnable {
 				@SuppressWarnings("unchecked")
 				WatchEvent<Path> ev = (WatchEvent<Path>) event;
 				Path file = ev.context();
-				LOGGER.debug("file change detected " + file.toString());
+				LOGGER.info("file change detected " + file.toString());
 				reactor.notify("files", Event.wrap(file));
 			}
 
@@ -91,6 +93,43 @@ public class Pathmonitor implements Runnable {
 	public synchronized void stopMonitor() {
 		running = false;
 	};
+
+	/**
+	 * register filesystem tree
+	 *
+	 * @param paths
+	 * @throws IOException
+	 */
+	public void registerTree(Path... rootPaths) throws IOException {
+		for (Path rootPath : rootPaths) {
+			registerPath(listSubdirectories(rootPath));
+		}
+	}
+
+	private Path[] listSubdirectories(Path rootPath) throws IOException {
+
+		Collection<Path> directories = new ArrayList<Path>();
+		AsynchronousRecursiveDirectoryStream directoryStream = null;
+
+		try {
+
+			directoryStream = new AsynchronousRecursiveDirectoryStream(
+					rootPath);
+
+			directoryStream.forEach(file -> {
+				if (file != null && file.toFile().isDirectory()) {
+					directories.add(file);
+				}
+			} );
+
+		} finally {
+			if (directoryStream != null) {
+				directoryStream.close();
+			}
+		}
+
+		return directories.toArray(new Path[directories.size()]);
+	}
 
 	/**
 	 * register path for montoring

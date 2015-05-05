@@ -78,9 +78,23 @@ class AsynchronousRecursiveDirectoryStream implements DirectoryStream<Path> {
 
 	public AsynchronousRecursiveDirectoryStream(Path startPath, String pattern)
 			throws IOException {
-		this.filter = FilterBuilder.buildGlobFilter(Objects
-				.requireNonNull(pattern));
+		this(startPath, FilterBuilder.buildGlobFilter(Objects
+				.requireNonNull(pattern)));
+
+	}
+
+	public AsynchronousRecursiveDirectoryStream(Path startPath,
+			Filter<Path> filter)
+					throws IOException {
+		this.filter = Objects.requireNonNull(filter);
 		this.startPath = Objects.requireNonNull(startPath);
+	}
+
+	public AsynchronousRecursiveDirectoryStream(Path rootPath)
+			throws IOException {
+		this(rootPath, path -> {
+						return true;
+		} );
 	}
 
 	@Override
