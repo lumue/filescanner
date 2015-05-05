@@ -1,6 +1,12 @@
-package lumue.github.io.filescanner.webapp;
+package io.github.lumue.filescanner.webapp;
+
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.WatchService;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 
@@ -8,19 +14,22 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
-@org.springframework.context.annotation.Configuration
-public class Configuration {
+import io.github.lumue.filescanner.process.metadata.FilescannerConfiguration;
 
-	public Configuration() {
+@Configuration
+@Import(FilescannerConfiguration.class)
+public class WebappConfiguration {
+
+	public WebappConfiguration() {
 	}
 
-	
+
 	@Bean
 	public TaskExecutor taskExecutor() {
 		return new SimpleAsyncTaskExecutor();
 	}
 
-	
+
 
 	@Bean
 	public ObjectMapper objectMapper() {
@@ -32,7 +41,10 @@ public class Configuration {
 	}
 
 
+	@Bean
+	public WatchService watchService() throws IOException {
+		return FileSystems.getDefault().newWatchService();
+	}
 
-		
 
 }

@@ -1,4 +1,4 @@
-package lumue.github.io.filescanner.process.metadata;
+package io.github.lumue.filescanner.process.metadata;
 
 import static reactor.event.selector.Selectors.$;
 
@@ -17,7 +17,7 @@ import reactor.function.Consumer;
 @Component
 public class MetadataRecorder implements Consumer<Event<Path>> {
 
-	private final MetadataRepository metadataRepository;
+	private MetadataRepository metadataRepository;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(MetadataRecorder.class);
 
@@ -39,10 +39,11 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 
 			boolean exists = metadataRepository.exists(filesystemMetadataAccessor.getUrl());
 
-			if (exists)
+			if (exists) {
 				updateMetadata(filesystemMetadataAccessor);
-			else
+			} else {
 				insertMetadata(filesystemMetadataAccessor);
+			}
 
 		} catch (IOException e) {
 			pathEvent.consumeError(e);

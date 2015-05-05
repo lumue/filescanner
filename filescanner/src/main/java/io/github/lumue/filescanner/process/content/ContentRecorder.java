@@ -1,4 +1,4 @@
-package lumue.github.io.filescanner.process.content;
+package io.github.lumue.filescanner.process.content;
 
 import static reactor.event.selector.Selectors.$;
 

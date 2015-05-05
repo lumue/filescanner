@@ -1,16 +1,24 @@
-package lumue.github.io.filescanner.process.metadata;
+package io.github.lumue.filescanner.process.metadata;
 
 import java.io.IOException;
 
 import org.elasticsearch.client.Client;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@org.springframework.context.annotation.Configuration
-public class Configuration {
+@Configuration
+@EnableElasticsearchRepositories("io.github.lumue.filescanner.process.metadata")
+@ComponentScan("io.github.lumue.filescanner.process.metadata")
+@Scope(proxyMode = ScopedProxyMode.NO)
+public class FilescannerConfiguration {
 
 	@Bean
 	public ElasticsearchTemplate elasticsearchTemplate(Client client, EntityMapper entityMapper) {
