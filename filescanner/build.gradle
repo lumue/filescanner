@@ -47,7 +47,7 @@ dependencies {
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.5.1'
 
-	
+	testCompile 'junit:junit:4.11'
 	
 }
 
