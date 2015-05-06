@@ -17,10 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class PathWatcher implements Runnable {
 
 	@FunctionalInterface
@@ -37,7 +34,6 @@ public class PathWatcher implements Runnable {
 
 	private PathWatcherCallback callback;
 
-	@Autowired
 	public PathWatcher(PathWatcherCallback callback) throws IOException {
 		super();
 		this.watchService = FileSystems.getDefault().newWatchService();
