@@ -7,3 +7,4 @@ data
 .gradle
 /bin/
 testtree
+*.jfr
