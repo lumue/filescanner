@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
+import io.github.lumue.filescanner.file.AsynchronousRecursiveDirectoryStream;
 import reactor.core.Reactor;
 import reactor.event.Event;
 

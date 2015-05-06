@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.scan;
+package io.github.lumue.filescanner.file;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -20,7 +20,8 @@ import com.google.common.base.Function;
 /**
  * @author lm
  */
-class AsynchronousRecursiveDirectoryStream implements DirectoryStream<Path> {
+public class AsynchronousRecursiveDirectoryStream
+		implements DirectoryStream<Path> {
 
 	static class FunctionVisitor extends SimpleFileVisitor<Path> {
 

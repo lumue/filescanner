@@ -1,20 +1,25 @@
 package io.github.lumue.filescanner.scan;
 
-import static org.junit.Assert.fail;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.github.lumue.filescanner.test.FiletreeMaker;
+import io.github.lumue.filescanner.file.AsynchronousRecursiveDirectoryStream;
+import io.github.lumue.filescanner.file.FiletreeBuildingTool;
 
 public class AsynchronousRecursiveDirectoryStreamTest {
-
-	private final FiletreeMaker filetreeMaker = new FiletreeMaker((short) 5,
+	private final FiletreeBuildingTool filetreeMaker = new FiletreeBuildingTool((short) 5,
 			(short) 5, (short) 50);
 
 	@Before
 	public void setUp() throws Exception {
+		filetreeMaker.deleteTree("testtree");
 		filetreeMaker.writeTree("testtree");
 	}
 
@@ -24,8 +29,30 @@ public class AsynchronousRecursiveDirectoryStreamTest {
 	}
 
 	@Test
-	public void testIterate() {
-		fail("Not yet implemented");
+	public void testIterate() throws IOException {
+		AsynchronousRecursiveDirectoryStream directoryStream = null;
+		try {
+
+			final Set<String> foundnodes = new ConcurrentSkipListSet<String>();
+
+			directoryStream = new AsynchronousRecursiveDirectoryStream(
+					Paths.get("testtree"));
+
+			directoryStream.forEach(filenode -> {
+				if (filenode == null) {
+					return;
+				}
+				foundnodes.add(filenode.getFileName().toString());
+			} );
+
+			Assert.assertEquals(filetreeMaker.getCreatednodes().size(),
+					foundnodes.size());
+
+		} finally {
+			if (directoryStream != null) {
+				directoryStream.close();
+			}
+		}
 	}
 
 }

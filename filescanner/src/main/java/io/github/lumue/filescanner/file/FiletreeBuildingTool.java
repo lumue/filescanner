@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.test;
+package io.github.lumue.filescanner.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * utility class for creating a file tree with testfiles
@@ -15,7 +18,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * @author lm
  *
  */
-public class FiletreeMaker {
+public class FiletreeBuildingTool {
 
 	/**
 	 * depth of filetree
@@ -32,7 +35,9 @@ public class FiletreeMaker {
 	 */
 	private final short testfilesPerDirectory;
 
-	public FiletreeMaker(short depth, short breadth,
+	private final Set<String> creatednodes = new ConcurrentSkipListSet<String>();
+
+	public FiletreeBuildingTool(short depth, short breadth,
 			short testfilesPerDirectory) {
 		super();
 		this.depth = depth;
@@ -41,11 +46,18 @@ public class FiletreeMaker {
 	}
 
 	public void writeTree(String rootPath) throws IOException {
+		creatednodes.clear();
 		writeSubtree(rootPath, 0);
 	}
 
 	public void deleteTree(String rootPath) throws IOException {
+
 		Path directory = Paths.get(rootPath);
+
+		if (!directory.toFile().exists()) {
+			return;
+		}
+
 		Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
 			@Override
 			public FileVisitResult visitFile(Path file,
@@ -66,12 +78,11 @@ public class FiletreeMaker {
 
 	private void writeSubtree(String rootPath, int level) throws IOException {
 
-		Path dir = Paths.get(rootPath);
-		Files.createDirectory(dir);
+		createDirectory(rootPath);
 
 		for (int j = 1; j <= testfilesPerDirectory; j++) {
 			String filePath = rootPath + File.separator + "f" + j;
-			Files.createFile(Paths.get(filePath));
+			createFile(filePath);
 		}
 
 		if (level > depth) {
@@ -82,4 +93,19 @@ public class FiletreeMaker {
 			writeSubtree(dirPath, level + 1);
 		}
 	}
+
+	private void createFile(String filePath) throws IOException {
+		Files.createFile(Paths.get(filePath));
+		this.creatednodes.add(filePath);
+	}
+
+	private void createDirectory(String dirPath) throws IOException {
+		Files.createDirectory(Paths.get(dirPath));
+		this.creatednodes.add(dirPath);
+	}
+
+	public Set<String> getCreatednodes() {
+		return Collections.unmodifiableSet(creatednodes);
+	}
+
 }
