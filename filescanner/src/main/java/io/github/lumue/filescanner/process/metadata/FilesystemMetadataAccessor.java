@@ -51,14 +51,22 @@ class FilesystemMetadataAccessor {
 	}
 
 	private static String fromMimeType(String mimeType) {
-		if (mimeType.startsWith("video"))
+		if (mimeType == null) {
+			return "GENERIC";
+		}
+
+		if (mimeType.startsWith("video")) {
 			return "VIDEO";
-		if (mimeType.startsWith("audio"))
+		}
+		if (mimeType.startsWith("audio")) {
 			return "AUDIO";
-		if (mimeType.startsWith("image"))
+		}
+		if (mimeType.startsWith("image")) {
 			return "IMAGE";
-		if (mimeType.startsWith("text") || mimeType.startsWith("application"))
+		}
+		if (mimeType.startsWith("text") || mimeType.startsWith("application")) {
 			return "DOCUMENT";
+		}
 
 		return "GENERIC";
 	}
