@@ -37,11 +37,18 @@ public class FilesystemScanTask implements Runnable {
 						     @Override
 						     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 						          if(!attrs.isDirectory()){
-						        	  LOGGER.info("file discovered " + file.toString());
+							LOGGER.debug("file discovered " + file.toString());
 						        	  pathEventCallback.onPathEvent(file);
 						          }
 						          return FileVisitResult.CONTINUE;
 						      }
+
+					@Override
+					public FileVisitResult visitFileFailed(Path file,
+							IOException exc) throws IOException {
+						LOGGER.error("exception visiting " + file, exc);
+						return FileVisitResult.CONTINUE;
+					}
 				});
 			} catch (Exception e) {
 				throw new RuntimeException(e);
