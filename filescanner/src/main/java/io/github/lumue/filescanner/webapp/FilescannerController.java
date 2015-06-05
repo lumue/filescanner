@@ -20,7 +20,7 @@ public class FilescannerController {
 
 	private final Pathmonitor pathmonitor;
 
-	@Value("#{filescanner.path.root}")
+	@Value("${filescanner.path.root}")
 	private String rootPath;
 
 	@Autowired
