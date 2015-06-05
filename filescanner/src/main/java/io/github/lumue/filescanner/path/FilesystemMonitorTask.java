@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.file;
+package io.github.lumue.filescanner.path;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -6,7 +6,9 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
@@ -18,23 +20,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PathWatcher implements Runnable {
-
-	@FunctionalInterface
-	public interface PathWatcherCallback {
-		public void onPathEvent(Path path);
-	}
+public class FilesystemMonitorTask implements Runnable {
 
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(PathWatcher.class);
+			.getLogger(FilesystemMonitorTask.class);
 
 	private final WatchService watchService;
 
 	private final AtomicBoolean running = new AtomicBoolean(false);
 
-	private PathWatcherCallback callback;
+	private PathEventCallback callback;
 
-	public PathWatcher(PathWatcherCallback callback) throws IOException {
+	public FilesystemMonitorTask(PathEventCallback callback) throws IOException {
 		super();
 		this.watchService = FileSystems.getDefault().newWatchService();
 		this.callback = callback;
@@ -44,7 +41,7 @@ public class PathWatcher implements Runnable {
 	@Override
 	public void run() {
 
-		LOGGER.info("running PathWatcher");
+		LOGGER.info("running FilesystemMonitorTask");
 
 		while (running.get()) {
 
@@ -92,7 +89,7 @@ public class PathWatcher implements Runnable {
 	}
 
 	public synchronized void stop() {
-		LOGGER.info("stopping PathWatcher");
+		LOGGER.info("stopping FilesystemMonitorTask");
 		running.compareAndSet(true, false);
 
 	}
@@ -112,12 +109,11 @@ public class PathWatcher implements Runnable {
 	private Path[] listSubdirectories(Path rootPath) throws IOException {
 
 		Collection<Path> directories = new ArrayList<Path>();
-		AsynchronousRecursiveDirectoryStream directoryStream = null;
 
+		DirectoryStream<Path> directoryStream = null;
 		try {
 
-			directoryStream = new AsynchronousRecursiveDirectoryStream(
-					rootPath);
+			directoryStream = Files.newDirectoryStream(rootPath);
 
 			directoryStream.forEach(file -> {
 				if (file != null && file.toFile().isDirectory()) {

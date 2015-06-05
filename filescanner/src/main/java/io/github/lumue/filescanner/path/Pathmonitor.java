@@ -1,17 +1,14 @@
-package io.github.lumue.filescanner.scan;
+package io.github.lumue.filescanner.path;
 
 import java.io.IOException;
 import java.nio.file.Path;
-
-import javax.annotation.PostConstruct;
+import java.util.concurrent.Executor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
-import io.github.lumue.filescanner.file.PathWatcher;
 import reactor.core.Reactor;
 import reactor.event.Event;
 
@@ -21,16 +18,17 @@ public class Pathmonitor {
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(Pathmonitor.class);
 
-	private final TaskExecutor taskExecutor;
+	private final Executor taskExecutor;
 
-	private final PathWatcher pathWatcher;
+	private final FilesystemMonitorTask pathWatcher;
+
 
 	@Autowired
-	public Pathmonitor(Reactor reactor, TaskExecutor taskExecutor)
+	public Pathmonitor(Reactor reactor, Executor taskExecutor)
 			throws IOException {
 		super();
 		this.taskExecutor = taskExecutor;
-		this.pathWatcher = new PathWatcher((file) -> {
+		this.pathWatcher = new FilesystemMonitorTask((file) -> {
 			reactor.notify("files", Event.wrap(file));
 		});
 	}
@@ -38,8 +36,8 @@ public class Pathmonitor {
 	/**
 	 * start monitoring
 	 */
-	@PostConstruct
 	public synchronized void startMonitor() {
+		LOGGER.info("starting pathmonitor");
 		taskExecutor.execute(pathWatcher);
 	};
 
@@ -47,6 +45,7 @@ public class Pathmonitor {
 	 * stop monitoring
 	 */
 	public synchronized void stopMonitor() {
+		LOGGER.info("stopping pathmonitor");
 		pathWatcher.stop();
 	};
 
@@ -56,8 +55,11 @@ public class Pathmonitor {
 	 * @param paths
 	 * @throws IOException
 	 */
-	public void registerTree(Path... rootPaths) throws IOException {
-		pathWatcher.watchRecursive(rootPaths);
+	public void registerTree(Path rootPath) throws IOException {
+		LOGGER.info("registering " + rootPath
+				+ " and subdirectories for montoring");
+		pathWatcher.watchRecursive(rootPath);
+		LOGGER.info(rootPath + " and subdirectories registered for montoring");
 	}
 
 	/**
@@ -66,7 +68,9 @@ public class Pathmonitor {
 	 * @param path
 	 * @throws IOException
 	 */
-	public void registerPath(Path... paths) throws IOException {
-		pathWatcher.watch(paths);
+	public void registerPath(Path path) throws IOException {
+		LOGGER.info("registering " + path + " for montoring");
+		pathWatcher.watch(path);
+		LOGGER.info(path + " registered for montoring");
 	};
 }
