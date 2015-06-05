@@ -38,7 +38,6 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
-	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-integration")
     compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.projectreactor.spring:reactor-spring-context:2.0.0.M1")
@@ -57,6 +56,23 @@ eclipse {
          containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
     }
 }
+
+task buildDocker(type: Docker, dependsOn: build) {
+	
+	push = true
+	applicationName = jar.baseName
+	
+	dockerfile = file('src/main/docker/Dockerfile')
+	
+	doFirst {
+	  copy {
+		from jar
+		into stageDir
+	  }
+	}
+	
+  }
+  
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
