@@ -32,8 +32,8 @@ public class WebappConfiguration {
 	@Bean
 	public AsyncTaskExecutor metadataRecorderTaskRunner() {
 		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-		threadPoolTaskExecutor.setMaxPoolSize(10);
-		threadPoolTaskExecutor.setCorePoolSize(5);
+		threadPoolTaskExecutor.setMaxPoolSize(1);
+		threadPoolTaskExecutor.setCorePoolSize(1);
 		return threadPoolTaskExecutor;
 	}
 

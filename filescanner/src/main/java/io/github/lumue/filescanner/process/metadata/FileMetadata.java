@@ -14,7 +14,7 @@ public class FileMetadata {
 	@JsonProperty("url")
 	private String url;
 
-	@JsonProperty("url")
+	@JsonProperty("name")
 	private String name;
 
 	@JsonProperty("mimeType")
@@ -43,6 +43,7 @@ public class FileMetadata {
 	}
 
 	public FileMetadata(
+			String name,
 			String url,
 			String mimeType,
 			LocalDateTime creationTime) {

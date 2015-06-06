@@ -13,7 +13,13 @@ import java.time.LocalDateTime;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class FilesystemMetadataAccessor {
+
+	private final static Logger LOGGER = LoggerFactory
+			.getLogger(FilesystemMetadataAccessor.class);
 
 	private final BasicFileAttributes attrs;
 
@@ -66,40 +72,52 @@ class FilesystemMetadataAccessor {
 
 	private String calculateHash() {
 
+		LOGGER.debug("calculating hash for " + this.path);
 
 		FileInputStream inputStream = null;
 		FileChannel channel = null;
 		byte[] hashValue;
-
+		String hashString = null;
 		MessageDigest md;
 		try {
+
 			md = MessageDigest.getInstance("MD5");
 			inputStream = new FileInputStream(this.path.toFile());
 			channel = inputStream.getChannel();
 			ByteBuffer buff = ByteBuffer.allocate(4096);
+
 			while (channel.read(buff) != -1) {
 				buff.flip();
 				md.update(buff);
 				buff.clear();
 			}
+
 			hashValue = md.digest();
-			return new String(hashValue);
+			hashString = new String(hashValue);
+
+			LOGGER.debug("calculated hash " + hashString + " for " + this.path);
 		} catch (NoSuchAlgorithmException e) {
-			return null;
+			LOGGER.error(e.getMessage(), e);
 		} catch (IOException e) {
-			return null;
+			LOGGER.error(e.getMessage(), e);
 		} finally {
 			try {
 				if (channel != null) {
 					channel.close();
 				}
-				if (inputStream != null) {
-					inputStream.close();
-				}
 			} catch (IOException e) {
-
+				LOGGER.error(e.getMessage(), e);
+			} finally {
+				if (inputStream != null) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						LOGGER.error(e.getMessage(), e);
+					}
+				}
 			}
 		}
+		return hashString;
 
 	}
 
@@ -122,6 +140,10 @@ class FilesystemMetadataAccessor {
 		}
 
 		return "GENERIC";
+	}
+
+	public String getName() {
+		return this.path.getFileName().toString();
 	}
 
 }
