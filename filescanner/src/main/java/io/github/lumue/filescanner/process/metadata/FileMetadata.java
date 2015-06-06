@@ -14,6 +14,9 @@ public class FileMetadata {
 	@JsonProperty("url")
 	private String url;
 
+	@JsonProperty("url")
+	private String name;
+
 	@JsonProperty("mimeType")
 	private String mimeType;
 
@@ -31,6 +34,9 @@ public class FileMetadata {
 
 	@JsonProperty("type")
 	private String type;
+
+	@JsonProperty("hash")
+	private String hash;
 
 	public FileMetadata() {
 		super();
@@ -92,6 +98,22 @@ public class FileMetadata {
 
 	public String getType() {
 		return type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
 	}
 
 }

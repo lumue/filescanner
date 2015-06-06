@@ -7,6 +7,7 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import reactor.core.Reactor;
@@ -24,7 +25,8 @@ public class Pathmonitor {
 
 
 	@Autowired
-	public Pathmonitor(Reactor reactor, Executor taskExecutor)
+	public Pathmonitor(Reactor reactor,
+			@Qualifier("taskScheduler") Executor taskExecutor)
 			throws IOException {
 		super();
 		this.taskExecutor = taskExecutor;

@@ -6,6 +6,7 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import reactor.core.Reactor;
@@ -22,6 +23,7 @@ public class Pathscanner {
 
 	@Autowired
 	public Pathscanner(
+			@Qualifier("taskScheduler") 
 			Executor taskExecutor,
 			Reactor eventBus) {
 

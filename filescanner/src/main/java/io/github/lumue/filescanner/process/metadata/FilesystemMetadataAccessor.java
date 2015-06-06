@@ -1,17 +1,26 @@
 package io.github.lumue.filescanner.process.metadata;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 class FilesystemMetadataAccessor {
 
 	private final BasicFileAttributes attrs;
 
 	private final Path path;
+
+	private final AtomicReference<String> hash = new AtomicReference<>(null);
+
 
 	public FilesystemMetadataAccessor(Path path) throws IOException {
 		super();
@@ -48,6 +57,50 @@ class FilesystemMetadataAccessor {
 
 	public String getType() throws IOException {
 		return fromMimeType(getMimeType());
+	}
+
+	public String getHash() {
+		hash.compareAndSet(null, calculateHash());
+		return hash.get();
+	}
+
+	private String calculateHash() {
+
+
+		FileInputStream inputStream = null;
+		FileChannel channel = null;
+		byte[] hashValue;
+
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			inputStream = new FileInputStream(this.path.toFile());
+			channel = inputStream.getChannel();
+			ByteBuffer buff = ByteBuffer.allocate(4096);
+			while (channel.read(buff) != -1) {
+				buff.flip();
+				md.update(buff);
+				buff.clear();
+			}
+			hashValue = md.digest();
+			return new String(hashValue);
+		} catch (NoSuchAlgorithmException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		} finally {
+			try {
+				if (channel != null) {
+					channel.close();
+				}
+				if (inputStream != null) {
+					inputStream.close();
+				}
+			} catch (IOException e) {
+
+			}
+		}
+
 	}
 
 	private static String fromMimeType(String mimeType) {

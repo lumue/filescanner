@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import reactor.core.Reactor;
@@ -21,10 +23,18 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(MetadataRecorder.class);
 
+
+	private final AsyncTaskExecutor taskExecutor;
+
 	@Autowired
-	public MetadataRecorder(MetadataRepository metadataRepository, Reactor reactor) {
+
+	public MetadataRecorder(
+			MetadataRepository metadataRepository,
+			Reactor reactor,
+			@Qualifier("metadataRecorderTaskRunner") AsyncTaskExecutor taskExecutor) {
 		super();
 		this.metadataRepository = metadataRepository;
+		this.taskExecutor = taskExecutor;
 		reactor.on($("files"), this);
 	}
 
@@ -33,21 +43,28 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 
 		LOGGER.debug("consuming new Event " + pathEvent);
 
-		try {
+		taskExecutor.submit(() ->
+		{
+			try {
 
-			FilesystemMetadataAccessor filesystemMetadataAccessor = new FilesystemMetadataAccessor(pathEvent.getData());
+				FilesystemMetadataAccessor filesystemMetadataAccessor = new FilesystemMetadataAccessor(
+						pathEvent.getData());
 
-			boolean exists = metadataRepository.exists(filesystemMetadataAccessor.getUrl());
+				boolean exists = metadataRepository
+						.exists(filesystemMetadataAccessor.getUrl());
 
-			if (exists) {
-				updateMetadata(filesystemMetadataAccessor);
-			} else {
-				insertMetadata(filesystemMetadataAccessor);
+				if (exists) {
+					updateMetadata(filesystemMetadataAccessor);
+				} else {
+					insertMetadata(filesystemMetadataAccessor);
+				}
+
+			} catch (IOException e) {
+				LOGGER.error("error reading file metadata for "
+						+ pathEvent.getData(), e);
+				pathEvent.consumeError(e);
 			}
-
-		} catch (IOException e) {
-			pathEvent.consumeError(e);
-		}
+		} );
 
 	}
 
@@ -61,6 +78,7 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 		fileMetadata.setModificationTime(filesystemMetadataAccessor.getModificationTime());
 		fileMetadata.setSize(filesystemMetadataAccessor.getSize());
 		fileMetadata.setType(filesystemMetadataAccessor.getType());
+		fileMetadata.setHash(filesystemMetadataAccessor.getHash());
 
 		metadataRepository.save(fileMetadata);
 	}
@@ -77,6 +95,7 @@ public class MetadataRecorder implements Consumer<Event<Path>> {
 		fileMetadata.setModificationTime(filesystemMetadataAccessor.getModificationTime());
 		fileMetadata.setSize(filesystemMetadataAccessor.getSize());
 		fileMetadata.setType(filesystemMetadataAccessor.getType());
+		fileMetadata.setHash(filesystemMetadataAccessor.getHash());
 
 		metadataRepository.save(fileMetadata);
 	}
