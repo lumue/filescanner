@@ -62,7 +62,8 @@ class FilesystemMetadataAccessor {
 	}
 
 	public String getType() throws IOException {
-		return fromMimeType(getMimeType());
+		String name = getName();
+		return name.substring(name.lastIndexOf("."));
 	}
 
 	public String getHash() {

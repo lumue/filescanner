@@ -88,7 +88,7 @@ public class MetadataRecorder {
 				filesystemMetadataAccessor.getModificationTime());
 		fileMetadata.setSize(filesystemMetadataAccessor.getSize());
 		fileMetadata.setType(filesystemMetadataAccessor.getType());
-		fileMetadata.setHash(filesystemMetadataAccessor.getHash());
+		// fileMetadata.setHash(filesystemMetadataAccessor.getHash());
 	}
 
 }

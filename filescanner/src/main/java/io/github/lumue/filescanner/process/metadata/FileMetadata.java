@@ -4,38 +4,50 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldIndex;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document(indexName = "files")
+@Document(indexName = "metadata", type = "filemetadata")
 public class FileMetadata {
 
 	@Id
 	@JsonProperty("url")
+	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private String url;
 
 	@JsonProperty("name")
+	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private String name;
 
 	@JsonProperty("mimeType")
+	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private String mimeType;
 
 	@JsonProperty("creationTime")
+	@Field(type = FieldType.Date, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private LocalDateTime creationTime;
 
 	@JsonProperty("size")
+	@Field(type = FieldType.Long, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private Long size;
 
 	@JsonProperty("lastAccessTime")
+	@Field(type = FieldType.Date, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private LocalDateTime lastAccessTime;
 
 	@JsonProperty("modificationTime")
+	@Field(type = FieldType.Date, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private LocalDateTime modificationTime;
 
 	@JsonProperty("type")
+	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private String type;
 
 	@JsonProperty("hash")
+	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private String hash;
 
 	public FileMetadata() {
@@ -48,6 +60,7 @@ public class FileMetadata {
 			String mimeType,
 			LocalDateTime creationTime) {
 		super();
+		this.name = name;
 		this.url = url;
 		this.mimeType = mimeType;
 		this.creationTime = creationTime;
