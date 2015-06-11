@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.webapp;
+package io.github.lumue.filescanner.path.controller;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.lumue.filescanner.path.Pathmonitor;
-import io.github.lumue.filescanner.path.Pathscanner;
+import io.github.lumue.filescanner.path.core.Pathmonitor;
+import io.github.lumue.filescanner.path.core.Pathscanner;
 
 @RestController
 public class FilescannerController {

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
-import io.github.lumue.filescanner.process.metadata.FilescannerConfiguration;
+import io.github.lumue.filescanner.metadata.core.FilescannerConfiguration;
 
 @Configuration
 @Import(FilescannerConfiguration.class)

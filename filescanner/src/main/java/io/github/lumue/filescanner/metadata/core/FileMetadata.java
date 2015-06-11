@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.process.metadata;
+package io.github.lumue.filescanner.metadata.core;
 
 import java.time.LocalDateTime;
 

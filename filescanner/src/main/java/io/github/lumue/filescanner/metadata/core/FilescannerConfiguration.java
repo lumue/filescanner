@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.process.metadata;
+package io.github.lumue.filescanner.metadata.core;
 
 import java.io.IOException;
 
@@ -15,8 +15,8 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@EnableElasticsearchRepositories("io.github.lumue.filescanner.process.metadata")
-@ComponentScan("io.github.lumue.filescanner.process.metadata")
+@EnableElasticsearchRepositories("io.github.lumue.filescanner.metadata.core")
+@ComponentScan("io.github.lumue.filescanner.metadata.core")
 @Scope(proxyMode = ScopedProxyMode.NO)
 public class FilescannerConfiguration {
 

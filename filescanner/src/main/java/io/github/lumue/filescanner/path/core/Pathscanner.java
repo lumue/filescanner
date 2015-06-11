@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.path;
+package io.github.lumue.filescanner.path.core;
 
 
 import java.util.concurrent.Executor;
