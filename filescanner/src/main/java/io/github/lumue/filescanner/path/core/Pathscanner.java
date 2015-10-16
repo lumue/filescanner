@@ -37,9 +37,7 @@ public class Pathscanner {
 
 		LOGGER.info(" start scanning " + path);
 
-		taskExecutor.execute(new FilesystemScanTask(path, (file) -> {
-			eventbus.notify("files", Event.wrap(file));
-		} ));
+		taskExecutor.execute(new FilesystemScanTask(path, (file) -> eventbus.notify("files", Event.wrap(file))));
 
 	}
 }

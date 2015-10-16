@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import io.github.lumue.filescanner.metadata.elasticsearch.MetadataRepository;
+import io.github.lumue.filescanner.metadata.repository.MetadataRepository;
 
 @Component
 public class MetadataRecorder {
@@ -32,8 +32,7 @@ public class MetadataRecorder {
 
 		try {
 
-			FilesystemMetadataAccessor filesystemMetadataAccessor = new FilesystemMetadataAccessor(
-					path);
+			MetadataAccessor filesystemMetadataAccessor = new FilesystemMetadataAccessor(path);
 
 			boolean exists = metadataRepository
 					.exists(filesystemMetadataAccessor.getUrl());
@@ -53,8 +52,8 @@ public class MetadataRecorder {
 	}
 
 	private void updateMetadata(
-			FilesystemMetadataAccessor filesystemMetadataAccessor)
-					throws IOException {
+			MetadataAccessor filesystemMetadataAccessor)
+			throws IOException {
 
 		FileMetadata fileMetadata = metadataRepository
 				.findOne(filesystemMetadataAccessor.getUrl());
@@ -66,8 +65,8 @@ public class MetadataRecorder {
 	}
 
 	private void insertMetadata(
-			FilesystemMetadataAccessor filesystemMetadataAccessor)
-					throws IOException {
+			MetadataAccessor filesystemMetadataAccessor)
+			throws IOException {
 
 		FileMetadata fileMetadata = new FileMetadata(
 				filesystemMetadataAccessor.getName(),
@@ -82,7 +81,7 @@ public class MetadataRecorder {
 	}
 
 	private void updateFileMetadata(
-			FilesystemMetadataAccessor filesystemMetadataAccessor,
+			MetadataAccessor filesystemMetadataAccessor,
 			FileMetadata fileMetadata) throws IOException {
 		fileMetadata.setLastAccessTime(
 				filesystemMetadataAccessor.getLastAccessTime());

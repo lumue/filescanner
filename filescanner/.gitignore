@@ -8,3 +8,5 @@ data
 /bin/
 testtree
 *.jfr
+.idea
+filescanner.iml

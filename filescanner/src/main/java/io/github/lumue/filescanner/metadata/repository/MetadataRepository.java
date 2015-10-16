@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.metadata.elasticsearch;
+package io.github.lumue.filescanner.metadata.repository;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;
 

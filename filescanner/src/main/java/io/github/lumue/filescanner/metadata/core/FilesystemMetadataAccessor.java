@@ -10,13 +10,15 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class FilesystemMetadataAccessor {
+class FilesystemMetadataAccessor implements MetadataAccessor {
 
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(FilesystemMetadataAccessor.class);
@@ -30,42 +32,49 @@ class FilesystemMetadataAccessor {
 
 	public FilesystemMetadataAccessor(Path path) throws IOException {
 		super();
-		attrs = Files.<BasicFileAttributes> readAttributes(path, BasicFileAttributes.class);
+		attrs = Files.readAttributes(path, BasicFileAttributes.class);
 		this.path = path;
 	}
 
 
+	@Override
 	public String getMimeType() throws IOException {
 		return Files.probeContentType(path);
 	}
 
+	@Override
 	public Long getSize() {
 
 		return attrs.size();
 	}
 
 
+	@Override
 	public LocalDateTime getCreationTime() {
 		return LocalDateTime.ofInstant(attrs.creationTime().toInstant(), TimeZone.getDefault().toZoneId());
 	}
 
+	@Override
 	public LocalDateTime getLastAccessTime() {
 		return LocalDateTime.ofInstant(attrs.lastAccessTime().toInstant(), TimeZone.getDefault().toZoneId());
 	}
 
+	@Override
 	public LocalDateTime getModificationTime() {
 		return LocalDateTime.ofInstant(attrs.lastModifiedTime().toInstant(), TimeZone.getDefault().toZoneId());
 	}
 
+	@Override
 	public String getUrl() {
 		return path.toUri().toString();
 	}
 
+	@Override
 	public String getType() throws IOException {
-		String name = getName();
-		return name.substring(name.lastIndexOf("."));
+		return fromMimeType(getMimeType());
 	}
 
+	@Override
 	public String getHash() {
 		hash.compareAndSet(null, calculateHash());
 		return hash.get();
@@ -143,8 +152,22 @@ class FilesystemMetadataAccessor {
 		return "GENERIC";
 	}
 
+	@Override
 	public String getName() {
 		return this.path.getFileName().toString();
 	}
 
+	@Override
+	public <T> T getProperty(String key) {
+		return null;
+	}
+
+	@Override
+	public Collection<String> getPropertyKeys() {
+		return Collections.emptyList();
+	}
+
+	public Path getPath(){
+		return this.path;
+	}
 }

@@ -30,29 +30,37 @@ jar {
     baseName = 'filescanner'
     version = '0.0.1-SNAPSHOT'
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
 
 repositories {
     mavenCentral()
 	maven{
 		url('http://maven.springframework.org/milestone/')
-		url('http://repo.springsource.org/libs-milestone/')
-	}
+		}
+    maven { url('http://repo.springsource.org/libs-milestone/') }
 }
 
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+    compile("org.springframework.boot:spring-boot-starter-data-repository")
     compile("org.springframework.boot:spring-boot-starter-integration")
     compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.projectreactor.spring:reactor-spring-context:2.0.0.M1")
+    compile 'org.springframework.data:spring-data-elasticsearch'
+
+    compile("org.projectreactor.spring:reactor-spring-context:2.0.0.M1")
 	
 	compile group: 'com.google.guava', name: 'guava', version: '12.0'
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.5.1'
 
-	testCompile 'junit:junit:4.11'
+    compile 'org.apache.tika:tika-core:1.10'
+    compile 'org.apache.tika:tika-parsers:1.10'
+
+
+    testCompile 'junit:junit:4.11'
 	
 }
 
@@ -63,7 +71,7 @@ eclipse {
     }
 }
 
-group = '192.168.1.105:5000'
+group = 'lumue'
 
 task buildDocker(type: Docker, dependsOn: build) {
 	
@@ -83,5 +91,5 @@ task buildDocker(type: Docker, dependsOn: build) {
   
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.6'
 }

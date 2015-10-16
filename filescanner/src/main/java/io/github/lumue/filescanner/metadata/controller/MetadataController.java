@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.lumue.filescanner.metadata.core.FileMetadata;
-import io.github.lumue.filescanner.metadata.elasticsearch.MetadataRepository;
+import io.github.lumue.filescanner.metadata.repository.MetadataRepository;
 
 @RestController
 public class MetadataController {
