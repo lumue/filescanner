@@ -158,7 +158,7 @@ class FilesystemMetadataAccessor implements MetadataAccessor {
 	}
 
 	@Override
-	public <T> T getProperty(String key) {
+	public String getProperty(String key) {
 		return null;
 	}
 

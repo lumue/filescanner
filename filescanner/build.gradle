@@ -45,7 +45,6 @@ repositories {
 
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-data-repository")
     compile("org.springframework.boot:spring-boot-starter-integration")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile 'org.springframework.data:spring-data-elasticsearch'

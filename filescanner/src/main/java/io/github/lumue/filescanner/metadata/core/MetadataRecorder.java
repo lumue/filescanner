@@ -32,15 +32,15 @@ public class MetadataRecorder {
 
 		try {
 
-			MetadataAccessor filesystemMetadataAccessor = new TikaMetadataAccessor(path);
+			MetadataAccessor metadataAccessor = new TikaMetadataAccessor(path);
 
 			boolean exists = metadataRepository
-					.exists(filesystemMetadataAccessor.getUrl());
+					.exists(metadataAccessor.getUrl());
 
 			if (exists) {
-				updateMetadata(filesystemMetadataAccessor);
+				updateMetadata(metadataAccessor);
 			} else {
-				insertMetadata(filesystemMetadataAccessor);
+				insertMetadata(metadataAccessor);
 			}
 
 		} catch (Throwable t) {
@@ -52,44 +52,28 @@ public class MetadataRecorder {
 	}
 
 	private void updateMetadata(
-			MetadataAccessor filesystemMetadataAccessor)
+			MetadataAccessor accessor)
 			throws IOException {
 
 		FileMetadata fileMetadata = metadataRepository
-				.findOne(filesystemMetadataAccessor.getUrl());
+				.findOne(accessor.getUrl());
 
-		updateFileMetadata(filesystemMetadataAccessor, fileMetadata);
+		FileMetadata.updateWithAccssor(fileMetadata, accessor);
 
 		metadataRepository.save(fileMetadata);
 
 	}
 
 	private void insertMetadata(
-			MetadataAccessor filesystemMetadataAccessor)
+			MetadataAccessor accessor)
 			throws IOException {
 
-		FileMetadata fileMetadata = new FileMetadata(
-				filesystemMetadataAccessor.getName(),
-				filesystemMetadataAccessor.getUrl(),
-				filesystemMetadataAccessor.getMimeType(),
-				filesystemMetadataAccessor.getCreationTime());
-
-		updateFileMetadata(filesystemMetadataAccessor, fileMetadata);
+		FileMetadata fileMetadata = FileMetadata.createWithAccessor(accessor);
 
 		metadataRepository.save(fileMetadata);
 
 	}
 
-	private void updateFileMetadata(
-			MetadataAccessor filesystemMetadataAccessor,
-			FileMetadata fileMetadata) throws IOException {
-		fileMetadata.setLastAccessTime(
-				filesystemMetadataAccessor.getLastAccessTime());
-		fileMetadata.setModificationTime(
-				filesystemMetadataAccessor.getModificationTime());
-		fileMetadata.setSize(filesystemMetadataAccessor.getSize());
-		fileMetadata.setType(filesystemMetadataAccessor.getType());
-		// fileMetadata.setHash(filesystemMetadataAccessor.getHash());
-	}
+
 
 }

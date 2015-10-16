@@ -28,7 +28,7 @@ public class TikaMetadataAccessor extends FilesystemMetadataAccessor{
 	private static Metadata parse(Path path) throws Exception {
 		InputStream stream = new FileInputStream(path.toFile());
 		AutoDetectParser parser = new AutoDetectParser();
-		BodyContentHandler handler = new BodyContentHandler();
+		BodyContentHandler handler = new BodyContentHandler(-1);
 		Metadata metadata = new Metadata();
 		try {
 			parser.parse(stream,handler,metadata);
@@ -39,8 +39,8 @@ public class TikaMetadataAccessor extends FilesystemMetadataAccessor{
 	}
 
 	@Override
-	public <T> T getProperty(String key) {
-		return (T) tikaMetadata.get(key);
+	public String getProperty(String key) {
+		return  tikaMetadata.get(key);
 	}
 
 	@Override

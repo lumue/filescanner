@@ -26,7 +26,7 @@ public interface MetadataAccessor {
 
 	String getName();
 
-	<T> T getProperty(String key);
+	String getProperty(String key);
 
 	Collection<String> getPropertyKeys();
 }

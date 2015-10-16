@@ -1,6 +1,9 @@
 package io.github.lumue.filescanner.metadata.core;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -49,6 +52,10 @@ public class FileMetadata {
 	@JsonProperty("hash")
 	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
 	private String hash;
+
+	@JsonProperty("properties")
+	@Field(type = FieldType.Nested, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	private Map<String,String> properties=new HashMap<>();
 
 	public FileMetadata() {
 		super();
@@ -128,6 +135,34 @@ public class FileMetadata {
 
 	public void setHash(String hash) {
 		this.hash = hash;
+	}
+
+	public static FileMetadata createWithAccessor(MetadataAccessor accessor) throws IOException {
+		FileMetadata fileMetadata = new FileMetadata(
+				accessor.getName(),
+				accessor.getUrl(),
+				accessor.getMimeType(),
+				accessor.getCreationTime());
+		updateWithAccssor(fileMetadata,accessor	);
+		return fileMetadata;
+	}
+
+	public static void updateWithAccssor(FileMetadata fileMetadata,MetadataAccessor accessor) throws IOException {
+		fileMetadata.setLastAccessTime(
+				accessor.getLastAccessTime());
+		fileMetadata.setModificationTime(
+				accessor.getModificationTime());
+		fileMetadata.setSize(accessor.getSize());
+		fileMetadata.setType(accessor.getType());
+		fileMetadata.setHash(accessor.getHash());
+		for (String key:accessor.getPropertyKeys()
+		     ) {
+			fileMetadata.setProperty(key,accessor.getProperty(key));
+		}
+	}
+
+	public void setProperty(String key,String value) {
+		this.properties.put(key,value);
 	}
 
 }

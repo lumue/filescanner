@@ -15,10 +15,10 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@EnableElasticsearchRepositories("io.github.lumue.filescanner.metadata.core")
+@EnableElasticsearchRepositories("io.github.lumue.filescanner.metadata.repository")
 @ComponentScan("io.github.lumue.filescanner.metadata.core")
 @Scope(proxyMode = ScopedProxyMode.NO)
-public class FilescannerConfiguration {
+public class MetadataConfiguration {
 
 	@Bean
 	public ElasticsearchTemplate elasticsearchTemplate(Client client, EntityMapper entityMapper) {
