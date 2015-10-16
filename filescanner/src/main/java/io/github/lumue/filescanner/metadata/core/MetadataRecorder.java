@@ -13,7 +13,7 @@ import io.github.lumue.filescanner.metadata.repository.MetadataRepository;
 @Component
 public class MetadataRecorder {
 
-	private MetadataRepository metadataRepository;
+	private final MetadataRepository metadataRepository;
 
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(MetadataRecorder.class);
@@ -32,7 +32,7 @@ public class MetadataRecorder {
 
 		try {
 
-			MetadataAccessor filesystemMetadataAccessor = new FilesystemMetadataAccessor(path);
+			MetadataAccessor filesystemMetadataAccessor = new TikaMetadataAccessor(path);
 
 			boolean exists = metadataRepository
 					.exists(filesystemMetadataAccessor.getUrl());
