@@ -18,7 +18,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 @EnableElasticsearchRepositories("io.github.lumue.filescanner.metadata.repository")
-@ComponentScan("io.github.lumue.filescanner.metadata.core")
+@ComponentScan("io.github.lumue.filescanner.metadata")
 @Scope(proxyMode = ScopedProxyMode.NO)
 public class MetadataConfiguration {
 
