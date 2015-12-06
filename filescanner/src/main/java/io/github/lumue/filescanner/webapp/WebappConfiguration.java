@@ -3,8 +3,6 @@ package io.github.lumue.filescanner.webapp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,13 +27,7 @@ public class WebappConfiguration {
 		return objectMapper;
 	}
 
-	@Bean
-	public AsyncTaskExecutor metadataRecorderTaskRunner() {
-		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-		threadPoolTaskExecutor.setMaxPoolSize(1);
-		threadPoolTaskExecutor.setCorePoolSize(1);
-		return threadPoolTaskExecutor;
-	}
+
 
 
 

@@ -154,7 +154,7 @@ public class FileMetadata {
 				accessor.getModificationTime());
 		fileMetadata.setSize(accessor.getSize());
 		fileMetadata.setType(accessor.getType());
-		fileMetadata.setHash(accessor.getHash());
+		//fileMetadata.setHash(accessor.getHash());
 		for (String key:accessor.getPropertyKeys()
 		     ) {
 			fileMetadata.setProperty(key,accessor.getProperty(key));

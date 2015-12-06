@@ -8,11 +8,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 @EnableElasticsearchRepositories("io.github.lumue.filescanner.metadata.repository")
@@ -42,5 +44,13 @@ public class MetadataConfiguration {
 			}
 
 		};
+	}
+
+	@Bean
+	public AsyncTaskExecutor metadataRecorderTaskRunner() {
+		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+		threadPoolTaskExecutor.setMaxPoolSize(10);
+		threadPoolTaskExecutor.setCorePoolSize(10);
+		return threadPoolTaskExecutor;
 	}
 }
