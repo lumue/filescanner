@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.3.0.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -12,15 +12,30 @@ buildscript {
     }
 }
 
+
+
+
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'docker'
 
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
 
 configurations {
     runtime
     testCompile
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
 }
 
 
@@ -31,8 +46,8 @@ jar {
     version = '0.0.1-SNAPSHOT'
 }
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 
 repositories {
@@ -41,8 +56,9 @@ repositories {
 		url('http://maven.springframework.org/milestone/')
 		}
     maven { url('http://repo.springsource.org/libs-milestone/') }
+    maven { url ('https://github.com/lumue/maven-repository/raw/master/')}
+    maven { url('http://download.oracle.com/maven')}
 }
-
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-integration")
@@ -58,16 +74,20 @@ dependencies {
     compile 'org.apache.tika:tika-core:1.10'
     compile 'org.apache.tika:tika-parsers:1.10'
 
+    compile 'io.github.lumue:nfotools:1.0-RELEASE'
+
+
 
     testCompile 'junit:junit:4.11'
-	
+
+    integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
-eclipse {
-    classpath {
-         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-    }
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
 }
 
 group = 'lumue'
@@ -85,9 +105,23 @@ task buildDocker(type: Docker, dependsOn: build) {
 		into stageDir
 	  }
 	}
-	
-  }
+}
   
+idea {
+
+
+  module {
+    
+    //and some extra test source dirs
+    testSourceDirs += file('src/integration-test/java')
+
+
+    //if you need to put 'provided' dependencies on the classpath
+    scopes.TEST.plus += [ configurations.integrationTestCompile ]
+    downloadSources = true
+  }
+}
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.6'

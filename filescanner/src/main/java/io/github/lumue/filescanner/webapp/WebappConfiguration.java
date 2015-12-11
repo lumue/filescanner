@@ -1,5 +1,6 @@
 package io.github.lumue.filescanner.webapp;
 
+import org.elasticsearch.client.Client;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -9,6 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
 import io.github.lumue.filescanner.metadata.core.MetadataConfiguration;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.EntityMapper;
+
+import java.io.IOException;
 
 @Configuration
 @Import(MetadataConfiguration.class)
@@ -28,7 +33,29 @@ public class WebappConfiguration {
 	}
 
 
+	@Bean
+	public ElasticsearchTemplate elasticsearchTemplate(Client client, EntityMapper entityMapper) {
+		return new ElasticsearchTemplate(client,entityMapper );
+	}
 
+	@Bean
+	public EntityMapper entityMapper(final ObjectMapper objectMapper) {
+
+		return new EntityMapper() {
+
+			@Override
+			public String mapToString(Object object) throws IOException {
+				return objectMapper.writeValueAsString(object);
+			}
+
+			@Override
+			public <T> T mapToObject(String source, Class<T> clazz)
+					throws IOException {
+				return objectMapper.readValue(source, clazz);
+			}
+
+		};
+	}
 
 
 }

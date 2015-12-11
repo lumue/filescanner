@@ -8,60 +8,59 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document(indexName = "metadata", type = "filemetadata")
-public class FileMetadata {
+@Document(indexName = "filescanner.metadata", type = "document")
+public class DocumentMetadata {
 
 	@Id
 	@JsonProperty("url")
-	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.String, store = true)
 	private String url;
 
 	@JsonProperty("name")
-	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.String, store = true)
 	private String name;
 
 	@JsonProperty("mimeType")
-	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.String,  store = true)
 	private String mimeType;
 
 	@JsonProperty("creationTime")
-	@Field(type = FieldType.Date, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.Date,  store = true)
 	private LocalDateTime creationTime;
 
 	@JsonProperty("size")
-	@Field(type = FieldType.Long, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.Long,  store = true)
 	private Long size;
 
 	@JsonProperty("lastAccessTime")
-	@Field(type = FieldType.Date, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.Date,  store = true)
 	private LocalDateTime lastAccessTime;
 
 	@JsonProperty("modificationTime")
-	@Field(type = FieldType.Date, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.Date,  store = true)
 	private LocalDateTime modificationTime;
 
 	@JsonProperty("type")
-	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.String,  store = true)
 	private String type;
 
 	@JsonProperty("hash")
-	@Field(type = FieldType.String, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.String,  store = true)
 	private String hash;
 
 	@JsonProperty("properties")
-	@Field(type = FieldType.Nested, index = FieldIndex.analyzed, searchAnalyzer = "standard", indexAnalyzer = "standard", store = true)
+	@Field(type = FieldType.Nested,  store = true)
 	private Map<String,String> properties=new HashMap<>();
 
-	public FileMetadata() {
+	public DocumentMetadata() {
 		super();
 	}
 
-	public FileMetadata(
+	public DocumentMetadata(
 			String name,
 			String url,
 			String mimeType,
@@ -137,27 +136,27 @@ public class FileMetadata {
 		this.hash = hash;
 	}
 
-	public static FileMetadata createWithAccessor(MetadataAccessor accessor) throws IOException {
-		FileMetadata fileMetadata = new FileMetadata(
+	public static DocumentMetadata createWithAccessor(MetadataAccessor accessor) throws IOException {
+		DocumentMetadata documentMetadata = new DocumentMetadata(
 				accessor.getName(),
 				accessor.getUrl(),
 				accessor.getMimeType(),
 				accessor.getCreationTime());
-		updateWithAccssor(fileMetadata,accessor	);
-		return fileMetadata;
+		updateWithAccssor(documentMetadata,accessor	);
+		return documentMetadata;
 	}
 
-	public static void updateWithAccssor(FileMetadata fileMetadata,MetadataAccessor accessor) throws IOException {
-		fileMetadata.setLastAccessTime(
+	public static void updateWithAccssor(DocumentMetadata documentMetadata, MetadataAccessor accessor) throws IOException {
+		documentMetadata.setLastAccessTime(
 				accessor.getLastAccessTime());
-		fileMetadata.setModificationTime(
+		documentMetadata.setModificationTime(
 				accessor.getModificationTime());
-		fileMetadata.setSize(accessor.getSize());
-		fileMetadata.setType(accessor.getType());
-		//fileMetadata.setHash(accessor.getHash());
+		documentMetadata.setSize(accessor.getSize());
+		documentMetadata.setType(accessor.getType());
+		//documentMetadata.setHash(accessor.getHash());
 		for (String key:accessor.getPropertyKeys()
 		     ) {
-			fileMetadata.setProperty(key,accessor.getProperty(key));
+			documentMetadata.setProperty(key,accessor.getProperty(key));
 		}
 	}
 

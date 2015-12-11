@@ -55,12 +55,12 @@ public class MetadataRecorder {
 			MetadataAccessor accessor)
 			throws IOException {
 
-		FileMetadata fileMetadata = metadataRepository
+		DocumentMetadata documentMetadata = metadataRepository
 				.findOne(accessor.getUrl());
 
-		FileMetadata.updateWithAccssor(fileMetadata, accessor);
+		DocumentMetadata.updateWithAccssor(documentMetadata, accessor);
 
-		metadataRepository.save(fileMetadata);
+		metadataRepository.save(documentMetadata);
 
 	}
 
@@ -68,9 +68,9 @@ public class MetadataRecorder {
 			MetadataAccessor accessor)
 			throws IOException {
 
-		FileMetadata fileMetadata = FileMetadata.createWithAccessor(accessor);
+		DocumentMetadata documentMetadata = DocumentMetadata.createWithAccessor(accessor);
 
-		metadataRepository.save(fileMetadata);
+		metadataRepository.save(documentMetadata);
 
 	}
 

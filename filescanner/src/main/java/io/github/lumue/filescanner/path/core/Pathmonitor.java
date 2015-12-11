@@ -2,7 +2,7 @@ package io.github.lumue.filescanner.path.core;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,60 +19,33 @@ public class Pathmonitor {
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(Pathmonitor.class);
 
-	private final Executor taskExecutor;
+	private final ThreadPoolExecutor taskExecutor;
 
-	private final FilesystemMonitorTask pathWatcher;
-
+	private final Reactor reactor;
 
 	@Autowired
 	public Pathmonitor(Reactor reactor,
-			@Qualifier("taskScheduler") Executor taskExecutor)
+					   @Qualifier("taskScheduler") ThreadPoolExecutor taskExecutor, Reactor reactor1)
 			throws IOException {
 		super();
 		this.taskExecutor = taskExecutor;
-		this.pathWatcher = new FilesystemMonitorTask((file) -> {
-			reactor.notify("files", Event.wrap(file));
-		});
+		this.reactor = reactor1;
 	}
 
 	/**
 	 * start monitoring
 	 */
-	public synchronized void startMonitor() {
-		LOGGER.info("starting pathmonitor");
-		taskExecutor.execute(pathWatcher);
+	public synchronized FilesystemMonitorTask newMonitor(Path path) throws IOException {
+		LOGGER.info("starting pathmonitor for "+path);
+		FilesystemMonitorTask pathWatcher=new FilesystemMonitorTask(
+				path,
+				(file) -> {
+			reactor.notify("files", Event.wrap(file));
+		});
+		taskExecutor.submit(pathWatcher);
+		return pathWatcher;
 	};
 
-	/**
-	 * stop monitoring
-	 */
-	public synchronized void stopMonitor() {
-		LOGGER.info("stopping pathmonitor");
-		pathWatcher.stop();
-	};
 
-	/**
-	 * register filesystem tree
-	 *
-	 * @param paths
-	 * @throws IOException
-	 */
-	public void registerTree(Path rootPath) throws IOException {
-		LOGGER.info("registering " + rootPath
-				+ " and subdirectories for montoring");
-		pathWatcher.watchRecursive(rootPath);
-		LOGGER.info(rootPath + " and subdirectories registered for montoring");
-	}
 
-	/**
-	 * register path for montoring
-	 *
-	 * @param path
-	 * @throws IOException
-	 */
-	public void registerPath(Path path) throws IOException {
-		LOGGER.info("registering " + path + " for montoring");
-		pathWatcher.watch(path);
-		LOGGER.info(path + " registered for montoring");
-	};
 }

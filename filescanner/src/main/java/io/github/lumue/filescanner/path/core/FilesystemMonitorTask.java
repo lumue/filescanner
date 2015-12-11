@@ -29,22 +29,29 @@ public class FilesystemMonitorTask implements Runnable {
 
 	private final AtomicBoolean running = new AtomicBoolean(false);
 
-	private PathEventCallback callback;
+	private final AtomicBoolean stopRequested=new AtomicBoolean(false);
 
-	public FilesystemMonitorTask(PathEventCallback callback) throws IOException {
+	private PathEventCallback callback;
+	private final Path path;
+
+	public FilesystemMonitorTask(Path path,PathEventCallback callback) throws IOException {
 		super();
 		this.watchService = FileSystems.getDefault().newWatchService();
 		this.callback = callback;
-
+		this.path = path;
 	}
 
 	@Override
 	public void run() {
 
 		LOGGER.info("running FilesystemMonitorTask");
+		try{
 
-		while (running.get()) {
 
+		watchRecursive(this.path);
+
+		while (!stopRequested.get()) {
+			running.compareAndSet(false,true);
 			// wait for key to be signaled
 			WatchKey key;
 			key = watchService.poll();
@@ -80,18 +87,32 @@ public class FilesystemMonitorTask implements Runnable {
 
 			key.reset();
 		}
-
-		try {
-			this.watchService.close();
-		} catch (IOException e) {
-			LOGGER.error("exception closing WatchService", e);
+		}
+		catch (IOException e){
+			LOGGER.error("error running path monitor task",e);
+		}
+		finally {
+			try {
+				this.watchService.close();
+				running.compareAndSet(true,false);
+			} catch (IOException e) {
+				LOGGER.error("exception closing WatchService", e);
+			}
 		}
 	}
 
 	public synchronized void stop() {
 		LOGGER.info("stopping FilesystemMonitorTask");
-		running.compareAndSet(true, false);
-
+		stopRequested.compareAndSet(false,true);
+		while(running.get()){
+			try {
+				Thread.sleep(1000);
+				LOGGER.info("waiting for FilesystemMonitorTask to stop");
+			} catch (InterruptedException e) {
+				LOGGER.error("interrupted stopping FilesystemMonitorTask "+this);
+			}
+		};
+		stopRequested.compareAndSet(true,false);
 	}
 
 	/**
@@ -105,6 +126,8 @@ public class FilesystemMonitorTask implements Runnable {
 			watch(listSubdirectories(rootPath));
 		}
 	}
+
+
 
 	private Path[] listSubdirectories(Path rootPath) throws IOException {
 

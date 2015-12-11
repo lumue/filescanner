@@ -2,10 +2,10 @@ package io.github.lumue.filescanner.metadata.repository;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;
 
-import io.github.lumue.filescanner.metadata.core.FileMetadata;
+import io.github.lumue.filescanner.metadata.core.DocumentMetadata;
 import org.springframework.stereotype.Repository;
 
-
-public interface MetadataRepository extends ElasticsearchCrudRepository<FileMetadata, String> {
+@Repository
+public interface MetadataRepository extends ElasticsearchCrudRepository<DocumentMetadata, String> {
 
 }

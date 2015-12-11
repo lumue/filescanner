@@ -132,6 +132,7 @@ class FilesystemMetadataAccessor implements MetadataAccessor {
 	}
 
 	private static String fromMimeType(String mimeType) {
+
 		if (mimeType == null) {
 			return "GENERIC";
 		}

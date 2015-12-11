@@ -25,6 +25,8 @@ public class MetadataRecorderServiceActivator implements Consumer<Event<Path>> {
 
 	private final MetadataRecorder metadataRecorder;
 
+
+
 	@Autowired
 	public MetadataRecorderServiceActivator(
 			Reactor reactor,
