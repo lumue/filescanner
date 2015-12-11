@@ -38,7 +38,7 @@ public class FilescannerController {
 
 	@RequestMapping("/startMonitoring")
 	public void startMonitoring(@RequestParam String path) throws IOException {
-		pathmonitor.registerTree(Paths.get(rootPath + path));
+		pathmonitor.newMonitor(Paths.get(rootPath + path));
 	}
 
 }

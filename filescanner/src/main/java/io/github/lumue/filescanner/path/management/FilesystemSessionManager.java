@@ -30,8 +30,9 @@ class FilesystemSessionManager {
         if(sessions.containsKey(path.getName()))
             throw new ExistingSessionException("Path "+path.getName()+" already has a session");
 
-        FilesystemSession filesystemSession = new FilesystemSession(path, pathmonitor, path, (session) -> sessions.remove(session.pathName()));
+        FilesystemSession filesystemSession = new FilesystemSession(path, pathmonitor, pathscanner, (session) -> sessions.remove(session.pathName()));
         filesystemSession.open();
+
 
         return filesystemSession;
     }

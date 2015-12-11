@@ -33,9 +33,16 @@ public class ManagedPath {
     @Field(type = FieldType.Boolean, store = true)
     private Boolean startScanOnConnect=true;
 
+    @JsonProperty("startScanOnConnect")
+    @Field(type = FieldType.Boolean, store = true)
+    private Boolean connectOnStartup=true;
+
     @JsonProperty("lastScanned")
     @Field(type = FieldType.Boolean, store = true)
     private LocalDateTime lastScanned;
+
+
+    private transient FilesystemSession  session;
 
 
     public ManagedPath() {
@@ -68,4 +75,37 @@ public class ManagedPath {
         return Objects.hash(name, path);
     }
 
+
+
+    public Boolean getStartScanOnConnect() {
+        return startScanOnConnect;
+    }
+
+    public void setStartScanOnConnect(Boolean startScanOnConnect) {
+        this.startScanOnConnect = startScanOnConnect;
+    }
+
+    public Boolean getConnectOnStartup() {
+        return connectOnStartup;
+    }
+
+    public void setConnectOnStartup(Boolean connectOnStartup) {
+        this.connectOnStartup = connectOnStartup;
+    }
+
+    public LocalDateTime getLastScanned() {
+        return lastScanned;
+    }
+
+    public void setLastScanned(LocalDateTime lastScanned) {
+        this.lastScanned = lastScanned;
+    }
+
+    public void setSession(FilesystemSession session) {
+        this.session = session;
+    }
+
+    public FilesystemSession getSession() {
+        return session;
+    }
 }

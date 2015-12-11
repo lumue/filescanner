@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ public class FilesystemScanTask implements Runnable {
 
 	private final PathEventCallback pathEventCallback;
 
+	private boolean running=false;
+
 	public FilesystemScanTask(String path,
 			PathEventCallback pathEventCallback) {
 		super();
@@ -28,10 +31,14 @@ public class FilesystemScanTask implements Runnable {
 	}
 
 
+	public boolean isRunning() {
+		return running;
+	}
+
 	@Override
 	public void run() {
 		{
-
+			running=true;
 			try {
 				Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
 						     @Override
@@ -51,9 +58,10 @@ public class FilesystemScanTask implements Runnable {
 					}
 				});
 			} catch (Exception e) {
+				running=false;
 				throw new RuntimeException(e);
 			}
-
+			running=false;
 			LOGGER.info(" finished scanning " + path);
 		}
 

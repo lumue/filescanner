@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.metadata.core;
+package io.github.lumue.filescanner.metadata;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

@@ -4,6 +4,9 @@ import io.github.lumue.filescanner.path.core.FilesystemMonitorTask;
 import io.github.lumue.filescanner.path.core.Pathmonitor;
 import io.github.lumue.filescanner.path.core.Pathscanner;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
@@ -14,12 +17,14 @@ import static java.util.Objects.requireNonNull;
 class FilesystemSession implements AutoCloseable{
 
 
+    private final AtomicBoolean open=new AtomicBoolean(false);
 
     @Override
     public void close() throws Exception {
         if(monitorTaskReference.get()!=null)
             monitorTaskReference.get().stop();
         monitorTaskReference.set(null);
+        managedPath.setSession(null);
         sessionClosedCallback.afterSessionClosed(this);
     }
 
@@ -28,7 +33,22 @@ class FilesystemSession implements AutoCloseable{
     }
 
     public void open() {
+        managedPath.setSession(this);
+        if(Boolean.TRUE.equals(managedPath.getStartScanOnConnect())){
+            pathscanner.startScan(managedPath.getPath());
+        }
+        try {
+            monitorTaskReference.set(pathmonitor.newMonitor(Paths.get(managedPath.getPath())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.open.compareAndSet(false,true);
     }
+
+    public boolean isOpen() {
+        return open.get();
+    }
+
 
     interface SessionClosedCallback{
         void afterSessionClosed(FilesystemSession session);

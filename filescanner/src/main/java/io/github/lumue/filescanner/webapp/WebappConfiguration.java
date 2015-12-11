@@ -9,9 +9,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
-import io.github.lumue.filescanner.metadata.core.MetadataConfiguration;
+import io.github.lumue.filescanner.metadata.MetadataConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
+import reactor.core.Environment;
+import reactor.core.Reactor;
 
 import java.io.IOException;
 
@@ -57,5 +59,14 @@ public class WebappConfiguration {
 		};
 	}
 
+	@Bean public Environment environment(){
+		Environment environment = new Environment();
+		return environment;
+	}
+
+		@Bean
+		public Reactor reactor(Environment environment) {
+			return environment.getRootReactor();
+		}
 
 }

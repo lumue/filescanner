@@ -1,6 +1,7 @@
-package io.github.lumue.filescanner.path.repository;
+package io.github.lumue.filescanner.path;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.lumue.filescanner.path.repository.RepositoryConfiguration;
 import org.elasticsearch.client.Client;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,7 +20,7 @@ import java.io.IOException;
  */
 @Configuration
 @TestPropertySource(locations="classpath:test.properties")
-@ComponentScan("io.github.lumue.filescanner.path.repository")
+@ComponentScan("io.github.lumue.filescanner.path")
 @EnableAutoConfiguration
 @Import(RepositoryConfiguration.class)
 public class TestConfiguration {

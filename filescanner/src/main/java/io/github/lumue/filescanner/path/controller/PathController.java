@@ -1,5 +1,6 @@
 package io.github.lumue.filescanner.path.controller;
 
+import io.github.lumue.filescanner.path.management.ExistingSessionException;
 import io.github.lumue.filescanner.path.management.ManagedPath;
 import io.github.lumue.filescanner.path.management.PathManager;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ public class PathController {
 
     @ResponseStatus(value = HttpStatus.CONFLICT,reason = "path already managed")
     public static class HttpConflictStatusException extends RuntimeException{
-        public HttpConflictStatusException(io.github.lumue.filescanner.path.management.PathAlreadyManagedException e) {
+        public HttpConflictStatusException(Exception e) {
             super(e);
         }
     }
@@ -42,6 +43,9 @@ public class PathController {
         } catch (io.github.lumue.filescanner.path.management.PathAlreadyManagedException e) {
             LOGGER.error("path already managed",e);
             throw new HttpConflictStatusException(e);
+        } catch (ExistingSessionException e2) {
+            LOGGER.error("error starting session for path. already exists",e2);
+            throw new HttpConflictStatusException(e2);
         }
     }
 

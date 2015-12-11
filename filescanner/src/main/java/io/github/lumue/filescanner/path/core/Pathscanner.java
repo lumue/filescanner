@@ -1,12 +1,11 @@
 package io.github.lumue.filescanner.path.core;
 
 
-import java.util.concurrent.Executor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import reactor.core.Reactor;
@@ -15,7 +14,7 @@ import reactor.event.Event;
 @Component
 public class Pathscanner {
 
-	private final Executor taskExecutor;
+	private final ThreadPoolTaskExecutor taskExecutor;
 
 	private final Reactor eventbus;
 
@@ -23,8 +22,8 @@ public class Pathscanner {
 
 	@Autowired
 	public Pathscanner(
-			@Qualifier("taskScheduler") 
-			Executor taskExecutor,
+			@Qualifier("taskScheduler")
+			ThreadPoolTaskExecutor taskExecutor,
 			Reactor eventBus) {
 
 		super();
@@ -37,7 +36,7 @@ public class Pathscanner {
 
 		LOGGER.info(" start scanning " + path);
 
-		taskExecutor.execute(new FilesystemScanTask(path, (file) -> eventbus.notify("files", Event.wrap(file))));
+		taskExecutor.submit(new FilesystemScanTask(path, (file) -> eventbus.notify("files", Event.wrap(file))));
 
 	}
 }

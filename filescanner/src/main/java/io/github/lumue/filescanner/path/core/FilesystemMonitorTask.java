@@ -166,4 +166,12 @@ public class FilesystemMonitorTask implements Runnable {
 			LOGGER.info(path + " registered for change monitoring");
 		}
 	};
+
+	public boolean isRunning() {
+		return running.get();
+	}
+
+	public boolean isStopRequested() {
+		return stopRequested.get();
+	}
 }
