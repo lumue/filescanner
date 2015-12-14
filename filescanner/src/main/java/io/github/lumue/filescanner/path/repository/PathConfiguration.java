@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
 import java.io.IOException;
 
 /**
@@ -14,6 +16,12 @@ import java.io.IOException;
  */
 @Configuration
 @EnableElasticsearchRepositories("io.github.lumue.filescanner.path.repository")
-public class RepositoryConfiguration {
-
+public class PathConfiguration {
+    @Bean(name = "filesystemSessionTaskRunner")
+    public ThreadPoolTaskExecutor filesystemSessionTaskRunner() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setMaxPoolSize(10);
+        threadPoolTaskExecutor.setCorePoolSize(10);
+        return threadPoolTaskExecutor;
+    }
 }

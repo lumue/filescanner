@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Scope(proxyMode = ScopedProxyMode.NO)
 public class MetadataConfiguration {
 	@Bean
-	public AsyncTaskExecutor metadataRecorderTaskRunner() {
+	public ThreadPoolTaskExecutor metadataRecorderTaskRunner() {
 		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
 		threadPoolTaskExecutor.setMaxPoolSize(10);
 		threadPoolTaskExecutor.setCorePoolSize(10);

@@ -22,7 +22,7 @@ public class Pathscanner {
 
 	@Autowired
 	public Pathscanner(
-			@Qualifier("taskScheduler")
+			@Qualifier("filesystemSessionTaskRunner")
 			ThreadPoolTaskExecutor taskExecutor,
 			Reactor eventBus) {
 

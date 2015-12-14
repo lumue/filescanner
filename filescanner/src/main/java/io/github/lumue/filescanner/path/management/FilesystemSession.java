@@ -24,7 +24,7 @@ class FilesystemSession implements AutoCloseable{
         if(monitorTaskReference.get()!=null)
             monitorTaskReference.get().stop();
         monitorTaskReference.set(null);
-        managedPath.setSession(null);
+        managedPath.setConnected(false);
         sessionClosedCallback.afterSessionClosed(this);
     }
 
@@ -33,7 +33,7 @@ class FilesystemSession implements AutoCloseable{
     }
 
     public void open() {
-        managedPath.setSession(this);
+        managedPath.setConnected(true);
         if(Boolean.TRUE.equals(managedPath.getStartScanOnConnect())){
             pathscanner.startScan(managedPath.getPath());
         }

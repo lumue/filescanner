@@ -1,6 +1,5 @@
 package io.github.lumue.filescanner.path.repository;
 
-import io.github.lumue.filescanner.path.TestConfiguration;
 import io.github.lumue.filescanner.path.management.ManagedPath;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +14,7 @@ import static org.junit.Assert.*;
  * Created by lm on 09.12.15.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(TestConfiguration.class)
+@SpringApplicationConfiguration(PathConfiguration.class)
 @IntegrationTest
 public class ManagedPathRepositoryTest {
 

@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import reactor.core.Reactor;
@@ -21,7 +21,7 @@ public class Pathmonitor {
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(Pathmonitor.class);
 
-	private final ThreadPoolExecutor taskExecutor;
+	private final ThreadPoolTaskExecutor taskExecutor;
 
 	private final Reactor reactor;
 
@@ -29,7 +29,7 @@ public class Pathmonitor {
 
 	@Autowired
 	public Pathmonitor(Reactor reactor,
-					   @Qualifier("taskScheduler") ThreadPoolExecutor taskExecutor, Reactor reactor1)
+					   @Qualifier("filesystemSessionTaskRunner") ThreadPoolTaskExecutor taskExecutor, Reactor reactor1)
 			throws IOException {
 		super();
 		this.taskExecutor = taskExecutor;

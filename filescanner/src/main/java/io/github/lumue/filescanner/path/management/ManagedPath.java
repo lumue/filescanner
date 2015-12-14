@@ -41,8 +41,10 @@ public class ManagedPath {
     @Field(type = FieldType.Boolean, store = true)
     private LocalDateTime lastScanned;
 
+    @JsonProperty("lastScanned")
+    @Field(type = FieldType.Boolean, store = true)
+    private Boolean  connected;
 
-    private transient FilesystemSession  session;
 
 
     public ManagedPath() {
@@ -101,11 +103,12 @@ public class ManagedPath {
         this.lastScanned = lastScanned;
     }
 
-    public void setSession(FilesystemSession session) {
-        this.session = session;
+
+    public Boolean getConnected() {
+        return connected;
     }
 
-    public FilesystemSession getSession() {
-        return session;
+    public void setConnected(Boolean connected) {
+        this.connected = connected;
     }
 }
