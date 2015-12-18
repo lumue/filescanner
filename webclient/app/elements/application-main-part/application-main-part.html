@@ -1,0 +1,35 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="application-main-part">
+  <template>
+    <iron-pages attr-for-selected="data-route" selected="{{route}}">
+     <section data-route="home">
+          <header>
+            <h2>
+              Hallo Welt!
+            </h2>
+          </header>
+          <section>
+              Das ist die Startseite!
+          </section>
+      </section>
+      <section data-route="cors-ajax-demo">
+        <cors-ajax-demo-page />
+      </section>
+    </iron-pages>
+  </template>
+
+  <script>
+    // register a new element called proto-element
+    Polymer({
+      is: "application-main-part",
+      // add a callback to the element's prototype
+      ready: function() {
+
+      }
+    });
+  </script>
+
+</dom-module>

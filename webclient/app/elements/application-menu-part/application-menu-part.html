@@ -1,0 +1,33 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="application-menu-part">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <nav>
+      <ul>
+        <li>
+            <a href="/home">home</a>
+            <a href="/paths">paths</a>
+        </li>
+      </ul>
+    </nav>
+  </template>
+
+  <script>
+    // register a new element called proto-element
+    Polymer({
+      is: "application-menu-part",
+      // add a callback to the element's prototype
+      ready: function() {
+
+      }
+    });
+  </script>
+
+</dom-module>

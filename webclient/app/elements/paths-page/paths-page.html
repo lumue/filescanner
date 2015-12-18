@@ -1,0 +1,42 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="paths-page">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <paths-data id="data" paths="{{paths}}" newpath="{{newpath}}"/>
+
+    <header>
+      <h2 class="page-title">paths</h2>
+    </header>
+    <paths-list paths="{{paths}}"/>
+    <paths-create-form newpath="{{newpath}}" />
+  </template>
+
+  <script>
+    // register a new element called proto-element
+    Polymer({
+      is: "paths-page",
+      paths:null,
+      newpath:null,
+
+      ready: function(){
+
+      },
+      // add a callback to the element's prototype
+      handleCreate: function(){
+       this.$.data.createPath();
+      }
+
+
+
+    });
+  </script>
+
+</dom-module>

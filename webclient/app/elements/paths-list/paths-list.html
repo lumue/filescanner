@@ -7,38 +7,35 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../styles/denim.css" type="css">
-<dom-module id="my-greeting">
+
+<dom-module id="paths-list">
   <template>
-    <style include="shared-styles"></style>
     <style>
       :host {
         display: block;
       }
     </style>
-    <h2 class="page-title">{{greeting}}</h2>
-    <span class="paper-font-body2">Update text to change the greeting.</span>
-    <!-- Listens for "input" event and sets greeting to <input>.value -->
-    <input class="paper-font-body2" value="{{greeting::input}}">
+    <section>
+      <template is="dom-repeat" items="{{paths}}">
+        <paths-edit-form newpath="{{item}}" />
+      </template>
+    </section>
   </template>
-
   <script>
-    (function() {
-      'use strict';
+  (function() {
+    'use strict';
 
-      Polymer({
-        is: 'my-greeting',
+    Polymer({
+      is: 'paths-list',
 
-        properties: {
-          greeting: {
-            type: String,
-            value: 'Welcome!',
-            notify: true
-          }
+      properties: {
+        paths: {
+          notify: true
         }
-      });
-    })();
+      }
+    });
+  })();
   </script>
-
 </dom-module>

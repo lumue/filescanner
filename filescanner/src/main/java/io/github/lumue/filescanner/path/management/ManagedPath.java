@@ -33,15 +33,15 @@ public class ManagedPath {
     @Field(type = FieldType.Boolean, store = true)
     private Boolean startScanOnConnect=true;
 
-    @JsonProperty("startScanOnConnect")
+    @JsonProperty("connectOnStartup")
     @Field(type = FieldType.Boolean, store = true)
     private Boolean connectOnStartup=true;
 
     @JsonProperty("lastScanned")
-    @Field(type = FieldType.Boolean, store = true)
+    @Field(type = FieldType.Date, store = true)
     private LocalDateTime lastScanned;
 
-    @JsonProperty("lastScanned")
+    @JsonProperty("connected")
     @Field(type = FieldType.Boolean, store = true)
     private Boolean  connected;
 
