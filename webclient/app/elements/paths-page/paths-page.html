@@ -25,14 +25,8 @@
       is: "paths-page",
 
       properties: {
-        paths: {
-          notify: true,
-          value: testpaths
-        },
-        newpath:{
-          notify: true,
-          value:{"name":"testname","path":"/testpath","startScanOnConnect":true,"connectOnStartup":true,"lastScanned":null,"connected":null}
-        }
+        paths: {type: Array,notify: true},
+        newpath:{type: Object,notify: true }
       },
 
       ready: function(){

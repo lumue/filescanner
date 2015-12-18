@@ -18,8 +18,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <section>
+      <header>
+        <h3>managed paths</h3>
+      </header>
       <template is="dom-repeat" items="{{paths}}">
-        <paths-edit-form newpath="{{item}}" />
+        <paths-edit-form newpath="{{item}}" ></paths-edit-form>
       </template>
     </section>
   </template>
@@ -32,6 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       properties: {
         paths: {
+          type: Array,
           notify: true
         }
       }

@@ -2,23 +2,25 @@
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="cors-ajax-demo-dataprovider">
+<dom-module id="paths-data">
   <script>
-
-    var testpaths=[{"name":"testname","path":"/testpath","startScanOnConnect":true,"connectOnStartup":true,"lastScanned":null,"connected":null}];
 
   (function() {
     'use strict';
 
     Polymer({
-      is: 'cors-ajax-demo-dataprovider',
+      is: 'paths-data',
 
 
 
       properties: {
         paths: {
           notify: true,
-          value: testpaths
+          value: [
+            {"name":"testname","path":"/testpath","startScanOnConnect":true,"connectOnStartup":true,"lastScanned":null,"connected":null},
+            {"name":"testname","path":"/testpath","startScanOnConnect":true,"connectOnStartup":true,"lastScanned":null,"connected":null}
+          ]
+
         },
         newpath:{
           notify: true,

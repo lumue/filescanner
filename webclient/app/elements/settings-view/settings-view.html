@@ -10,51 +10,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="paths-edit-form">
+<dom-module id="settings-view">
   <template>
     <style>
       :host {
         display: block;
       }
     </style>
-    <section>
-      <header>
-        <h3>path {{newpath.name}}</h3>
-      </header>
-      <form>
-      <section>
-        <p>
-          <label>name</label>
-          <span >{{newpath.name}}</span>
-        </p>
-        <p>
-          <label >name</label>
-          <span>{{newpath.path}}</span>
-        </p>
-      </section>
-      <section>
-          <button type="submit" on-click="{{update}}">update</button>
-      </section>
-      </form>
-      </section>
-    </section>
+    <div>Hello from <span>{{foo}}</span></div>
   </template>
   <script>
   (function() {
     'use strict';
 
     Polymer({
-      is: 'paths-edit-form',
+      is: 'settings-view',
 
       properties: {
-        newpath: {
-          type: Object,
+        foo: {
+          type: String,
+          value: 'settings-view',
           notify: true
         }
-      },
-
-      update:function(){
-
       }
     });
   })();
