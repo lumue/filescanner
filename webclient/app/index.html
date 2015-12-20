@@ -43,49 +43,47 @@
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-<template is="dom-bind" id="app">
+  <template is="dom-bind" id="app">
 
-  <header>
-    <h1>filescanner</h1>
-  </header>
+    <header>
+      <h1>filescanner</h1>
+    </header>
 
-  <div class="contentContainer">
+    <div class="contentContainer">
 
-  <aside>
-    <application-menu-part />
-  </aside>
-
-
-  <main>
+    <aside>
+      <application-menu-part />
+    </aside>
 
 
-    <iron-pages attr-for-selected="data-route" selected="{{route}}">
+    <main>
 
 
-      <section data-route="home">
-        <header>
-          <h2>
-            Filescanner
-          </h2>
-        </header>
-        <section>
-          Metadata for your files
+      <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
+
+        <section data-route="home">
+          <header>
+            <h2>
+              Filescanner
+            </h2>
+          </header>
+          <section>
+            Metadata for your files
+          </section>
         </section>
-      </section>
 
-      <section data-route="paths">
-        <paths-page />
-      </section>
+        <paths-page data-route="paths"/>
 
-    </iron-pages>
-  </main>
+      </iron-pages>
+    </main>
 
-  </div>
+    </div>
 
-</template>
+  </template>
 
-<!-- build:js scripts/app.js -->
-<script src="scripts/app.js"></script>
+  <!-- build:js scripts/app.js -->
+  <script src="scripts/app.js"></script>
 <!-- endbuild-->
 </body>
 
