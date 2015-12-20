@@ -13,26 +13,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="paths-create-form">
   <template>
     <style>
+
       :host {
         display: block;
+        padding: 10px;
+        border-radius: 10px;
       }
+
+
     </style>
     <section>
       <header>
-        <h3>new path</h3>
+        <h4>new path</h4>
       </header>
       <form>
-        <section>
+        <section class="inputs">
           <p>
             <label for="path-name-input">name</label>
             <input id="path-name-input" type="text" value="{{newpath.name}}" />
           </p>
           <p>
-            <label for="path-path-input">name</label>
+            <label for="path-path-input">path</label>
             <input id="path-path-input" type="text" value="{{newpath.path}}" />
           </p>
         </section>
-        <section>
+        <section class="controls">
           <button type="submit" on-click="{{add}}">add</button>
         </section>
       </form>

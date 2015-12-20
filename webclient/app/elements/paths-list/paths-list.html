@@ -17,12 +17,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      paths-edit-form{
-        border-bottom: 5px;
-        padding-left: 5px;
-        padding-bottom: 5px;
-        background-color: #2b2b2b;
-      }
+
+
 
 
 
@@ -32,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h3>managed paths</h3>
       </header>
       <template is="dom-repeat" items="{{paths}}">
-        <paths-edit-form newpath="{{item}}" ></paths-edit-form>
+        <paths-edit-form class="panel" newpath="{{item}}" ></paths-edit-form>
       </template>
     </section>
   </template>
