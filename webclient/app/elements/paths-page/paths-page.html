@@ -22,8 +22,13 @@
     <header>
       <h2 class="page-title">paths</h2>
     </header>
+    <section>
+      <header>
+        <h3>ADD managed path</h3>
+      </header>
+      <paths-create-form class="panel" newpath="{{newpath}}" ></paths-create-form>
+    </section>
     <paths-list paths="{{paths}}"></paths-list>
-    <paths-create-form newpath="{{newpath}}" ></paths-create-form>
   </template>
 
   <script>

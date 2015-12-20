@@ -6,28 +6,18 @@
     <style>
       :host {
         display: block;
+        padding: 10px;
+        border-radius: 10px;
       }
 
 
-
-      header{
-        order: 0;
-      }
-
-      form{
-        order: 1;
-
-      }
-
-
-
-    </style>
+  </style>
     <section>
       <header>
-        <h3>path {{newpath.name}}</h3>
+        <h4>{{newpath.name}}</h4>
       </header>
       <form>
-        <section>
+        <section class="inputs">
           <p>
             <label>name</label>
             <span >{{newpath.name}}</span>
@@ -37,7 +27,7 @@
             <span>{{newpath.path}}</span>
           </p>
         </section>
-        <section >
+        <section class="controls">
             <button type="submit" on-click="{{update}}">update</button>
         </section>
       </form>

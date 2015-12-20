@@ -1,43 +1,35 @@
 
 body {
-  color: #bbbbbb;
+  color: #4082ef;
   background-color: #3c3f41;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 h2{
-  color: #ef6a29;
+  color: #4082ef;
+}
+
+h3{color: #ea4335}
+
+h4{
+  color: #4082ef;
+  margin: 0px;
 }
 
 article, section{
-  color: #a9b7ec;
+  color: #4082ef;
   font-size: 10pt;
 }
 
 a{
-  color: #e8bf6a;
+  color: #efad40;
 }
 
 h1{
-  color: #e8bf6a;
+  color: #efad40;
   font-size: 20pt;
 }
 
-input{
-  background-color: #3c3f41;
-  color: #0f9d58;
-  border: none;
-}
-
-span{
-  color: #0f9d58;
-}
-
-
-label{
-  color: #ef6a29;
-  padding-right: 4px;
-}
 
 body {
   display: flex;
@@ -52,3 +44,83 @@ main.header {
 .contentContainer { display: flex; flex: 1; }
 main { flex: 3; }
 aside { flex: 2; width: 120px; min-width: 120px; max-width: 120px; }
+
+button {
+  border-style: none;
+  background: #efad40;
+  color: #0b3b88;
+  align-self: baseline;
+  border-radius: 5px;
+}
+
+header{
+  order: 0;
+  margin: 0px;
+  padding-left: 3px;
+  padding-top: 3px;
+}
+
+h4{
+  color: #4082ef;
+  margin: 0px;
+}
+
+
+
+form{
+  order: 1;
+  display: flex;
+  align-items: flex-end;
+}
+
+.inputs{
+  order: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.controls{
+  order: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+}
+
+button {
+  border-style: none;
+  background: #efad40;
+  color: #0b3b88;
+  align-self: baseline;
+  border-radius: 5px;
+}
+
+
+label{
+  color: #ea4335;
+  padding-right: 4px;
+  margin-bottom: 3px;
+  float: left;
+}
+
+
+
+input{
+  background-color: #3c3f41;
+  color: #fbbc05;
+  border: none;
+  max-width: 75px;
+  font-weight: bold ;
+}
+
+
+span{
+  color: #fbbc05;
+  border: none;
+  max-width: 75px;
+  font-weight: bold;
+}
+
+.panel{
+  background-color: #2b2b2b;
+  margin-bottom: 10px;
+}
