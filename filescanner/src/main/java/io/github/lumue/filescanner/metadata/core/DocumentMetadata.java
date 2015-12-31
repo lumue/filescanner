@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,11 +18,11 @@ public class DocumentMetadata {
 
 	@Id
 	@JsonProperty("url")
-	@Field(type = FieldType.String, store = true)
+	@Field(type = FieldType.String, store = true,index = FieldIndex.not_analyzed)
 	private String url;
 
 	@JsonProperty("name")
-	@Field(type = FieldType.String, store = true)
+	@Field(type = FieldType.String, store = true,index = FieldIndex.analyzed)
 	private String name;
 
 	@JsonProperty("mimeType")
@@ -29,7 +30,7 @@ public class DocumentMetadata {
 	private String mimeType;
 
 	@JsonProperty("creationTime")
-	@Field(type = FieldType.Date,  store = true)
+	@Field(type = FieldType.Date,  store = true,index = FieldIndex.analyzed)
 	private LocalDateTime creationTime;
 
 	@JsonProperty("size")
@@ -45,7 +46,7 @@ public class DocumentMetadata {
 	private LocalDateTime modificationTime;
 
 	@JsonProperty("type")
-	@Field(type = FieldType.String,  store = true)
+	@Field(type = FieldType.String,  store = true,index = FieldIndex.analyzed)
 	private String type;
 
 	@JsonProperty("hash")

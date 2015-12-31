@@ -42,7 +42,7 @@ configurations {
 
 
 jar {
-    baseName = 'filescanner'
+    baseName = 'filescanner-server'
     version = '0.0.1-SNAPSHOT'
 }
 
@@ -91,9 +91,9 @@ task integrationTest(type: Test) {
     outputs.upToDateWhen { false }
 }
 
-group = 'lumue'
+group = 'media:5000'
 
-task buildDocker(type: Docker, dependsOn: build) {
+task buildDocker(type: Docker, dependsOn: [build,integrationTestClasses]) {
 	
 	push = true
 	applicationName = jar.baseName
