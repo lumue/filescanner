@@ -3,17 +3,13 @@
 
 <dom-module id="paths-page">
   <template>
-    <style include="shared-styles"></style>
-    <style>
-      :host {
-        display: block;
-      }
 
-      paths-create-form{
-        border-bottom: 5px;
-        padding-left: 5px;
-        padding-bottom: 5px;
+    <style>
+      .panel{
         background-color: #2b2b2b;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 10px;
       }
     </style>
 
@@ -23,12 +19,11 @@
       <h2 class="page-title">paths</h2>
     </header>
     <section>
-      <header>
-        <h3>ADD managed path</h3>
-      </header>
-      <paths-create-form class="panel" newpath="{{newpath}}" ></paths-create-form>
+      <paths-create-form class="panel" newpath="{{newpath}}" on-addpath="handleCreate" ></paths-create-form>
     </section>
-    <paths-list paths="{{paths}}"></paths-list>
+    <section>
+      <paths-list paths="{{paths}}" class="panel"></paths-list>
+    </section>
   </template>
 
   <script>
@@ -41,8 +36,7 @@
         newpath:{type: Object,notify: true }
       },
 
-      ready: function(){
-
+      ready: function(){this.$.data.reload();
       },
       // add a callback to the element's prototype
       handleCreate: function(){

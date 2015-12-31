@@ -16,8 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       :host {
         display: block;
-        padding: 10px;
-        border-radius: 10px;
       }
 
 
@@ -38,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </p>
         </section>
         <section class="controls">
-          <button type="submit" on-click="{{add}}">add</button>
+          <button  on-click="add">add</button>
         </section>
       </form>
     </section>
@@ -57,8 +55,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
 
-      add:function(){
-
+      add:function(e,detail){
+        this.fire('addpath');
       }
     });
   })();

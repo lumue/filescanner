@@ -17,35 +17,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-
-
-
-
-
+      th {
+        color: #cc7832;
+        padding-right: 5px;
+      }
     </style>
-    <section>
-      <header>
-        <h3>managed paths</h3>
-      </header>
+    <table>
+      <thead>
+      <tr>
+        <th width="140px" align="left">name</th>
+        <th width="140px" align="left">path</th>
+        <th>scan on connect</th>
+        <th>connect on startup</th>
+        <th>last scan</th>
+        <th>connected</th>
+      </tr>
+      </thead>
+      <tbody>
       <template is="dom-repeat" items="{{paths}}">
-        <paths-edit-form class="panel" newpath="{{item}}" ></paths-edit-form>
+        <tr>
+          <td>{{item.name}}</td>
+          <td>{{item.path}}</td>
+          <td>{{item.startScanOnConnect}}</td>
+          <td>{{item.connectOnStartup}}</td>
+          <td>{{item.lastScanned}}</td>
+          <td>{{item.connected}}</td>
+        </tr>
       </template>
-    </section>
+      </tbody>
+    </table>
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function () {
+      'use strict';
 
-    Polymer({
-      is: 'paths-list',
+      Polymer({
+        is: 'paths-list',
 
-      properties: {
-        paths: {
-          type: Array,
-          notify: true
+        properties: {
+          paths: {
+            type: Array,
+            notify: true
+          }
         }
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>
