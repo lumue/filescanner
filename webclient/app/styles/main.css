@@ -42,7 +42,7 @@ main.header {
 }
 
 .contentContainer { display: flex; flex: 1; }
-main { flex: 3; }
+main { flex: 3; padding-left: 20px;}
 aside { flex: 2; width: 120px; min-width: 120px; max-width: 120px; }
 
 button {
@@ -97,6 +97,7 @@ button {
 
 label{
   color: #cc7832;
+  font-weight: bold;
   padding-right: 4px;
   margin-bottom: 5px;
   float: left;

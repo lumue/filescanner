@@ -1,0 +1,50 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="documents-data">
+
+  <template>
+    <iron-ajax id="ajaxget"
+               handle-as="json"
+               content-type="application/json"
+               method="GET"
+               last-response="{{documents}}"
+               debounce-duration="3000"
+               url="http://localhost:8002/documents"
+               on-response="ongetresponse">
+    </iron-ajax>
+  </template>
+
+  <script>
+
+
+
+    (function () {
+      'use strict';
+
+      Polymer({
+
+        is: 'documents-data',
+
+        properties: {
+          documents: {
+            type: Array,
+            notify: true
+          }
+
+
+        },
+
+
+        reload(){
+          this.$.ajaxget.generateRequest();
+        },
+
+        ongetresponse: function (request) {
+          console.log(request.detail.response);
+          console.log(this.$.ajaxget.lastResponse);
+          console.log(this.$.ajaxget.params);
+        }
+      });
+    })();
+  </script>
+</dom-module>
