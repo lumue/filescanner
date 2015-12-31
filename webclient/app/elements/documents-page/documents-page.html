@@ -5,6 +5,11 @@
   <template>
 
     <style>
+
+      :host {
+        display: block;
+      }
+
       .panel{
         background-color: #2b2b2b;
         margin-bottom: 10px;
@@ -17,9 +22,10 @@
 
     <header>
       <h2 class="page-title">documents</h2>
+      <iron-icon style="align-self: flex-end" icon="icons:refresh" on-tap="refresh"></iron-icon>
     </header>
-    <section>
-      <documents-list documents="{{documents}}" class="panel"></documents-list>
+    <section class="panel">
+      <documents-list documents="{{documents}}"  on-refresh="refresh"></documents-list>
     </section>
   </template>
 
@@ -35,8 +41,7 @@
       ready: function(){this.$.data.reload();
       },
 
-      handleCreate: function(){
-       this.$.data.create();
+      refresh: function(){
         this.$.data.reload();
       }
 

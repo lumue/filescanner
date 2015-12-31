@@ -10,7 +10,7 @@
                body="{{newpath}}"
                on-response="onpostresponse"
                debounce-duration="3000"
-               url="http://localhost:8002/paths">
+               url="http://filescanner-server:8002/paths">
     </iron-ajax>
     <iron-ajax id="ajaxget"
                handle-as="json"
@@ -18,7 +18,7 @@
                method="GET"
                last-response="{{paths}}"
                debounce-duration="3000"
-               url="http://localhost:8002/paths"
+               url="http://filescanner-server:8002/paths"
                on-response="ongetresponse">
     </iron-ajax>
   </template>

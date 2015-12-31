@@ -19,27 +19,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       th {
         color: #cc7832;
-        padding-right: 5px;
+        padding: 5px;
+        alignment: left;
+      }
+      td{
+        padding-bottom: 5px;
       }
     </style>
-    <table>
+    <div style="overflow-x:auto;">
+    <table width="100%">
+      <col style="width:30%">
+      <col style="width:10%">
+      <col style="width:60%">
       <thead>
-      <tr>
-        <th>name</th>
-        <th>type</th>
-        <th>url</th>
-      </tr>
+        <tr>
+          <th align="left">name</th>
+          <th align="left">type</th>
+          <th align="left">url</th>
+        </tr>
       </thead>
       <tbody>
-      <template is="dom-repeat" items="{{documents}}">
-        <tr>
-          <td>{{item.name}}</td>
-          <td>{{item.type}}</td>
-          <td>{{item.url}}</td>
-        </tr>
-      </template>
+        <template is="dom-repeat" items="{{documents}}">
+          <tr>
+            <td>{{item.name}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.url}}</td>
+          </tr>
+        </template>
       </tbody>
     </table>
+    </div>
   </template>
   <script>
     (function () {

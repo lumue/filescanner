@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+
+    }
+    dependencies {
+    	classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
+}
+
+
+
+
+
+apply plugin: 'idea'
+apply plugin: 'docker'
+
+group = 'media:5000'
+
+task buildDocker(type: Docker) {
+
+	push = true
+	applicationName = "filescanner-webclient"
+
+	dockerfile = file('Dockerfile')
+
+  doFirst {
+    copy {
+      from "app"
+      into 'build/docker/app'
+    }
+  }
+}
+
