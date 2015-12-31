@@ -191,6 +191,15 @@
       </item>
     </group>
   </component>
+  <component name="ProjectDictionaryState">
+    <dictionary name="lm">
+      <words>
+        <w>newpath</w>
+        <w>testname</w>
+        <w>testpath</w>
+      </words>
+    </dictionary>
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/filescanner.iml" filepath="$PROJECT_DIR$/filescanner.iml" />
