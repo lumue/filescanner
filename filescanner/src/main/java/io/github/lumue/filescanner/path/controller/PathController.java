@@ -16,6 +16,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/paths")
+@CrossOrigin
 public class PathController {
 
     private final static Logger LOGGER= LoggerFactory.getLogger(PathController.class);
@@ -36,10 +37,9 @@ public class PathController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ManagedPath add(
-            @RequestParam("path") String path,
-            @RequestParam("name") String name){
+            @RequestBody ManagedPath path){
         try {
-            return pathManager.addPath(path,name);
+            return pathManager.addPath(path.getPath(),path.getName());
         } catch (io.github.lumue.filescanner.path.management.PathAlreadyManagedException e) {
             LOGGER.error("path already managed",e);
             throw new HttpConflictStatusException(e);

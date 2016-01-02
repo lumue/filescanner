@@ -1,10 +1,15 @@
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="paths-page">
+<dom-module id="documents-page">
   <template>
 
     <style>
+
+      :host {
+        display: block;
+      }
+
       .panel{
         background-color: #2b2b2b;
         margin-bottom: 10px;
@@ -13,34 +18,30 @@
       }
     </style>
 
-    <paths-data id="data" paths="{{paths}}" newpath="{{newpath}}"></paths-data>
+    <documents-data id="data" documents="{{documents}}" ></documents-data>
 
     <header>
-      <h2 class="page-title">paths</h2>
+      <h2 class="page-title">documents</h2>
+      <iron-icon style="align-self: flex-end" icon="icons:refresh" on-tap="refresh"></iron-icon>
     </header>
-    <section>
-      <paths-create-form class="panel" newpath="{{newpath}}" on-addpath="handleCreate" ></paths-create-form>
-    </section>
-    <section>
-      <paths-list paths="{{paths}}" class="panel"></paths-list>
+    <section class="panel">
+      <documents-list documents="{{documents}}"  on-refresh="refresh"></documents-list>
     </section>
   </template>
 
   <script>
     // register a new element called proto-element
     Polymer({
-      is: "paths-page",
+      is: "documents-page",
 
       properties: {
-        paths: {type: Array,notify: true},
-        newpath:{type: Object,notify: true }
+        documents: {type: Array,notify: true}
       },
 
       ready: function(){this.$.data.reload();
       },
 
-      handleCreate: function(){
-       this.$.data.create();
+      refresh: function(){
         this.$.data.reload();
       }
 

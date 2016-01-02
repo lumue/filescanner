@@ -1,0 +1,19 @@
+rootProject.group = 'io.github.lumue.getdown.filescanner'
+
+version = '0.1.0-SNAPSHOT'
+
+
+
+allprojects {
+
+
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
+
+
+	apply plugin: 'idea'
+
+}

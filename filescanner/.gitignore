@@ -10,3 +10,6 @@ testtree
 *.jfr
 .idea
 filescanner.iml
+gradle
+gradlew
+

@@ -1,41 +1,93 @@
-
-
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="paths-data">
+
+  <template>
+    <iron-ajax id="ajaxpost"
+               handle-as="json"
+               content-type="application/json"
+               method="POST"
+               body="{{newpath}}"
+               on-response="onpostresponse"
+               debounce-duration="3000"
+               url="http://filescanner-server:8002/paths">
+    </iron-ajax>
+    <iron-ajax id="ajaxget"
+               handle-as="json"
+               content-type="application/json"
+               method="GET"
+               last-response="{{paths}}"
+               debounce-duration="3000"
+               url="http://filescanner-server:8002/paths"
+               on-response="ongetresponse">
+    </iron-ajax>
+  </template>
+
   <script>
 
-  (function() {
-    'use strict';
+    var testdata = [
+      {
+        "name": "testname",
+        "path": "/testpath",
+        "startScanOnConnect": true,
+        "connectOnStartup": true,
+        "lastScanned": null,
+        "connected": null
+      },
+      {
+        "name": "testname",
+        "path": "/testpath",
+        "startScanOnConnect": true,
+        "connectOnStartup": true,
+        "lastScanned": null,
+        "connected": null
+      }
+    ];
 
-    Polymer({
-      is: 'paths-data',
+    (function () {
+      'use strict';
 
+      Polymer({
 
+        is: 'paths-data',
 
-      properties: {
-        paths: {
-          notify: true,
-          value: [
-            {"name":"testname","path":"/testpath","startScanOnConnect":true,"connectOnStartup":true,"lastScanned":null,"connected":null},
-            {"name":"testname","path":"/testpath","startScanOnConnect":true,"connectOnStartup":true,"lastScanned":null,"connected":null}
-          ]
+        properties: {
+          paths: {
+            notify: true
+          },
+
+          newpath: {
+            notify: true,
+            type: Object,
+            value: {
+              name: '',
+              path: '',
+              startScanOnConnect: true,
+              connectOnStartup: false,
+              lastScanned: null,
+              connected: null
+            }
+          }
 
         },
-        newpath:{
-          notify: true,
-          value:{"name":"testname","path":"/testpath","startScanOnConnect":true,"connectOnStartup":true,"lastScanned":null,"connected":null}
+
+        create(){
+          this.$.ajaxpost.generateRequest();
+        },
+        reload(){
+          this.$.ajaxget.generateRequest();
+        },
+        onpostresponse: function (request) {
+          console.log(request.detail.response);
+          console.log(this.$.ajaxpost.lastResponse);
+          console.log(this.$.ajaxpost.params);
+        },
+        ongetresponse: function (request) {
+          console.log(request.detail.response);
+          console.log(this.$.ajaxget.lastResponse);
+          console.log(this.$.ajaxget.params);
         }
-      },
-
-      create(){
-
-      },
-
-      refresh: function(){
-        this.properties.data.value++;
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>

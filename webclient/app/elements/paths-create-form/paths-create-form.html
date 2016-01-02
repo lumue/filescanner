@@ -16,8 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       :host {
         display: block;
-        padding: 10px;
-        border-radius: 10px;
       }
 
 
@@ -30,15 +28,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <section class="inputs">
           <p>
             <label for="path-name-input">name</label>
-            <input id="path-name-input" type="text" value="{{newpath.name}}" />
+            <input id="path-name-input" type="text" value="{{newpath.name::input}}" />
           </p>
           <p>
             <label for="path-path-input">path</label>
-            <input id="path-path-input" type="text" value="{{newpath.path}}" />
+            <input id="path-path-input" type="text" value="{{newpath.path::input}}" />
           </p>
         </section>
         <section class="controls">
-          <button type="submit" on-click="{{add}}">add</button>
+          <button  on-click="add">add</button>
         </section>
       </form>
     </section>
@@ -57,8 +55,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
 
-      add:function(){
-
+      add:function(e,detail){
+        this.fire('addpath');
       }
     });
   })();

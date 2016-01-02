@@ -25,6 +25,9 @@
   </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.RestController" />
+    </list>
   </component>
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
@@ -191,6 +194,15 @@
       </item>
     </group>
   </component>
+  <component name="ProjectDictionaryState">
+    <dictionary name="lm">
+      <words>
+        <w>newpath</w>
+        <w>testname</w>
+        <w>testpath</w>
+      </words>
+    </dictionary>
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/filescanner.iml" filepath="$PROJECT_DIR$/filescanner.iml" />
@@ -204,6 +216,7 @@
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
   <component name="VcsDirectoryMappings">
+    <mapping directory="/data/git/filescanner.git" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
   </component>

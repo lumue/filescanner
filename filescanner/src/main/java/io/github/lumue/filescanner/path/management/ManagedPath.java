@@ -43,7 +43,7 @@ public class ManagedPath {
 
     @JsonProperty("connected")
     @Field(type = FieldType.Boolean, store = true)
-    private Boolean  connected;
+    private Boolean  connected=false;
 
 
 

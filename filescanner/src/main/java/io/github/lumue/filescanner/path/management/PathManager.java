@@ -59,6 +59,8 @@ public class PathManager {
     }
 
     public ManagedPath addPath(String path, String name) throws PathAlreadyManagedException, ExistingSessionException {
+        if(isManagedPath(path) || pathNameExists(name))
+            throw new PathAlreadyManagedException();
         ManagedPath newPath=new ManagedPath(path,name);
         managedPathRepository.save(newPath);
         pathMap.put(newPath.getName(),newPath);
@@ -66,6 +68,14 @@ public class PathManager {
             this.sessionManager.connect(newPath);
         }
         return newPath;
+    }
+
+    private boolean isManagedPath(String path) {
+        return pathMap.values().parallelStream().anyMatch(p -> p.getPath().equals(path));
+    }
+
+    private boolean pathNameExists(String name) {
+        return pathMap.containsKey(name);
     }
 
 
