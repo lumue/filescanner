@@ -1,4 +1,14 @@
-filescanner_server:34xc  :
+filescanner_server:
+  image: media:5000/filescanner-server
+  log_driver: "syslog"
+  log_opt:
+    syslog-tag: "filescanner_server"
+    syslog-address: "udp://192.168.1.105:514"
+  volumes:
+    - /mnt/nasbox:/media
+  ports:
+    - "8002:8002"
+  links:
     - filescanner_elasticsearch
 
 filescanner_elasticsearch:
