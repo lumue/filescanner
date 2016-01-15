@@ -4,8 +4,7 @@
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "page": "visionmedia/page.js#~1.6.4",
-    "polymer": "Polymer/polymer#^1.2.0",
-    "vaadin-core-elements": "master"
+    "polymer": "Polymer/polymer#^1.2.0"
   },
   "devDependencies": {
     "web-component-tester": "*"
