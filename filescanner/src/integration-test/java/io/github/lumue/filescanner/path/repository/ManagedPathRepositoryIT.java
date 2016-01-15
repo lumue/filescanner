@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(TestConfiguration.class)
 @IntegrationTest
-public class ManagedPathRepositoryTest {
+public class ManagedPathRepositoryIT {
 
     @Autowired
     private ManagedPathRepository repository;

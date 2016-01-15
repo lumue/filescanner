@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(TestConfiguration.class)
 @IntegrationTest
-public class PathManagerIntegrationTest {
+public class PathManagerIT {
 
     @Autowired
     private PathManager pathManager;
