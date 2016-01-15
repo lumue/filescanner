@@ -20,9 +20,6 @@ public class FilescannerController {
 
 	private final Pathmonitor pathmonitor;
 
-	@Value("${filescanner.path.root}")
-	private String rootPath;
-
 	@Autowired
 	public FilescannerController(Pathscanner filescanner,
 			Pathmonitor pathmonitor) {
@@ -33,12 +30,12 @@ public class FilescannerController {
 
 	@RequestMapping("/startScan")
 	public void startScan(@RequestParam String path) {
-		filescanner.startScan(rootPath + path);
+		filescanner.startScan( path);
 	}
 
 	@RequestMapping("/startMonitoring")
 	public void startMonitoring(@RequestParam String path) throws IOException {
-		pathmonitor.newMonitor(Paths.get(rootPath + path));
+		pathmonitor.newMonitor(Paths.get( path));
 	}
 
 }

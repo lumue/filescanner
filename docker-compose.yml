@@ -1,11 +1,11 @@
 filescanner_server:
   image: media:5000/filescanner-server
-  log_driver: "syslog"
-  log_opt:
-    syslog-tag: "filescanner_server"
-    syslog-address: "udp://192.168.1.105:514"
+#  log_driver: "syslog"
+#  log_opt:
+#    syslog-tag: "filescanner_server"
+#    syslog-address: "udp://192.168.1.105:514"
   volumes:
-    - /mnt/nasbox:/media
+    - /mnt/nasbox/media:/media
   ports:
     - "8002:8002"
   links:
@@ -13,10 +13,10 @@ filescanner_server:
 
 filescanner_elasticsearch:
   image: elasticsearch:1.5.2
-  log_driver: "syslog"
-  log_opt:
-    syslog-tag: "filescanner_elasticsearch"
-    syslog-address: "udp://192.168.1.105:514"
+#  log_driver: "syslog"
+#  log_opt:
+#    syslog-tag: "filescanner_elasticsearch"
+#    syslog-address: "udp://192.168.1.105:514"
   volumes:
     - /data/docker-volumes/filescanner/elasticsearch/config:/usr/share/elasticsearch/config
     - /data/docker-volumes/filescanner/elasticsearch/data:/usr/share/elasticsearch/data
@@ -26,10 +26,10 @@ filescanner_elasticsearch:
 
 filescanner_client:
   image: media:5000/filescanner-webclient
-  log_driver: "syslog"
-  log_opt:
-    syslog-tag: "filescanner_client"
-    syslog-address: "udp://192.168.1.105:514"
+#  log_driver: "syslog"
+#  log_opt:
+#    syslog-tag: "filescanner_client"
+#    syslog-address: "udp://192.168.1.105:514"
   ports:
     - "8004:80"
   links:

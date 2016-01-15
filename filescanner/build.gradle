@@ -91,6 +91,7 @@ task integrationTest(type: Test) {
     outputs.upToDateWhen { false }
 }
 
+
 group = 'media:5000'
 
 task buildDocker(type: Docker, dependsOn: [build,integrationTestClasses]) {
@@ -106,21 +107,6 @@ task buildDocker(type: Docker, dependsOn: [build,integrationTestClasses]) {
 		into stageDir
 	  }
 	}
-}
-  
-idea {
-
-
-  module {
-    
-    //and some extra test source dirs
-    testSourceDirs += file('src/integration-test/java')
-
-
-    //if you need to put 'provided' dependencies on the classpath
-    scopes.TEST.plus += [ configurations.integrationTestCompile ]
-    downloadSources = true
-  }
 }
 
 
