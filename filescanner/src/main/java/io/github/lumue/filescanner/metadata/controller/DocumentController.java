@@ -5,30 +5,30 @@ import io.github.lumue.filescanner.metadata.core.DocumentMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import io.github.lumue.filescanner.metadata.repository.MetadataRepository;
+import io.github.lumue.filescanner.metadata.repository.DocumentRepository;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/documents")
 @CrossOrigin
-public class MetadataController {
+public class DocumentController {
 
-	private final MetadataRepository metadataRepository;
+	private final DocumentRepository documentRepository;
 
 	@Autowired
-	public MetadataController(MetadataRepository metadataRepository) {
+	public DocumentController(DocumentRepository documentRepository) {
 		super();
-		this.metadataRepository = metadataRepository;
+		this.documentRepository = documentRepository;
 	}
 
 	@RequestMapping("/{url}")
 	public DocumentMetadata find(@PathVariable("url") String url) {
-		return metadataRepository.findOne(url);
+		return documentRepository.findOne(url);
 	}
 
 	@RequestMapping(method=RequestMethod.GET)
 	public List<DocumentMetadata> list() {
-		return Lists.newArrayList(metadataRepository.findAll());
+		return Lists.newArrayList(documentRepository.findAll());
 	}
 }

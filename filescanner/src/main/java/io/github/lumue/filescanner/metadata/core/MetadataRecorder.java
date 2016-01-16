@@ -8,21 +8,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import io.github.lumue.filescanner.metadata.repository.MetadataRepository;
+import io.github.lumue.filescanner.metadata.repository.DocumentRepository;
 
 @Component
 public class MetadataRecorder {
 
-	private final MetadataRepository metadataRepository;
+	private final DocumentRepository documentRepository;
 
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(MetadataRecorder.class);
 
 	@Autowired
 	public MetadataRecorder(
-			MetadataRepository metadataRepository) {
+			DocumentRepository documentRepository) {
 		super();
-		this.metadataRepository = metadataRepository;
+		this.documentRepository = documentRepository;
 
 	}
 
@@ -34,7 +34,7 @@ public class MetadataRecorder {
 
 			MetadataAccessor metadataAccessor = new TikaMetadataAccessor(path);
 
-			boolean exists = metadataRepository
+			boolean exists = documentRepository
 					.exists(metadataAccessor.getUrl());
 
 			if (exists) {
@@ -55,12 +55,12 @@ public class MetadataRecorder {
 			MetadataAccessor accessor)
 			throws IOException {
 
-		DocumentMetadata documentMetadata = metadataRepository
+		DocumentMetadata documentMetadata = documentRepository
 				.findOne(accessor.getUrl());
 
 		DocumentMetadata.updateWithAccssor(documentMetadata, accessor);
 
-		metadataRepository.save(documentMetadata);
+		documentRepository.save(documentMetadata);
 
 	}
 
@@ -70,7 +70,7 @@ public class MetadataRecorder {
 
 		DocumentMetadata documentMetadata = DocumentMetadata.createWithAccessor(accessor);
 
-		metadataRepository.save(documentMetadata);
+		documentRepository.save(documentMetadata);
 
 	}
 

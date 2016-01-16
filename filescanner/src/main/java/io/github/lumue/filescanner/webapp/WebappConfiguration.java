@@ -12,6 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import io.github.lumue.filescanner.metadata.MetadataConfiguration;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import reactor.core.Environment;
 import reactor.core.Reactor;
 
