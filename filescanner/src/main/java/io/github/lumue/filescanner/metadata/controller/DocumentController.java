@@ -1,13 +1,12 @@
 package io.github.lumue.filescanner.metadata.controller;
 
-import com.google.common.collect.Lists;
 import io.github.lumue.filescanner.metadata.core.DocumentMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import io.github.lumue.filescanner.metadata.repository.DocumentRepository;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/documents")
@@ -28,7 +27,7 @@ public class DocumentController {
 	}
 
 	@RequestMapping(method=RequestMethod.GET)
-	public List<DocumentMetadata> list() {
-		return Lists.newArrayList(documentRepository.findAll());
+	public Stream<DocumentMetadata> list() {
+		return documentRepository.findDocumentMetadata();
 	}
 }

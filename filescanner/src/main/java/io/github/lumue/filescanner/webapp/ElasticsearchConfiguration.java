@@ -1,27 +1,31 @@
-package io.github.lumue.filescanner.path;
+package io.github.lumue.filescanner.webapp;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.lumue.filescanner.path.repository.PathConfiguration;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.elasticsearch.client.Client;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.EntityMapper;
-import org.springframework.test.context.TestPropertySource;
-import reactor.core.Environment;
-import reactor.core.Reactor;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import java.io.IOException;
 
 /**
- * Created by lm on 10.12.15.
+ * Created by lm on 17.01.16.
  */
 @Configuration
-@PropertySource("classpath:test.properties")
-@ComponentScan("io.github.lumue.filescanner.path")
-@EnableAutoConfiguration
-@Import(PathConfiguration.class)
-public class TestConfiguration {
+public class ElasticsearchConfiguration {
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JSR310Module());
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        return objectMapper;
+    }
+
 
     @Bean
     public ElasticsearchTemplate elasticsearchTemplate(Client client, EntityMapper entityMapper) {
@@ -46,17 +50,4 @@ public class TestConfiguration {
 
         };
     }
-
-
-    @Bean public Environment environment(){
-        Environment environment = new Environment();
-        return environment;
-    }
-
-    @Bean
-    public Reactor reactor(Environment environment) {
-        return environment.getRootReactor();
-    }
-
-
 }

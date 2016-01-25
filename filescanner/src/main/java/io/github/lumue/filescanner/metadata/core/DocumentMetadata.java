@@ -1,17 +1,16 @@
 package io.github.lumue.filescanner.metadata.core;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Document(indexName = "filescanner.metadata", type = "document")
 public class DocumentMetadata {
@@ -138,11 +137,7 @@ public class DocumentMetadata {
 	}
 
 	public static DocumentMetadata createWithAccessor(MetadataAccessor accessor) throws IOException {
-		DocumentMetadata documentMetadata = new DocumentMetadata(
-				accessor.getName(),
-				accessor.getUrl(),
-				accessor.getMimeType(),
-				accessor.getCreationTime());
+		DocumentMetadata documentMetadata = new DocumentMetadataBuilder().setName(accessor.getName()).setUrl(accessor.getUrl()).setMimeType(accessor.getMimeType()).setCreationTime(accessor.getCreationTime()).createDocumentMetadata();
 		updateWithAccssor(documentMetadata,accessor	);
 		return documentMetadata;
 	}
@@ -165,4 +160,34 @@ public class DocumentMetadata {
 		this.properties.put(key,value);
 	}
 
+	public static class DocumentMetadataBuilder {
+        private String name;
+        private String url;
+        private String mimeType = null;
+        private LocalDateTime creationTime = LocalDateTime.now();
+
+        public DocumentMetadataBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public DocumentMetadataBuilder setUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public DocumentMetadataBuilder setMimeType(String mimeType) {
+            this.mimeType = mimeType;
+            return this;
+        }
+
+        public DocumentMetadataBuilder setCreationTime(LocalDateTime creationTime) {
+            this.creationTime = creationTime;
+            return this;
+        }
+
+        public DocumentMetadata createDocumentMetadata() {
+            return new DocumentMetadata(name, url, mimeType, creationTime);
+        }
+    }
 }

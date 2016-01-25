@@ -7,6 +7,7 @@ buildscript {
 		
     }
     dependencies {
+        classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     	classpath('se.transmode.gradle:gradle-docker:1.2')
     }
@@ -18,6 +19,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
 
 sourceSets {
@@ -56,31 +58,43 @@ repositories {
 		url('http://maven.springframework.org/milestone/')
 		}
     maven { url('http://repo.springsource.org/libs-milestone/') }
-    maven { url ('https://github.com/lumue/maven-repository/raw/master/')}
+    maven { url ('https://raw.githubusercontent.com/lumue/maven-repository/master/')}
     maven { url('http://download.oracle.com/maven')}
+}
+
+// Import Spring Boot's bom, spring-boot-dependencies
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+    }
 }
 
 dependencies {
 
+    //spring
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile 'org.springframework.data:spring-data-elasticsearch'
-
+    compile 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
     compile 'org.projectreactor.spring:reactor-spring-context:1.1.3.RELEASE'
 
-
+    //json serializer
     compile group: 'com.google.guava', name: 'guava', version: '12.0'
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.5.1'
 
+    //tika parser
     compile 'org.apache.tika:tika-core:1.10'
     compile 'org.apache.tika:tika-parsers:1.10'
 
+    //nfo
     compile 'io.github.lumue:nfotools:1.0-RELEASE'
 
+    compile 'commons-io:commons-io:2.4'
 
 
+    //test
     testCompile 'junit:junit:4.11'
 
+    //integration-test
     integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
