@@ -20,9 +20,7 @@ filescanner_elasticsearch:
   volumes:
     - /data/docker-volumes/filescanner/elasticsearch/config:/usr/share/elasticsearch/config
     - /data/docker-volumes/filescanner/elasticsearch/data:/usr/share/elasticsearch/data
-  ports:
-    - "9201:9200"
-    - "9301:9300"
+
 
 filescanner_client:
   image: media:5000/filescanner-webclient

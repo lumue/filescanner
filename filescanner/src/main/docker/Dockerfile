@@ -5,4 +5,4 @@ ADD filescanner-server-0.0.1-SNAPSHOT.jar app.jar
 RUN touch /app.jar
 CMD mkdir /media
 CMD mkdir /filescanner
-ENTRYPOINT ["java","-jar","/app.jar","-D","logging.file=/filescanner/filescanner.log"]
+ENTRYPOINT ["java","-jar","/app.jar","--logging.file=/filescanner.log"]

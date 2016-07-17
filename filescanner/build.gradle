@@ -58,7 +58,7 @@ repositories {
 		url('http://maven.springframework.org/milestone/')
 		}
     maven { url('http://repo.springsource.org/libs-milestone/') }
-    maven { url ('https://raw.githubusercontent.com/lumue/maven-repository/master/')}
+	maven { url "https://jitpack.io" }
     maven { url('http://download.oracle.com/maven')}
 }
 
@@ -86,10 +86,12 @@ dependencies {
     compile 'org.apache.tika:tika-parsers:1.10'
 
     //nfo
-    compile 'io.github.lumue:nfotools:1.0-RELEASE'
+    compile 'com.github.lumue:nfotools:master'
 
     compile 'commons-io:commons-io:2.4'
 
+	//logging
+	compile 'org.slf4j:slf4j-api:1.7.18'
 
     //test
     testCompile 'junit:junit:4.11'
