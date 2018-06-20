@@ -1,14 +1,13 @@
 package io.github.lumue.filescanner.metadata.repository;
 
-import org.springframework.data.elasticsearch.repository.ElasticsearchCrudRepository;
 
 import io.github.lumue.filescanner.metadata.core.DocumentMetadata;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.stream.Stream;
 
 @Repository
-public interface DocumentRepository extends ElasticsearchCrudRepository<DocumentMetadata, String> {
+public interface DocumentRepository extends MongoRepository<DocumentMetadata, String> {
 
-    Stream<DocumentMetadata> findDocumentMetadata();
 }

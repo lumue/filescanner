@@ -2,9 +2,6 @@ package io.github.lumue.filescanner.path.management;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -17,32 +14,25 @@ import static java.util.Objects.requireNonNull;
  *
  * Created by lm on 09.12.15.
  */
-@Document(indexName = "filescanner.path", type = "managedPath")
 public class ManagedPath {
 
     @Id
     @JsonProperty("name")
-    @Field(type = FieldType.String, store = true)
     private String name;
 
     @JsonProperty("path")
-    @Field(type = FieldType.String, store = true)
     private String path;
 
     @JsonProperty("startScanOnConnect")
-    @Field(type = FieldType.Boolean, store = true)
     private Boolean startScanOnConnect=true;
 
     @JsonProperty("connectOnStartup")
-    @Field(type = FieldType.Boolean, store = true)
     private Boolean connectOnStartup=true;
 
     @JsonProperty("lastScanned")
-    @Field(type = FieldType.Date, store = true)
     private LocalDateTime lastScanned;
 
     @JsonProperty("connected")
-    @Field(type = FieldType.Boolean, store = true)
     private Boolean  connected=false;
 
 

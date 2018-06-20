@@ -28,6 +28,6 @@ public class DocumentController {
 
 	@RequestMapping(method=RequestMethod.GET)
 	public Stream<DocumentMetadata> list() {
-		return documentRepository.findDocumentMetadata();
+		return documentRepository.findAll().stream();
 	}
 }

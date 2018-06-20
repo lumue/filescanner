@@ -2,9 +2,10 @@ package io.github.lumue.filescanner.path.management;
 
 import io.github.lumue.filescanner.path.core.Pathmonitor;
 import io.github.lumue.filescanner.path.core.Pathscanner;
-import org.elasticsearch.common.netty.util.internal.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by lm on 10.12.15.

@@ -1,9 +1,8 @@
 package io.github.lumue.filescanner.test;
 
-import io.github.lumue.filescanner.webapp.FilescannerApplication;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -14,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @PropertySource("classpath:test.properties")
-@SpringApplicationConfiguration(FilescannerApplication.class)
-@WebIntegrationTest
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractFullApplicationStackIntegrationTest {
 }
