@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.path.management;
+package io.github.lumue.filescanner.config;
 
 /**
  * Created by lm on 10.12.15.

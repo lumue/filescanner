@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.path.core;
+package io.github.lumue.filescanner.discover;
 
 
 import org.slf4j.Logger;
@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
+import reactor.bus.Event;
+import reactor.bus.EventBus;
 
-import reactor.core.Reactor;
-import reactor.event.Event;
 
 @Component
 public class Pathscanner {
 
 	private final ThreadPoolTaskExecutor taskExecutor;
 
-	private final Reactor eventbus;
+	private final EventBus eventbus;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(Pathscanner.class);
 
@@ -24,7 +24,7 @@ public class Pathscanner {
 	public Pathscanner(
 			@Qualifier("filesystemSessionTaskRunner")
 			ThreadPoolTaskExecutor taskExecutor,
-			Reactor eventBus) {
+			EventBus eventBus) {
 
 		super();
 		this.taskExecutor = taskExecutor;

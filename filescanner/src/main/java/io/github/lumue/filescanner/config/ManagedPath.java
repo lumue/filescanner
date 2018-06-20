@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.path.management;
+package io.github.lumue.filescanner.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;

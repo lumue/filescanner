@@ -1,6 +1,7 @@
 package io.github.lumue.filescanner.path.repository;
 
-import io.github.lumue.filescanner.path.management.ManagedPath;
+import io.github.lumue.filescanner.config.ManagedPath;
+import io.github.lumue.filescanner.config.ManagedPathRepository;
 import io.github.lumue.filescanner.test.repository.AbstractRepositoryIT;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -1,7 +1,8 @@
 package io.github.lumue.filescanner.cli;
 
 import io.github.lumue.filescanner.metadata.Tags;
-import io.github.lumue.filescanner.path.core.FilesystemScanTask;
+import io.github.lumue.filescanner.discover.FilesystemScanTask;
+import io.github.lumue.filescanner.util.FileExtensionUtils;
 import io.github.lumue.infojson.DownloadMetadata;
 import io.github.lumue.infojson.DownloadMetadataStreamParser;
 import io.github.lumue.nfotools.Movie;
@@ -35,8 +36,6 @@ private int run=0;
 
 private final static Logger LOGGER = LoggerFactory.getLogger(WriteNfoCliTask.class);
 
-private final static List<String> MOVIE_EXTENSIONS = Arrays.asList("flv", "mp4", "avi");
-
 public WriteNfoCliTask(String path) throws JAXBException {
 	this.path = Objects.requireNonNull(path);
 	JAXBContext jaxbContext = JAXBContext.newInstance(Movie.class, Movie.Actor.class);
@@ -49,7 +48,7 @@ public void execute() throws Exception {
 		try {
 			String filename = file.toString();
 			String extension = FilenameUtils.getExtension(filename);
-			if (isVideoFileExtension(extension)) {
+			if (FileExtensionUtils.isVideoFileExtension(file)) {
 				String baseName = FilenameUtils.getBaseName(filename);
 				Movie.MovieBuilder movieBuilder = Movie.builder().withTitle(baseName);
 				String infoJsonFilename = FilenameUtils.getFullPath(filename) + baseName + ".info.json";
@@ -174,12 +173,4 @@ private Set<String> extractTagsFromInfojson(DownloadMetadata downloadMetadata) {
 	return ret;
 }
 
-private boolean isVideoFileExtension(String extension) {
-	for (String m : MOVIE_EXTENSIONS) {
-		if (m.equalsIgnoreCase(extension))
-			return true;
-	}
-	;
-	return false;
-}
 }

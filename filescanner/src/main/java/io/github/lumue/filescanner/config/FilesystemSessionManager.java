@@ -1,7 +1,7 @@
-package io.github.lumue.filescanner.path.management;
+package io.github.lumue.filescanner.config;
 
-import io.github.lumue.filescanner.path.core.Pathmonitor;
-import io.github.lumue.filescanner.path.core.Pathscanner;
+import io.github.lumue.filescanner.discover.Pathmonitor;
+import io.github.lumue.filescanner.discover.Pathscanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

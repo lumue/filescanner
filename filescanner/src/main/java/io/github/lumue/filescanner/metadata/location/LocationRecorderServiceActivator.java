@@ -1,8 +1,7 @@
-package io.github.lumue.filescanner.metadata.core;
-
-import static reactor.event.selector.Selectors.$;
+package io.github.lumue.filescanner.metadata.location;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,31 +9,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
+import reactor.bus.Event;
+import reactor.bus.EventBus;
 
-import reactor.core.Reactor;
-import reactor.event.Event;
-import reactor.function.Consumer;
+import static reactor.bus.selector.Selectors.$;
 
 @Component
-public class MetadataRecorderServiceActivator implements Consumer<Event<Path>> {
+public class LocationRecorderServiceActivator implements Consumer<Event<Path>> {
 
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(MetadataRecorder.class);
+			.getLogger(LocationRecorder.class);
 
 	private final AsyncTaskExecutor taskExecutor;
 
-	private final MetadataRecorder metadataRecorder;
+	private final LocationRecorder pathMetadataRecorder;
 
 
 
 	@Autowired
-	public MetadataRecorderServiceActivator(
-			Reactor reactor,
+	public LocationRecorderServiceActivator(
+			EventBus reactor,
 			@Qualifier("metadataRecorderTaskRunner") AsyncTaskExecutor taskExecutor,
-			MetadataRecorder recorder) {
+			LocationRecorder recorder) {
 		super();
 		this.taskExecutor = taskExecutor;
-		this.metadataRecorder = recorder;
+		this.pathMetadataRecorder = recorder;
 		reactor.on($("files"), this);
 	}
 
@@ -42,7 +41,7 @@ public class MetadataRecorderServiceActivator implements Consumer<Event<Path>> {
 	public void accept(Event<Path> pathEvent) {
 		LOGGER.debug("consuming Event " + pathEvent);
 		taskExecutor.submit(() -> {
-			metadataRecorder.recordMetadata(pathEvent.getData());
+			pathMetadataRecorder.recordMetadata(pathEvent.getData());
 		} );
 		LOGGER.debug("consumed Event " + pathEvent);
 	}

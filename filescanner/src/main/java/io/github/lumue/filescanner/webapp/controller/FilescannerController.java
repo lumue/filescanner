@@ -1,17 +1,16 @@
-package io.github.lumue.filescanner.path.controller;
+package io.github.lumue.filescanner.webapp.controller;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.lumue.filescanner.path.core.Pathmonitor;
-import io.github.lumue.filescanner.path.core.Pathscanner;
+import io.github.lumue.filescanner.discover.Pathmonitor;
+import io.github.lumue.filescanner.discover.Pathscanner;
 
 @RestController
 public class FilescannerController {

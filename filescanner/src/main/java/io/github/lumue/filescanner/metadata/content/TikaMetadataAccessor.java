@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.metadata.core;
+package io.github.lumue.filescanner.metadata.content;
 
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -15,13 +15,12 @@ import java.util.Collection;
  *
  * Created by lm on 16.10.15.
  */
-public class TikaMetadataAccessor extends FilesystemMetadataAccessor{
+public class TikaMetadataAccessor {
 
 
 	private final Metadata tikaMetadata;
 
 	public TikaMetadataAccessor(Path path) throws Exception {
-		super(path);
 		tikaMetadata=parse(path);
 	}
 
@@ -38,12 +37,12 @@ public class TikaMetadataAccessor extends FilesystemMetadataAccessor{
 		}
 	}
 
-	@Override
+
 	public String getProperty(String key) {
 		return  tikaMetadata.get(key);
 	}
 
-	@Override
+	
 	public Collection<String> getPropertyKeys() {
 		return Arrays.asList(tikaMetadata.names());
 	}

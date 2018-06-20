@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.path.core;
+package io.github.lumue.filescanner.discover;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
+import reactor.bus.Event;
+import reactor.bus.EventBus;
 
-import reactor.core.Reactor;
-import reactor.event.Event;
 
 @Component
 public class Pathmonitor {
@@ -23,17 +23,18 @@ public class Pathmonitor {
 
 	private final ThreadPoolTaskExecutor taskExecutor;
 
-	private final Reactor reactor;
+	private final EventBus reactor;
 
 	private final ConcurrentMap<String,FilesystemMonitorTask> runningJobMap=new ConcurrentHashMap<>();
 
 	@Autowired
-	public Pathmonitor(Reactor reactor,
-					   @Qualifier("filesystemSessionTaskRunner") ThreadPoolTaskExecutor taskExecutor, Reactor reactor1)
+	public Pathmonitor(EventBus reactor,
+					   @Qualifier("filesystemSessionTaskRunner") ThreadPoolTaskExecutor taskExecutor
+	)
 			throws IOException {
 		super();
 		this.taskExecutor = taskExecutor;
-		this.reactor = reactor1;
+		this.reactor = reactor;
 	}
 
 	/**

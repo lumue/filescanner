@@ -1,7 +1,6 @@
-package io.github.lumue.filescanner.path.repository;
+package io.github.lumue.filescanner.config;
 
 
-import io.github.lumue.filescanner.path.management.ManagedPath;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

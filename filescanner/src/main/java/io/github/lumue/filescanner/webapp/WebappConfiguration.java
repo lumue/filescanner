@@ -18,21 +18,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import reactor.core.Environment;
-import reactor.core.Reactor;
-import reactor.spring.context.config.EnableReactor;
+import reactor.bus.EventBus;
+import reactor.core.publisher.TopicProcessor;
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
 @Configuration
-@EnableReactor
 @ComponentScan("io.github.lumue.filescanner")
 @EnableAutoConfiguration
-@EnableMongoRepositories(basePackages = {"io.github.lumue.filescanner.metadata.repository","io.github.lumue.filescanner.path.repository"})
+@EnableMongoRepositories(basePackages = {"io.github.lumue.filescanner.metadata.location","io.github.lumue.filescanner.config"})
 public class WebappConfiguration extends WebMvcConfigurerAdapter {
 
 	public WebappConfiguration() {
@@ -60,14 +60,28 @@ public class WebappConfiguration extends WebMvcConfigurerAdapter {
 		om.registerModule(new SimpleModule("Streams API", Version.unknownVersion(), Lists.newArrayList(streamSer)));
 		return jackson;
 	}
-
-
-
-
-	@Bean
-	public Reactor reactor(Environment environment) {
-			return environment.getRootReactor();
+	
+	
+	@Bean public ExecutorService fileEventHandlerExecutor() {
+		final ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+		threadPoolTaskExecutor.setThreadNamePrefix("file-event-handler");
+		threadPoolTaskExecutor.setThreadGroupName("file-event-handler");
+		threadPoolTaskExecutor.setCorePoolSize(10);
+		threadPoolTaskExecutor.setMaxPoolSize(20);
+		threadPoolTaskExecutor.setQueueCapacity(5000);
+		threadPoolTaskExecutor.initialize();
+		return threadPoolTaskExecutor.getThreadPoolExecutor();
 	}
+	
+	@Bean public TopicProcessor dispatcher(ExecutorService fileEventHandlerExecutor){
+		return TopicProcessor.create(fileEventHandlerExecutor,4096);
+	}
+	
+	@Bean
+	public EventBus eventBus(TopicProcessor dispatcher) {
+		return EventBus.create(dispatcher);
+	}
+	
 	@Bean
 	public ObjectMapper objectMapper() {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -77,6 +91,12 @@ public class WebappConfiguration extends WebMvcConfigurerAdapter {
 		return objectMapper;
 	}
 	
-	
+	@Bean(name = "filesystemSessionTaskRunner")
+	public ThreadPoolTaskExecutor filesystemSessionTaskRunner() {
+		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+		threadPoolTaskExecutor.setMaxPoolSize(10);
+		threadPoolTaskExecutor.setCorePoolSize(10);
+		return threadPoolTaskExecutor;
+	}
 	
 }

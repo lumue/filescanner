@@ -1,8 +1,8 @@
-package io.github.lumue.filescanner.path.controller;
+package io.github.lumue.filescanner.webapp.controller;
 
-import io.github.lumue.filescanner.path.management.ExistingSessionException;
-import io.github.lumue.filescanner.path.management.ManagedPath;
-import io.github.lumue.filescanner.path.management.PathManager;
+import io.github.lumue.filescanner.config.ExistingSessionException;
+import io.github.lumue.filescanner.config.ManagedPath;
+import io.github.lumue.filescanner.config.PathManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class PathController {
             @RequestBody ManagedPath path){
         try {
             return pathManager.addPath(path.getPath(),path.getName());
-        } catch (io.github.lumue.filescanner.path.management.PathAlreadyManagedException e) {
+        } catch (io.github.lumue.filescanner.config.PathAlreadyManagedException e) {
             LOGGER.error("path already managed",e);
             throw new HttpConflictStatusException(e);
         } catch (ExistingSessionException e2) {

@@ -1,6 +1,7 @@
 package io.github.lumue.filescanner.metadata.repository;
 
-import io.github.lumue.filescanner.metadata.core.DocumentMetadata;
+import io.github.lumue.filescanner.metadata.location.Location;
+import io.github.lumue.filescanner.metadata.location.LocationRepository;
 import io.github.lumue.filescanner.test.repository.AbstractRepositoryIT;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,19 +12,19 @@ import java.util.stream.Stream;
 /**
  * Created by lm on 17.01.16.
  */
-public class DocumentRepositoryIT extends AbstractRepositoryIT<DocumentMetadata>{
+public class DocumentRepositoryIT extends AbstractRepositoryIT<Location>{
 
     @Autowired
-    private DocumentRepository documentRepository;
+    private LocationRepository locationRepository;
 
     @Test
     public void shouldReturnStreamContainingTestentityFromStreamAll() throws Exception {
 
         //given a document repository containing testentity
-        DocumentMetadata testentity = documentRepository.save(createTestentity());
+        Location testentity = locationRepository.save(createTestentity());
 
         //executing findDocumentMetadata should contain testentity
-        try(Stream<DocumentMetadata> result=documentRepository.findDocumentMetadata()){
+        try(Stream<Location> result= locationRepository.findAll().stream()){
             Assert.assertTrue("result should contain testentity",
                     result
                             .filter(documentMetadata -> testentity.equals(documentMetadata))
@@ -34,15 +35,15 @@ public class DocumentRepositoryIT extends AbstractRepositoryIT<DocumentMetadata>
     }
 
     @Override
-    protected DocumentMetadata createTestentity() {
-        return new DocumentMetadata.DocumentMetadataBuilder()
+    protected Location createTestentity() {
+        return new Location.DocumentMetadataBuilder()
                 .setName("testdocument")
                 .setUrl("test:/url")
                 .createDocumentMetadata();
     }
 
     @Override
-    protected DocumentRepository getRepository() {
-        return documentRepository;
+    protected LocationRepository getRepository() {
+        return locationRepository;
     }
 }

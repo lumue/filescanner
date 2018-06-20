@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.path.core;
+package io.github.lumue.filescanner.discover;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;

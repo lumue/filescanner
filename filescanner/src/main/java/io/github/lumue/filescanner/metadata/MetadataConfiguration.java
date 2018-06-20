@@ -15,8 +15,9 @@ public class MetadataConfiguration {
 	@Bean
 	public ThreadPoolTaskExecutor metadataRecorderTaskRunner() {
 		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-		threadPoolTaskExecutor.setMaxPoolSize(10);
-		threadPoolTaskExecutor.setCorePoolSize(10);
+		threadPoolTaskExecutor.setMaxPoolSize(100);
+		threadPoolTaskExecutor.setCorePoolSize(100);
+		threadPoolTaskExecutor.setQueueCapacity(1000);
 		return threadPoolTaskExecutor;
 	}
 }
