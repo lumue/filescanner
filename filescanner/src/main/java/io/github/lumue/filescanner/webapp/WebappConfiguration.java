@@ -12,15 +12,13 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import reactor.bus.EventBus;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import reactor.core.publisher.TopicProcessor;
 
 import java.io.IOException;
@@ -31,9 +29,10 @@ import java.util.stream.Stream;
 
 @Configuration
 @ComponentScan("io.github.lumue.filescanner")
+@ImportResource("classpath*:io/github/lumue/filescanner/integrationflow/application-integration-flow.xml")
 @EnableAutoConfiguration
 @EnableMongoRepositories(basePackages = {"io.github.lumue.filescanner.metadata.location","io.github.lumue.filescanner.config"})
-public class WebappConfiguration extends WebMvcConfigurerAdapter {
+public class WebappConfiguration implements WebMvcConfigurer {
 
 	public WebappConfiguration() {
 	}
@@ -73,13 +72,15 @@ public class WebappConfiguration extends WebMvcConfigurerAdapter {
 		return threadPoolTaskExecutor.getThreadPoolExecutor();
 	}
 	
-	@Bean public TopicProcessor dispatcher(ExecutorService fileEventHandlerExecutor){
-		return TopicProcessor.create(fileEventHandlerExecutor,4096);
-	}
-	
-	@Bean
-	public EventBus eventBus(TopicProcessor dispatcher) {
-		return EventBus.create(dispatcher);
+	@Bean public TaskExecutor insertUpdateExecutor() {
+		final ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+		threadPoolTaskExecutor.setThreadNamePrefix("insert-update-executor");
+		threadPoolTaskExecutor.setThreadGroupName("insert-update-executor");
+		threadPoolTaskExecutor.setCorePoolSize(1);
+		threadPoolTaskExecutor.setMaxPoolSize(3);
+		threadPoolTaskExecutor.setQueueCapacity(50000);
+		threadPoolTaskExecutor.initialize();
+		return threadPoolTaskExecutor;
 	}
 	
 	@Bean

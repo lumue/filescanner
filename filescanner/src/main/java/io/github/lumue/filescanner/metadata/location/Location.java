@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -30,6 +29,10 @@ public class Location {
 	@JsonProperty("creationTime")
 	@Indexed
 	private LocalDateTime creationTime;
+	
+	@JsonProperty("lastScanTime")
+	@Indexed
+	private LocalDateTime lastScanTime;
 	
 	@JsonProperty("size")
 	@Indexed
@@ -142,34 +145,53 @@ public class Location {
 		this.hash = hash;
 	}
 	
-	public static Location createWithAccessor(LocationMetadataAccessor accessor) throws IOException {
-		Location location = new DocumentMetadataBuilder()
-				.setName(accessor.getName())
-				.setUrl(accessor.getUrl())
-				.setMimeType(accessor.getMimeType())
-				.setCreationTime(accessor.getCreationTime())
-				.createDocumentMetadata();
-		updateWithAccssor(location, accessor);
-		return location;
-	}
-	
-	public static void updateWithAccssor(Location location, LocationMetadataAccessor accessor) throws IOException {
-		final LocalDateTime modificationTime = accessor.getModificationTime();
-		final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getModificationTime()).orElse(LocalDateTime.ofEpochSecond(0,0, ZoneOffset.UTC));
-		if (   (location.getHash() == null || location.getHash().isEmpty())
-				|| (metadataModificationTime.isBefore(modificationTime))
-		) {
-			location.setHash(accessor.getHash());
+	public static Location createWithAccessor(FileMetadataAccessor accessor) throws IOException {
+		try {
+			Location location = new DocumentMetadataBuilder()
+					.setName(accessor.getName())
+					.setUrl(accessor.getUrl())
+					.setMimeType(accessor.getMimeType())
+					.setCreationTime(accessor.getCreationTime())
+					.createDocumentMetadata();
+			updateWithAccessor(location, accessor);
+			return location;
 		}
-		location.setLastAccessTime(
-				accessor.getLastAccessTime());
-		location.setModificationTime(
-				modificationTime);
-		location.setSize(accessor.getSize());
-		location.setType(accessor.getType());
+		catch(IOException ex){
+			throw new RuntimeException(ex);
+		}
 		
 	}
 	
+	public static Location updateWithAccessor(Location location, FileMetadataAccessor accessor)  {
+		try {
+			final LocalDateTime modificationTime = accessor.getModificationTime();
+			final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getModificationTime()).orElse(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
+			if ((location.getHash() == null || location.getHash().isEmpty())
+					|| (metadataModificationTime.isBefore(modificationTime))
+			) {
+				location.setHash(accessor.getType() + "_" + accessor.getSize() + "_" + accessor.getHash());
+			}
+			location.setLastAccessTime(
+					accessor.getLastAccessTime());
+			location.setModificationTime(
+					modificationTime);
+			location.setSize(accessor.getSize());
+			location.setType(accessor.getType());
+			
+			return location;
+		}
+		catch(IOException ex){
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	public LocalDateTime getLastScanTime() {
+		return lastScanTime;
+	}
+	
+	public void setLastScanTime(LocalDateTime lastScanTime) {
+		this.lastScanTime = lastScanTime;
+	}
 	
 	
 	public static class DocumentMetadataBuilder {

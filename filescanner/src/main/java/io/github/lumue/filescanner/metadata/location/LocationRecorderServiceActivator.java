@@ -8,14 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import reactor.bus.Event;
-import reactor.bus.EventBus;
-
-import static reactor.bus.selector.Selectors.$;
 
 @Component
-public class LocationRecorderServiceActivator implements Consumer<Event<Path>> {
+public class LocationRecorderServiceActivator implements Consumer<Message<Path>> {
 
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(LocationRecorder.class);
@@ -28,20 +25,18 @@ public class LocationRecorderServiceActivator implements Consumer<Event<Path>> {
 
 	@Autowired
 	public LocationRecorderServiceActivator(
-			EventBus reactor,
 			@Qualifier("metadataRecorderTaskRunner") AsyncTaskExecutor taskExecutor,
 			LocationRecorder recorder) {
 		super();
 		this.taskExecutor = taskExecutor;
 		this.pathMetadataRecorder = recorder;
-		reactor.on($("files"), this);
 	}
 
 	@Override
-	public void accept(Event<Path> pathEvent) {
+	public void accept(Message<Path> pathEvent) {
 		LOGGER.debug("consuming Event " + pathEvent);
 		taskExecutor.submit(() -> {
-			pathMetadataRecorder.recordMetadata(pathEvent.getData());
+			pathMetadataRecorder.recordMetadata(pathEvent.getPayload());
 		} );
 		LOGGER.debug("consumed Event " + pathEvent);
 	}

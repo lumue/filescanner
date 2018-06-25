@@ -1,4 +1,4 @@
-rootProject.group = 'io.github.lumue.getdown.filescanner'
+rootProject.group = 'io.github.lumue.filescanner'
 
 version = '0.1.0-SNAPSHOT'
 

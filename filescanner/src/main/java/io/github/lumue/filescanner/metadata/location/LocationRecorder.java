@@ -34,9 +34,9 @@ public class LocationRecorder {
 
 		try {
 
-			LocationMetadataAccessor metadataAccessor = new LocationMetadataAccessor(path);
+			FileMetadataAccessor metadataAccessor = new FileMetadataAccessor(path);
 			
-			final Location metadata = locationRepository.findOne(metadataAccessor.getUrl());
+			final Location metadata = locationRepository.findById(metadataAccessor.getUrl()).orElse(null);
 			boolean exists = metadata !=null;
 
 			if (exists  && metadataAccessor.getModificationTime().isAfter(metadata.getModificationTime())) {
@@ -54,20 +54,21 @@ public class LocationRecorder {
 	}
 
 	private void updateMetadata(
-			LocationMetadataAccessor accessor)
+			FileMetadataAccessor accessor)
 			throws IOException {
 
 		Location location = locationRepository
-				.findOne(accessor.getUrl());
+				.findById(accessor.getUrl())
+				.orElseThrow(()->new IllegalArgumentException("existing url location required"));
 
-		Location.updateWithAccssor(location, accessor);
+		Location.updateWithAccessor(location, accessor);
 
 		locationRepository.save(location);
 
 	}
 
 	private void insertMetadata(
-			LocationMetadataAccessor accessor)
+			FileMetadataAccessor accessor)
 			throws IOException {
 
 		Location location = Location.createWithAccessor(accessor);

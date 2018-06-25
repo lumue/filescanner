@@ -1,7 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.14.RELEASE'
-	    reactor_version = '2.5.0.BUILD-SNAPSHOT'
+        springBootVersion ='2.0.3.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -9,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	    classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
     	classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
@@ -78,11 +77,10 @@ dependencies {
     //spring
     compile("org.springframework.boot:spring-boot-starter-web")
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	compile("io.projectreactor.spring:reactor-spring-context:$reactor_version")
-	compile "io.projectreactor:reactor-core:$reactor_version"
-	compile "io.projectreactor:reactor-bus:$reactor_version"
-	compile "io.projectreactor:reactor-stream:$reactor_version"
-
+	compile("org.springframework.boot:spring-boot-starter-integration")
+	compile("org.springframework.integration:spring-integration-core")
+	compile("org.springframework.integration:spring-integration-event")
+	compile("org.springframework.integration:spring-integration-file")
 	//json serializer
     compile group: 'com.google.guava', name: 'guava', version: '12.0'
 	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'

@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
-import reactor.bus.Event;
-import reactor.bus.EventBus;
 
 
 @Component
@@ -23,18 +21,15 @@ public class Pathmonitor {
 
 	private final ThreadPoolTaskExecutor taskExecutor;
 
-	private final EventBus reactor;
-
 	private final ConcurrentMap<String,FilesystemMonitorTask> runningJobMap=new ConcurrentHashMap<>();
 
 	@Autowired
-	public Pathmonitor(EventBus reactor,
+	public Pathmonitor(
 					   @Qualifier("filesystemSessionTaskRunner") ThreadPoolTaskExecutor taskExecutor
 	)
 			throws IOException {
 		super();
 		this.taskExecutor = taskExecutor;
-		this.reactor = reactor;
 	}
 
 	/**
@@ -50,7 +45,7 @@ public class Pathmonitor {
 		FilesystemMonitorTask pathWatcher= new FilesystemMonitorTask(
 				path,
 				(file) -> {
-			reactor.notify("files", Event.wrap(file));
+			//reactor.notify("files", Event.wrap(file));
 		});
 		taskExecutor.submit(pathWatcher);
 		runningJobMap.putIfAbsent(path.toString(),pathWatcher);

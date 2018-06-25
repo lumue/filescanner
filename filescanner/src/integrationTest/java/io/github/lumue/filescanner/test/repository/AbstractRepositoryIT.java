@@ -27,7 +27,7 @@ public abstract class AbstractRepositoryIT<T> extends AbstractFullApplicationSta
     public void testSaveAndGet() throws Exception {
         T testentity = createTestentity();
         getRepository().save(testentity);
-        T returnedEntity = getRepository().findOne("testname");
+        T returnedEntity = getRepository().findById("testname").get();
         assertTrue("result should not be null",returnedEntity!=null);
         assertEquals("returned path should equal testpath ",testentity,returnedEntity);
     }

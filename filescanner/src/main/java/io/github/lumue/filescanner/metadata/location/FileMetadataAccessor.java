@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.DatatypeConverter;
 
-class LocationMetadataAccessor {
+class FileMetadataAccessor {
 
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(LocationMetadataAccessor.class);
+			.getLogger(FileMetadataAccessor.class);
 
 	private final BasicFileAttributes attrs;
 
@@ -30,7 +30,7 @@ class LocationMetadataAccessor {
 	private final AtomicReference<String> hash = new AtomicReference<>(null);
 
 
-	public LocationMetadataAccessor(Path path) throws IOException {
+	public FileMetadataAccessor(Path path) throws IOException {
 		super();
 		attrs = Files.readAttributes(path, BasicFileAttributes.class);
 		this.path = path;
