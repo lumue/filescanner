@@ -121,8 +121,9 @@ public class Location {
 	}
 	
 	public void setType(String type) {
-		if(hash!=null)
-			hash.replace(this.type,type);
+		if(hash!=null) {
+			hash = hash.replace("GENERIC",this.type).replace(this.type, type);
+		}
 		this.type = type;
 		
 	}

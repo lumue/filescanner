@@ -52,6 +52,13 @@ public class LocationService {
 			if("GENERIC".equals(type))
 				return false;
 			
+			final String hash = location
+					.map(l->Optional.ofNullable(l.getHash()).orElse(""))
+					.orElse("");
+			
+			if(hash.startsWith("GENERIC"))
+				return false;
+			
 			final LocalDateTime lastScan = location
 					.map(Location::getLastScanTime)
 					.orElse(LocalDateTime.MIN);
