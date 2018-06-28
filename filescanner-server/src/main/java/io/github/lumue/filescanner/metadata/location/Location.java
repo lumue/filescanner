@@ -121,6 +121,8 @@ public class Location {
 	}
 	
 	public void setType(String type) {
+		if(hash!=null)
+			hash.replace(this.type,type);
 		this.type = type;
 		
 	}
@@ -177,7 +179,10 @@ public class Location {
 			location.setModificationTime(
 					modificationTime);
 			location.setSize(accessor.getSize());
+			
 			location.setType(accessor.getType());
+			
+			
 			
 			return location;
 		}
