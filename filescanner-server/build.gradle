@@ -119,22 +119,89 @@ task integrationTest(type: Test) {
 
 group = 'media:5000'
 
-task buildDocker(type: Docker, dependsOn: [build,integrationTestClasses]) {
-	
-	push = true
-	applicationName = jar.baseName
-	
-	dockerfile = file('src/main/docker/Dockerfile')
-	
+task docker(dependsOn: build) {
+
+	dependsOn 'dockerBuild'
+
+}
+
+task dockerBuild(type: Exec){
+	def stageDir = file(project.buildDir.absolutePath + '/docker')
+
+	workingDir stageDir
+	executable = 'docker'
+	args=['build', '-t', "lumue/filescanner-server:${project.version}", '.']
+
 	doFirst {
-	  copy {
-		from jar
-		into stageDir
-	  }
+		copy {
+			from jar
+			into stageDir
+		}
+		copy {
+			from file('src/main/docker/Dockerfile')
+			into stageDir
+		}
 	}
+
+}
+
+task dockerRun(type: Exec){
+
+	dependsOn 'dockerBuild'
+
+	def stageDir = file(project.buildDir.absolutePath + '/docker')
+
+	workingDir stageDir
+	executable = 'docker'
+	args=['run','-d',
+	      '--name',"filescanner-server_${project.version}",
+	      '-p','8001:8001',
+	      "lumue/filescanner-server:${project.version}"]
+
+	doLast{
+		sleep(10*1000)
+	}
+
+}
+
+task dockerStop(type: Exec){
+
+	def stageDir = file(project.buildDir.absolutePath + '/docker')
+
+	workingDir stageDir
+	executable = 'docker'
+	args=['stop',"filescanner-server_${project.version}"]
+
+	ignoreExitValue true
+
+}
+
+task dockerRemove(type: Exec){
+
+	dependsOn 'dockerStop'
+
+	def stageDir = file(project.buildDir.absolutePath + '/docker')
+
+	workingDir stageDir
+	executable = 'docker'
+	args=['rm','-f',"filescanner-server_${project.version}"]
+
+	ignoreExitValue true
+}
+
+task dockerTagLatest(type: Exec){
+
+	mustRunAfter 'dockerBuild'
+
+	def stageDir = file(project.buildDir.absolutePath + '/docker')
+
+	workingDir stageDir
+	executable = 'docker'
+	args= ['tag', "lumue/filescanner-server:${project.version}", 'lumue/filescanner-server:latest']
+
 }
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.6'
+    gradleVersion = '4.4'
 }

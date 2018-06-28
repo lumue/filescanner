@@ -1,5 +1,5 @@
-rootProject.name='filescanner-parent'
+rootProject.name='filescanner'
 include (
-	  'filescanner',
-	  'webclient'
+	  'filescanner-server',
+	  'filescanner-webclient'
 )
