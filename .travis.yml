@@ -17,10 +17,6 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-
-before_script:
-  - ./gradlew npmInstall
-
 script:
   - ./gradlew docker
 
