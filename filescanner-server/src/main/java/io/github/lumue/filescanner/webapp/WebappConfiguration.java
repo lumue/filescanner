@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
 @Configuration
+@PropertySource(ignoreResourceNotFound = true, value = "file://${filescanner.path.config}/filescanner.properties}")
 @ComponentScan("io.github.lumue.filescanner")
 @ImportResource("classpath*:io/github/lumue/filescanner/integrationflow/application-integration-flow.xml")
 @EnableAutoConfiguration
