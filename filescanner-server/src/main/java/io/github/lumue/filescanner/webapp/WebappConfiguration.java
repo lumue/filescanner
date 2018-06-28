@@ -29,23 +29,26 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
+
+
+
 @Configuration
-@PropertySource(ignoreResourceNotFound = true, value = "file://${filescanner.path.config}/filescanner.properties}")
 @ComponentScan("io.github.lumue.filescanner")
 @ImportResource("classpath*:io/github/lumue/filescanner/integrationflow/application-integration-flow.xml")
 @EnableAutoConfiguration
 @EnableMongoRepositories(basePackages = {"io.github.lumue.filescanner.metadata.location","io.github.lumue.filescanner.config"})
 @EnableAspectJAutoProxy
+@PropertySource(ignoreResourceNotFound = true, value = "file://${filescanner.properties}")
 public class WebappConfiguration implements WebMvcConfigurer {
-
+	
 	public WebappConfiguration() {
 	}
-
+	
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(jackson2HttpMessageConverter());
 	}
-
+	
 	private MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
 		MappingJackson2HttpMessageConverter jackson =
 				new MappingJackson2HttpMessageConverter();
