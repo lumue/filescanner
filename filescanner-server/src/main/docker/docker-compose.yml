@@ -17,4 +17,13 @@ mongo:
   ports:
     - "27018:27017"
 
-
+prometheus:
+  image: prometheus/prometheus
+  restart: always
+  volumes:
+    - /data/docker-volumes/filescanner/filescanner-prometheus/prometheus:/prometheus
+    - /data/docker-volumes/filescanner/filescanner-prometheus/etc:/etc/prometheus
+  ports:
+    - "9090:9010"
+  links:
+    - server

@@ -73,8 +73,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	compile("org.springframework.boot:spring-boot-starter-integration")
 	compile("org.springframework.boot:spring-boot-starter-actuator")
-	compile 'io.micrometer:micrometer-registry-jmx:latest.release'
-
+	compile 'io.micrometer:micrometer-registry-prometheus:latest.release'
 	compile("org.springframework.integration:spring-integration-core")
 	compile("org.springframework.integration:spring-integration-event")
 	compile("org.springframework.integration:spring-integration-file")
