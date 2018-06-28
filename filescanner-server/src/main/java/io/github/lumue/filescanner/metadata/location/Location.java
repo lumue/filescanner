@@ -165,7 +165,8 @@ public class Location {
 	public static Location updateWithAccessor(Location location, FileMetadataAccessor accessor)  {
 		try {
 			final LocalDateTime modificationTime = accessor.getModificationTime();
-			final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getModificationTime()).orElse(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
+			final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getModificationTime())
+					.orElse(LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC));
 			if ((location.getHash() == null || location.getHash().isEmpty())
 					|| (metadataModificationTime.isBefore(modificationTime))
 			) {
