@@ -12,13 +12,8 @@ server:
 mongo:
   image: mongo:latest
   restart: always
-  environment:
-    MONGO_INITDB_ROOT_USERNAME: filescanner
-    MONGO_INITDB_ROOT_PASSWORD: filescanner
   volumes:
     - /data/docker-volumes/filescanner/filescanner-mongo/data/db:/data/db
-  ports:
-    - "27018:27017"
 
 
 
