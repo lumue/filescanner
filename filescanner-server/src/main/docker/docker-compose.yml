@@ -1,0 +1,22 @@
+server:
+  image: lumue/filescanner-server:master-SNAPSHOT
+  restart: always
+  volumes:
+    - /mnt/nasbox/media:/media
+    - /data/docker-volumes/filescanner/filescanner-server:/filescanner
+  ports:
+    - "7002:8002"
+
+links:
+  - mongo
+
+mongo:
+  image: mongo:latest
+  restart: always
+  environment:
+    MONGO_INITDB_ROOT_USERNAME: filescanner
+    MONGO_INITDB_ROOT_PASSWORD: filescanner
+  volumes:
+    - /data/docker-volumes/filescanner/filescanner-server:/data/db
+  ports:
+    - "27018:27017"

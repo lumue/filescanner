@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
        xmlns:int="http://www.springframework.org/schema/integration"
        xmlns:int-file="http://www.springframework.org/schema/integration/file"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/task
+							http://www.springframework.org/schema/task/spring-task.xsd
 							http://www.springframework.org/schema/integration
 							http://www.springframework.org/integration/spring-integration-5.0.xsd
 							http://www.springframework.org/schema/integration/file
 							http://www.springframework.org/schema/integration/file/spring-integration-file-5.0.xsd"
 >
+
+
 
 	<bean id="recursiveScanner" class="org.springframework.integration.file.RecursiveDirectoryScanner">
 		<property name="filter">
@@ -23,19 +28,36 @@
 	                                  scanner="recursiveScanner"
 
 	>
-		<int:poller cron="${filescanner.scanner.cron}" max-messages-per-poll="-1"/>
+		<int:poller cron="${filescanner.scanner.cron}"
+		            max-messages-per-poll="-1"
+					task-executor="inboundFileExecutor"
+		/>
 	</int-file:inbound-channel-adapter>
 
-	<int:filter input-channel="inboundFileChannel" ref="unknownOrModifiedFileSelector"
-	            output-channel="unknownOrModifiedLocationChannel"/>
+	<task:executor id="inboundFileExecutor"
+	               pool-size="${filescanner.inboundfile.threads}"
+	               queue-capacity="${filescanner.inboundfile.queue}" />
+
+	<int:filter input-channel="inboundFileChannel"
+	            ref="unknownOrModifiedFileSelector"
+	            output-channel="unknownOrModifiedLocationChannel"
+
+
+	/>
 
 	<int:channel id="unknownOrModifiedLocationChannel">
 		<int:queue/>
 	</int:channel>
 
-	<int:service-activator input-channel="unknownOrModifiedLocationChannel" ref="locationService"
-	                       method="createOrUpdate" output-channel="nullChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="insertUpdateExecutor"/>
+	<int:service-activator input-channel="unknownOrModifiedLocationChannel"
+	                       ref="locationService"
+	                       method="createOrUpdate"
+	                       output-channel="nullChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="createOrUpdateLocationExecutor"/>
 	</int:service-activator>
+
+	<task:executor id="createOrUpdateLocationExecutor"
+	               pool-size="${filescanner.locationupdater.threads}"
+	               queue-capacity="${filescanner.locationupdater.queue}" />
 
 </beans>
