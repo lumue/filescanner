@@ -27,7 +27,7 @@ script:
 
 after_success:
   - docker login  -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker tag  lumue/filescanner-server:mongo-SNAPSHOT lumue/filescanner-server:latest
-  - docker push lumue/filescanner-server:mongo-SNAPSHOT
+  - docker tag  lumue/filescanner-server:master-SNAPSHOT lumue/filescanner-server:latest
+  - docker push lumue/filescanner-server:master-SNAPSHOT
   - docker push lumue/filescanner-server:latest
 
