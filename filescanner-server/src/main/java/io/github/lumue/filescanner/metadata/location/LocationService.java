@@ -44,7 +44,15 @@ public class LocationService {
 	{
 		try {
 			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());
-			final LocalDateTime lastScan = locationRepository.findById(fileMetadataAccessor.getUrl())
+			final Optional<Location> location = locationRepository.findById(fileMetadataAccessor.getUrl());
+			final String type = location
+					.map(Location::getType)
+					.orElse("GENERIC");
+			
+			if("GENERIC".equals(type))
+				return false;
+			
+			final LocalDateTime lastScan = location
 					.map(Location::getLastScanTime)
 					.orElse(LocalDateTime.MIN);
 			
