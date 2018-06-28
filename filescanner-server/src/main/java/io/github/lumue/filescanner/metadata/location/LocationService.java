@@ -29,13 +29,29 @@ public class LocationService {
 	public Location createOrUpdate(File file) {
 		try {
 			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());
-			final Location location = locationRepository.findById(file.toURI().toString())
+			final Location location = locationRepository.findById(fileMetadataAccessor.getUrl())
 					.map(l -> Location.updateWithAccessor(l, fileMetadataAccessor))
 					.orElse(Location.createWithAccessor(fileMetadataAccessor));
 			location.setLastScanTime(LocalDateTime.now());
 			return locationRepository.save(location);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		}
+	}
+	
+	@Timed("location_service.is_current")
+	public boolean isLocationCurrent(File file)
+	{
+		try {
+			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());
+			final LocalDateTime lastScan = locationRepository.findById(fileMetadataAccessor.getUrl())
+					.map(Location::getLastScanTime)
+					.orElse(LocalDateTime.MIN);
+			
+			return lastScan.isAfter(fileMetadataAccessor.getModificationTime());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 }

@@ -30,19 +30,12 @@
 	>
 		<int:poller cron="${filescanner.scanner.cron}"
 		            max-messages-per-poll="-1"
-					task-executor="inboundFileExecutor"
 		/>
 	</int-file:inbound-channel-adapter>
-
-	<task:executor id="inboundFileExecutor"
-	               pool-size="${filescanner.inboundfile.threads}"
-	               queue-capacity="${filescanner.inboundfile.queue}" />
 
 	<int:filter input-channel="inboundFileChannel"
 	            ref="unknownOrModifiedFileSelector"
 	            output-channel="unknownOrModifiedLocationChannel"
-
-
 	/>
 
 	<int:channel id="unknownOrModifiedLocationChannel">
