@@ -6,9 +6,8 @@ server:
     - /data/docker-volumes/filescanner/filescanner-server:/filescanner
   ports:
     - "7002:8002"
-
-links:
-  - mongo
+  links:
+    - mongo
 
 mongo:
   image: mongo:latest
@@ -17,6 +16,10 @@ mongo:
     MONGO_INITDB_ROOT_USERNAME: filescanner
     MONGO_INITDB_ROOT_PASSWORD: filescanner
   volumes:
-    - /data/docker-volumes/filescanner/filescanner-server:/data/db
+    - /data/docker-volumes/filescanner/filescanner-mongo/data/db:/data/db
   ports:
     - "27018:27017"
+
+
+
+
