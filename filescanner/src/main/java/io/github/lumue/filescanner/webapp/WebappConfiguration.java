@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.collect.Lists;
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.core.task.TaskExecutor;
@@ -32,6 +34,7 @@ import java.util.stream.Stream;
 @ImportResource("classpath*:io/github/lumue/filescanner/integrationflow/application-integration-flow.xml")
 @EnableAutoConfiguration
 @EnableMongoRepositories(basePackages = {"io.github.lumue.filescanner.metadata.location","io.github.lumue.filescanner.config"})
+@EnableAspectJAutoProxy
 public class WebappConfiguration implements WebMvcConfigurer {
 
 	public WebappConfiguration() {
@@ -98,6 +101,11 @@ public class WebappConfiguration implements WebMvcConfigurer {
 		threadPoolTaskExecutor.setMaxPoolSize(10);
 		threadPoolTaskExecutor.setCorePoolSize(10);
 		return threadPoolTaskExecutor;
+	}
+	
+	@Bean
+	TimedAspect timedAspect(MeterRegistry registry) {
+		return new TimedAspect(registry);
 	}
 	
 }

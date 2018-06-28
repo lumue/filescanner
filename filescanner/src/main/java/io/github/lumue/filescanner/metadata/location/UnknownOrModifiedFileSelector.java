@@ -22,13 +22,11 @@ public class UnknownOrModifiedFileSelector implements MessageSelector {
 	@Override
 	public boolean accept(Message<?> message) {
 		File file = (File) message.getPayload();
-		
-		if(!file.toURI().toString().endsWith("mp4"))
-			return false;
+	
 		
 		try {
 			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());
-			final LocalDateTime lastScan = locationService.getForURL(file.toURI().toString())
+			final LocalDateTime lastScan = locationService.getForURL(fileMetadataAccessor.getUrl())
 					.map(Location::getLastScanTime)
 					.orElse(LocalDateTime.MIN);
 			

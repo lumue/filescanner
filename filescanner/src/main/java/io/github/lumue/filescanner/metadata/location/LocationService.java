@@ -1,5 +1,6 @@
 package io.github.lumue.filescanner.metadata.location;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,12 @@ public class LocationService {
 		this.locationRepository = locationRepository;
 	}
 	
-	
+	@Timed("location_service.get_for_url")
 	public Optional<Location> getForURL(String url) {
 		return locationRepository.findById(url);
 	}
 	
+	@Timed("location_service.create_or_update")
 	public Location createOrUpdate(File file) {
 		try {
 			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());

@@ -12,7 +12,9 @@
 >
 
 	<bean id="recursiveScanner" class="org.springframework.integration.file.RecursiveDirectoryScanner">
-
+		<property name="filter">
+			<bean class="io.github.lumue.filescanner.discover.VideoFileFilter"/>
+		</property>
 	</bean>
 
 
@@ -21,7 +23,7 @@
 	                                  scanner="recursiveScanner"
 
 	>
-		<int:poller fixed-rate="1"/>
+		<int:poller cron="${filescanner.scanner.cron}" max-messages-per-poll="-1"/>
 	</int-file:inbound-channel-adapter>
 
 	<int:filter input-channel="inboundFileChannel" ref="unknownOrModifiedFileSelector"
