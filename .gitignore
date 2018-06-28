@@ -5,3 +5,4 @@ gradlew
 gradlew.bat
 .DS_Store
 data/
+.filescanner/
