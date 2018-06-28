@@ -65,12 +65,6 @@ repositories {
 	maven { url 'http://repo.spring.io/plugins-release' }
 }
 
-// Import Spring Boot's bom, spring-boot-dependencies
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-    }
-}
 
 dependencies {
 
@@ -125,8 +119,9 @@ task docker(dependsOn: build) {
 
 }
 
-task dockerBuild(type: Exec){
+task dockerBuild(type: Exec,dependsOn: bootJar){
 	def stageDir = file(project.buildDir.absolutePath + '/docker')
+	def bootJarDir = file(project.buildDir.absolutePath + '/libs')
 
 	workingDir stageDir
 	executable = 'docker'
@@ -134,7 +129,7 @@ task dockerBuild(type: Exec){
 
 	doFirst {
 		copy {
-			from jar
+			from bootJarDir
 			into stageDir
 		}
 		copy {
@@ -202,6 +197,3 @@ task dockerTagLatest(type: Exec){
 }
 
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
-}
