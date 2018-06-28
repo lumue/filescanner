@@ -28,7 +28,7 @@
 	                                  scanner="recursiveScanner"
 
 	>
-		<int:poller cron="${filescanner.scanner.cron}"
+		<int:poller fixed-delay="3600"
 		            max-messages-per-poll="-1"
 		/>
 	</int-file:inbound-channel-adapter>
