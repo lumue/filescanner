@@ -25,16 +25,19 @@ public class UnknownOrModifiedFileSelector implements MessageSelector {
 	
 	@Override
 	public boolean accept(Message<?> message) {
-		
-		File file = (File) message.getPayload();
-		
-		if (locationService.isLocationCurrent(file)) {
-			LOGGER.debug("data for file " + file.toURI().toString() + " is up to date. message discarded");
+		try {
+			File file = (File) message.getPayload();
+			
+			if (locationService.isLocationCurrent(file)) {
+				LOGGER.debug("data for file " + file.toURI().toString() + " is up to date. message discarded");
+				return false;
+			}
+			
+			LOGGER.debug("data for file " + file.toURI().toString() + " does not exist or is outdated. message accepted");
+			return true;
+		}catch (Throwable t) {
+			LOGGER.error("error filtering "+message,t);
 			return false;
 		}
-		
-		LOGGER.debug("data for file " + file.toURI().toString() + " does not exist or is outdated. message accepted");
-		return true;
-		
 	}
 }
