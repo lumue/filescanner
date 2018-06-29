@@ -3,10 +3,10 @@ package io.github.lumue.filescanner.metadata.location;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -15,9 +15,12 @@ public class LocationService {
 
 	private final LocationRepository locationRepository;
 	
+	private final ReactiveLocationRepository reactiveLocationRepository;
+	
 	@Autowired
-	public LocationService(LocationRepository locationRepository) {
+	public LocationService(LocationRepository locationRepository, ReactiveLocationRepository reactiveLocationRepository) {
 		this.locationRepository = locationRepository;
+		this.reactiveLocationRepository = reactiveLocationRepository;
 	}
 	
 	@Timed("filescanner.location_service.get_for_url")
@@ -25,13 +28,24 @@ public class LocationService {
 		return locationRepository.findById(url);
 	}
 	
+	@Timed("filescanner.location_service.get_for_file")
+	public Optional<Location> getForFile(File file) {
+		try {
+			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(file.toPath());
+			return locationRepository.findById(fileAttributeAccessor.getUrl());
+		}
+		catch (IOException e){
+			throw new RuntimeException(e);
+		}
+	}
+	
 	@Timed("filescanner.location_service.create_or_update")
 	public Location createOrUpdate(File file) {
 		try {
-			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());
-			final Location location = locationRepository.findById(fileMetadataAccessor.getUrl())
-					.map(l -> Location.updateWithAccessor(l, fileMetadataAccessor))
-					.orElse(Location.createWithAccessor(fileMetadataAccessor));
+			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(file.toPath());
+			final Location location = locationRepository.findById(fileAttributeAccessor.getUrl())
+					.map(l -> Location.updateWithAccessor(l, fileAttributeAccessor))
+					.orElse(Location.createWithAccessor(fileAttributeAccessor));
 			location.setLastScanTime(LocalDateTime.now());
 			return locationRepository.save(location);
 		} catch (IOException e) {
@@ -43,18 +57,22 @@ public class LocationService {
 	public boolean isLocationCurrent(File file)
 	{
 		try {
-			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());
-			final Optional<Location> location = locationRepository.findById(fileMetadataAccessor.getUrl());
+			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(file.toPath());
+			final Optional<Location> location = locationRepository.findById(fileAttributeAccessor.getUrl());
 			
 			
 			final LocalDateTime lastScan = location
 					.map(Location::getLastScanTime)
 					.orElse(LocalDateTime.MIN);
 			
-			return lastScan.isAfter(fileMetadataAccessor.getModificationTime());
+			return lastScan.isAfter(fileAttributeAccessor.getModificationTime());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public Flux<Location> findAll(){
+		return reactiveLocationRepository.findAll();
 	}
 }

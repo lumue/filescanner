@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(collection = "contentcollection")
 public class Content {
@@ -27,6 +28,7 @@ public class Content {
 	}
 	
 	public void addLocation(Location location) {
+		if(!contentKey.equals(location.getHash()))
 		locations.add(location);
 	}
 	
@@ -40,5 +42,15 @@ public class Content {
 	
 	public void removeLocations(List<Location> toRemove) {
 	    locations.removeAll(toRemove);
+	}
+	
+	public void setLocations(List<Location> locationList) {
+		this.locations.clear();
+		this.locations.addAll(
+				locationList.stream()
+				.filter(l->l.getHash().equals(getContentKey()))
+				.collect(Collectors.toList())
+		);
+		
 	}
 }

@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 
 @Document(collection = "locations")
@@ -148,7 +147,7 @@ public class Location {
 		this.hash = hash;
 	}
 	
-	public static Location createWithAccessor(FileMetadataAccessor accessor) throws IOException {
+	public static Location createWithAccessor(FileAttributeAccessor accessor) throws IOException {
 		try {
 			Location location = new DocumentMetadataBuilder()
 					.setName(accessor.getName())
@@ -165,7 +164,7 @@ public class Location {
 		
 	}
 	
-	public static Location updateWithAccessor(Location location, FileMetadataAccessor accessor)  {
+	public static Location updateWithAccessor(Location location, FileAttributeAccessor accessor)  {
 		try {
 			final LocalDateTime modificationTime = accessor.getModificationTime();
 			final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getLastScanTime())

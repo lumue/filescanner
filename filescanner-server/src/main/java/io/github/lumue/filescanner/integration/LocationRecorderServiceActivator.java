@@ -1,8 +1,9 @@
-package io.github.lumue.filescanner.metadata.location;
+package io.github.lumue.filescanner.integration;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
+import io.github.lumue.filescanner.metadata.location.LocationRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

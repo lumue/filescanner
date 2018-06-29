@@ -17,14 +17,12 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
@@ -39,19 +37,18 @@ import java.util.stream.Stream;
 		"io.github.lumue.filescanner.metadata.location",
 		"io.github.lumue.filescanner.metadata.content",
 		"io.github.lumue.filescanner.config"})
+@EnableReactiveMongoRepositories(basePackages = {
+		"io.github.lumue.filescanner.metadata.location",
+		"io.github.lumue.filescanner.metadata.content",
+		"io.github.lumue.filescanner.config"})
 @EnableAspectJAutoProxy
 @PropertySource(ignoreResourceNotFound = true, value = "file://${filescanner.properties}")
-public class WebappConfiguration implements WebMvcConfigurer {
+public class WebappConfiguration  {
 	
-	public WebappConfiguration() {
-	}
 	
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		converters.add(jackson2HttpMessageConverter());
-	}
 	
-	private MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
+	@Bean
+	public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
 		MappingJackson2HttpMessageConverter jackson =
 				new MappingJackson2HttpMessageConverter();
 		ObjectMapper om = jackson.getObjectMapper();

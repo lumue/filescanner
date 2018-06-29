@@ -35,22 +35,54 @@
 
 	<int:filter input-channel="inboundFileChannel"
 	            ref="unknownOrModifiedFileSelector"
-	            output-channel="unknownOrModifiedLocationChannel"
+	            output-channel="unknownOrModifiedFileChannel"
+	            discard-channel="knownAndUnmodifiedFileChannel"
 	/>
 
-	<int:channel id="unknownOrModifiedLocationChannel">
-		<int:queue/>
+	<int:channel id="unknownOrModifiedFileChannel">
+		<int:queue capacity="10000"/>
 	</int:channel>
 
-	<int:service-activator input-channel="unknownOrModifiedLocationChannel"
+	<int:channel id="knownAndUnmodifiedFileChannel">
+		<int:queue capacity="10000"/>
+	</int:channel>
+
+	<int:service-activator input-channel="unknownOrModifiedFileChannel"
 	                       ref="locationService"
 	                       method="createOrUpdate"
-	                       output-channel="nullChannel">
+	                       output-channel="scannedLocationChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="createOrUpdateLocationExecutor"/>
+	</int:service-activator>
+
+	<int:service-activator input-channel="knownAndUnmodifiedFileChannel"
+	                       ref="locationService"
+	                       method="getForFile"
+	                       output-channel="scannedLocationChannel">
 		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="createOrUpdateLocationExecutor"/>
 	</int:service-activator>
 
 	<task:executor id="createOrUpdateLocationExecutor"
 	               pool-size="${filescanner.locationupdater.threads}"
 	               queue-capacity="${filescanner.locationupdater.queue}" />
+
+
+
+
+
+	<int:channel id="scannedLocationChannel">
+		<int:queue capacity="10000"/>
+	</int:channel>
+
+
+	<int:service-activator input-channel="scannedLocationChannel"
+	                       ref="contentService"
+	                       method="updateOrCreateContent"
+	                       output-channel="nullChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="resolveContentExecutor"/>
+	</int:service-activator>
+
+	<task:executor id="resolveContentExecutor"
+	               pool-size="10"
+	               queue-capacity="10000" />
 
 </beans>

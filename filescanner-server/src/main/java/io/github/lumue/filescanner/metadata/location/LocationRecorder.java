@@ -34,7 +34,7 @@ public class LocationRecorder {
 
 		try {
 
-			FileMetadataAccessor metadataAccessor = new FileMetadataAccessor(path);
+			FileAttributeAccessor metadataAccessor = new FileAttributeAccessor(path);
 			
 			final Location metadata = locationRepository.findById(metadataAccessor.getUrl()).orElse(null);
 			boolean exists = metadata !=null;
@@ -54,7 +54,7 @@ public class LocationRecorder {
 	}
 
 	private void updateMetadata(
-			FileMetadataAccessor accessor)
+			FileAttributeAccessor accessor)
 			throws IOException {
 
 		Location location = locationRepository
@@ -68,7 +68,7 @@ public class LocationRecorder {
 	}
 
 	private void insertMetadata(
-			FileMetadataAccessor accessor)
+			FileAttributeAccessor accessor)
 			throws IOException {
 
 		Location location = Location.createWithAccessor(accessor);

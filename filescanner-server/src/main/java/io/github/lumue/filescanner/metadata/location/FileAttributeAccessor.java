@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.DatatypeConverter;
 
-class FileMetadataAccessor {
+class FileAttributeAccessor {
 
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(FileMetadataAccessor.class);
+			.getLogger(FileAttributeAccessor.class);
 
 	private final BasicFileAttributes attrs;
 
@@ -30,7 +30,7 @@ class FileMetadataAccessor {
 	private final AtomicReference<String> hash = new AtomicReference<>(null);
 
 
-	public FileMetadataAccessor(Path path) throws IOException {
+	public FileAttributeAccessor(Path path) throws IOException {
 		super();
 		attrs = Files.readAttributes(path, BasicFileAttributes.class);
 		this.path = path;

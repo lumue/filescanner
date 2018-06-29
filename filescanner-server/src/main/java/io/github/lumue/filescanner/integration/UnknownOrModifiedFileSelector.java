@@ -1,5 +1,6 @@
-package io.github.lumue.filescanner.metadata.location;
+package io.github.lumue.filescanner.integration;
 
+import io.github.lumue.filescanner.metadata.location.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,6 @@ import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Component
 public class UnknownOrModifiedFileSelector implements MessageSelector {
