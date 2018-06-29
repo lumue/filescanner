@@ -39,6 +39,11 @@ public class LocationService {
 		}
 	}
 	
+	@Timed("filescanner.location_service.get_for_file_or_null")
+	public Location getForFileOrNull(File file) {
+		return getForFile(file).orElse(null);
+	}
+	
 	@Timed("filescanner.location_service.create_or_update")
 	public Location createOrUpdate(File file) {
 		try {
