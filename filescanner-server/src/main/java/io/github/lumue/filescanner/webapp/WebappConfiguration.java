@@ -35,7 +35,10 @@ import java.util.stream.Stream;
 @ComponentScan("io.github.lumue.filescanner")
 @ImportResource("classpath*:io/github/lumue/filescanner/integrationflow/incoming-file-flow.xml")
 @EnableAutoConfiguration
-@EnableMongoRepositories(basePackages = {"io.github.lumue.filescanner.metadata.location","io.github.lumue.filescanner.config"})
+@EnableMongoRepositories(basePackages = {
+		"io.github.lumue.filescanner.metadata.location",
+		"io.github.lumue.filescanner.metadata.content",
+		"io.github.lumue.filescanner.config"})
 @EnableAspectJAutoProxy
 @PropertySource(ignoreResourceNotFound = true, value = "file://${filescanner.properties}")
 public class WebappConfiguration implements WebMvcConfigurer {
