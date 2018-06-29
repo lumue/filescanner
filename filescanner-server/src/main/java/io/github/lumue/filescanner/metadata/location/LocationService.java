@@ -20,12 +20,12 @@ public class LocationService {
 		this.locationRepository = locationRepository;
 	}
 	
-	@Timed("location_service.get_for_url")
+	@Timed("filescanner.location_service.get_for_url")
 	public Optional<Location> getForURL(String url) {
 		return locationRepository.findById(url);
 	}
 	
-	@Timed("location_service.create_or_update")
+	@Timed("filescanner.location_service.create_or_update")
 	public Location createOrUpdate(File file) {
 		try {
 			FileMetadataAccessor fileMetadataAccessor = new FileMetadataAccessor(file.toPath());
@@ -39,7 +39,7 @@ public class LocationService {
 		}
 	}
 	
-	@Timed("location_service.is_current")
+	@Timed("filescanner.location_service.is_current")
 	public boolean isLocationCurrent(File file)
 	{
 		try {

@@ -21,7 +21,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import reactor.core.publisher.TopicProcessor;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -34,7 +33,7 @@ import java.util.stream.Stream;
 
 @Configuration
 @ComponentScan("io.github.lumue.filescanner")
-@ImportResource("classpath*:io/github/lumue/filescanner/integrationflow/application-integration-flow.xml")
+@ImportResource("classpath*:io/github/lumue/filescanner/integrationflow/incoming-file-flow.xml")
 @EnableAutoConfiguration
 @EnableMongoRepositories(basePackages = {"io.github.lumue.filescanner.metadata.location","io.github.lumue.filescanner.config"})
 @EnableAspectJAutoProxy

@@ -95,7 +95,10 @@ dependencies {
 	//logging
 	compile 'org.slf4j:slf4j-api:1.7.18'
 
-    //test
+	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
+	compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.1'
+
+	//test
     testCompile 'junit:junit:4.11'
 
     //integration-test
