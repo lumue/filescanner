@@ -50,32 +50,32 @@
 	<int:service-activator input-channel="unknownOrModifiedFileChannel"
 	                       ref="locationService"
 	                       method="createOrUpdate"
-	                       output-channel="scannedLocationChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="createOrUpdateLocationExecutor"/>
+	                       output-channel="updatedLocationChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
 	</int:service-activator>
 
 	<int:service-activator input-channel="knownAndUnmodifiedFileChannel"
 	                       ref="locationService"
 	                       method="getForFileOrNull"
-	                       output-channel="scannedLocationChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="createOrUpdateLocationExecutor"/>
+	                       output-channel="updatedLocationChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="fingerprintLocationExecutor"/>
 	</int:service-activator>
 
-	<task:executor id="createOrUpdateLocationExecutor"
+	<task:executor id="fingerprintLocationExecutor"
 	               pool-size="${filescanner.locationupdater.threads}"
 	               queue-capacity="${filescanner.locationupdater.queue}" />
 
 
-	<int:publish-subscribe-channel id="scannedLocationChannel" >
+	<int:publish-subscribe-channel id="updatedLocationChannel" >
 
 	</int:publish-subscribe-channel>
 
 
 
-	<int:filter input-channel="scannedLocationChannel"
+	<int:filter input-channel="updatedLocationChannel"
 	            ref="missingMetadataLocationSelector"
 	            output-channel="missingMetadataLocationChannel"
-	            discard-channel="completeLocationChannel"
+	            discard-channel="locationWithMetadataChannel"
 	/>
 
 	<int:channel id="missingMetadataLocationChannel">
@@ -85,22 +85,42 @@
 	<int:service-activator input-channel="missingMetadataLocationChannel"
 	                       ref="locationService"
 	                       method="resolveMetadataLocations"
-	                       output-channel="completeLocationChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="createOrUpdateLocationExecutor"/>
+	                       output-channel="locationWithMetadataChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
 	</int:service-activator>
+
+	<int:publish-subscribe-channel id="locationWithMetadataChannel">
+	</int:publish-subscribe-channel>
+
+	<int:filter input-channel="locationWithMetadataChannel"
+	            ref="missingFingerprintLocationSelector"
+	            output-channel="missingFingerprintLocationChannel"
+	            discard-channel="completeLocationChannel"
+	/>
 
 	<int:channel id="completeLocationChannel">
 		<int:queue capacity="10000"/>
 	</int:channel>
 
+	<int:channel id="missingFingerprintLocationChannel">
+		<int:queue capacity="10000"/>
+	</int:channel>
+
+	<int:service-activator input-channel="missingFingerprintLocationChannel"
+	                       ref="locationService"
+	                       method="createOrUpdateFingerprint"
+	                       output-channel="completeLocationChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="fingerprintLocationExecutor"/>
+	</int:service-activator>
+
 	<int:service-activator input-channel="completeLocationChannel"
 	                       ref="contentService"
 	                       method="updateOrCreateContent"
 	                       output-channel="nullChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="resolveContentExecutor"/>
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
 	</int:service-activator>
 
-	<task:executor id="resolveContentExecutor"
+	<task:executor id="serviceExecutor"
 	               pool-size="10"
 	               queue-capacity="10000" />
 

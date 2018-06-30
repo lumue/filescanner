@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -65,6 +66,21 @@ public class LocationService {
 			return locationRepository.save(location);
 		} catch (IOException e) {
 			LOGGER.error("error accessing file "+file,e);
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@Timed("filescanner.location_service.create_or_update_fingerprint")
+	public Location createOrUpdateFingerprint(Location inlocation) {
+		LOGGER.debug("refreshing fingerprint for "+inlocation);
+		try {
+			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(Paths.get(inlocation.getUrl()));
+			final Location location = locationRepository.findById(inlocation.getUrl()).orElse(inlocation);
+			Location.fingerprintLocation(location, fileAttributeAccessor);
+			location.setLastScanTime(LocalDateTime.now());
+			return locationRepository.save(location);
+		} catch (IOException e) {
+			LOGGER.error("error accessing file "+inlocation.getUrl(),e);
 			throw new RuntimeException(e);
 		}
 	}

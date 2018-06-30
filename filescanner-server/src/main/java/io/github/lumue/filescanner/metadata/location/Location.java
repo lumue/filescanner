@@ -191,11 +191,10 @@ public class Location {
 			final LocalDateTime modificationTime = accessor.getModificationTime();
 			final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getLastScanTime())
 					.orElse(LocalDateTime.MIN);
-			if (    !FileNamingUtils.isMetadataFileExtension(accessor.getUrl()) &&
-					(location.getHash() == null || location.getHash().isEmpty())
-					|| (metadataModificationTime.isBefore(modificationTime))
+			if (   (location.getHash() != null && !location.getHash().isEmpty())
+					&& (metadataModificationTime.isBefore(modificationTime))
 			) {
-				location.setHash(accessor.getType() + "_" + accessor.getSize() + "_" + accessor.getHash());
+				location.setHash(null);
 			}
 			location.setLastAccessTime(
 					accessor.getLastAccessTime());
@@ -208,6 +207,23 @@ public class Location {
 			
 			
 			return location;
+		}
+		catch(IOException ex){
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	public static Location fingerprintLocation(Location location,FileAttributeAccessor accessor){
+		try {
+			final LocalDateTime modificationTime = accessor.getModificationTime();
+			final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getLastScanTime())
+					.orElse(LocalDateTime.MIN);
+		if (   (location.getHash() == null || location.getHash().isEmpty())
+				|| (metadataModificationTime.isBefore(modificationTime))
+		) {
+			location.setHash(accessor.getType() + "_" + accessor.getSize() + "_" + accessor.getHash());
+		}
+		return location;
 		}
 		catch(IOException ex){
 			throw new RuntimeException(ex);
