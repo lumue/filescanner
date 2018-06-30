@@ -1,5 +1,6 @@
 package io.github.lumue.filescanner.discover;
 
+import org.springframework.integration.file.filters.AcceptOnceFileListFilter;
 import org.springframework.integration.file.filters.CompositeFileListFilter;
 import org.springframework.integration.file.filters.FileListFilter;
 
@@ -11,7 +12,7 @@ public class IncomingFilesFilter implements FileListFilter<File> {
 	private final static CompositeFileListFilter<File> delegate=new CompositeFileListFilter<>();
 	
 	public IncomingFilesFilter() {
-		delegate.addFilter(new AcceptUnseenOrModifiedSinceFileFilter<>(20000));
+		delegate.addFilter(new AcceptOnceFileListFilter<>(20000));
 		delegate.addFilter(new VideoFileFilter());
 	}
 	
