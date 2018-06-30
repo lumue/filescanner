@@ -40,11 +40,11 @@
 	/>
 
 	<int:channel id="unknownOrModifiedFileChannel">
-		<int:queue capacity="10000"/>
+		<int:queue capacity="100000"/>
 	</int:channel>
 
 	<int:channel id="knownAndUnmodifiedFileChannel">
-		<int:queue capacity="10000"/>
+		<int:queue capacity="100000"/>
 	</int:channel>
 
 	<int:transformer id="updatingFileToLocationServiceActivator"
@@ -60,7 +60,7 @@
 	                       ref="locationService"
 	                       method="getForFileOrNull"
 	                       output-channel="updatedLocationChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="fingerprintLocationExecutor"/>
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
 	</int:transformer>
 
 	<task:executor id="fingerprintLocationExecutor"
