@@ -1,7 +1,6 @@
 package io.github.lumue.filescanner.metadata.location;
 
 import io.micrometer.core.annotation.Timed;
-import jdk.management.resource.internal.inst.StaticInstrumentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
