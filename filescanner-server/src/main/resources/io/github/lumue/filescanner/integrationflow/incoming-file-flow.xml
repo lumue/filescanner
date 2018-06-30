@@ -47,19 +47,21 @@
 		<int:queue capacity="10000"/>
 	</int:channel>
 
-	<int:service-activator input-channel="unknownOrModifiedFileChannel"
+	<int:transformer id="updatingFileToLocationServiceActivator"
+						   input-channel="unknownOrModifiedFileChannel"
 	                       ref="locationService"
 	                       method="createOrUpdate"
 	                       output-channel="updatedLocationChannel">
 		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
-	</int:service-activator>
+	</int:transformer>
 
-	<int:service-activator input-channel="knownAndUnmodifiedFileChannel"
+	<int:transformer       id="fileToLocationTransformer"
+						   input-channel="knownAndUnmodifiedFileChannel"
 	                       ref="locationService"
 	                       method="getForFileOrNull"
 	                       output-channel="updatedLocationChannel">
 		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="fingerprintLocationExecutor"/>
-	</int:service-activator>
+	</int:transformer>
 
 	<task:executor id="fingerprintLocationExecutor"
 	               pool-size="${filescanner.locationupdater.threads}"
@@ -82,7 +84,8 @@
 		<int:queue capacity="10000"/>
 	</int:channel>
 
-	<int:service-activator input-channel="missingMetadataLocationChannel"
+	<int:service-activator id="resolvingMetadataServiceActivator"
+			               input-channel="missingMetadataLocationChannel"
 	                       ref="locationService"
 	                       method="resolveMetadataLocations"
 	                       output-channel="locationWithMetadataChannel">
@@ -106,22 +109,24 @@
 		<int:queue capacity="10000"/>
 	</int:channel>
 
-	<int:service-activator input-channel="missingFingerprintLocationChannel"
+	<int:service-activator id="fingerprintingServiceActivator"
+						   input-channel="missingFingerprintLocationChannel"
 	                       ref="locationService"
 	                       method="createOrUpdateFingerprint"
 	                       output-channel="completeLocationChannel">
 		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="fingerprintLocationExecutor"/>
 	</int:service-activator>
 
-	<int:service-activator input-channel="completeLocationChannel"
+	<int:transformer id="contentResolverTransformer"
+							input-channel="completeLocationChannel"
 	                       ref="contentService"
 	                       method="updateOrCreateContent"
 	                       output-channel="nullChannel">
 		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
-	</int:service-activator>
+	</int:transformer>
 
 	<task:executor id="serviceExecutor"
-	               pool-size="10"
-	               queue-capacity="10000" />
+	               pool-size="100"
+	               queue-capacity="1000000" />
 
 </beans>
