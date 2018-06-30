@@ -4,6 +4,8 @@ import io.github.lumue.filescanner.metadata.location.Location;
 import io.github.lumue.filescanner.metadata.location.LocationRepository;
 import io.github.lumue.filescanner.metadata.location.ReactiveLocationRepository;
 import io.micrometer.core.annotation.Timed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +15,14 @@ import java.util.stream.Collectors;
 @Service("contentService")
 public class ContentService {
 	
+	private final static Logger LOGGER= LoggerFactory.getLogger(ContentService.class);
+	
 	private final ContentRepository contentRepository;
 	
 	private final LocationRepository locationRepository;
 	
 	private final ReactiveLocationRepository reactiveLocationRepository;
+	
 	
 	
 	@Autowired
@@ -29,6 +34,9 @@ public class ContentService {
 	
 	@Timed("filescanner.content_service.updateOrCreate")
 	public Content updateOrCreateContent(Location location){
+		
+		LOGGER.debug("updating or creating content for location "+location);
+		
 		final String contentKey = location.getHash();
 		final Content content = contentRepository.findById(contentKey)
 				.map(c -> {

@@ -1,6 +1,9 @@
 package io.github.lumue.filescanner.metadata.location;
 
 import io.micrometer.core.annotation.Timed;
+import jdk.management.resource.internal.inst.StaticInstrumentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,7 +15,8 @@ import java.util.Optional;
 
 @Service
 public class LocationService {
-
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(LocationService.class);
 	private final LocationRepository locationRepository;
 	
 	private final ReactiveLocationRepository reactiveLocationRepository;
@@ -25,16 +29,19 @@ public class LocationService {
 	
 	@Timed("filescanner.location_service.get_for_url")
 	public Optional<Location> getForURL(String url) {
+		LOGGER.debug("getting Location for url"+url);
 		return locationRepository.findById(url);
 	}
 	
 	@Timed("filescanner.location_service.get_for_file")
 	public Optional<Location> getForFile(File file) {
+		LOGGER.debug("getting Location for file"+file);
 		try {
 			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(file.toPath());
 			return locationRepository.findById(fileAttributeAccessor.getUrl());
 		}
 		catch (IOException e){
+			LOGGER.error("error accessing file "+file,e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -46,6 +53,7 @@ public class LocationService {
 	
 	@Timed("filescanner.location_service.create_or_update")
 	public Location createOrUpdate(File file) {
+		LOGGER.debug("refreshing location entry for "+file);
 		try {
 			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(file.toPath());
 			final Location location = locationRepository.findById(fileAttributeAccessor.getUrl())
@@ -54,6 +62,7 @@ public class LocationService {
 			location.setLastScanTime(LocalDateTime.now());
 			return locationRepository.save(location);
 		} catch (IOException e) {
+			LOGGER.error("error accessing file "+file,e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -61,6 +70,7 @@ public class LocationService {
 	@Timed("filescanner.location_service.is_current")
 	public boolean isLocationCurrent(File file)
 	{
+		LOGGER.debug("checking location entry for "+file);
 		try {
 			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(file.toPath());
 			final Optional<Location> location = locationRepository.findById(fileAttributeAccessor.getUrl());
@@ -72,7 +82,7 @@ public class LocationService {
 			
 			return lastScan.isAfter(fileAttributeAccessor.getModificationTime());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("error accessing file "+file,e);
 			return false;
 		}
 	}
