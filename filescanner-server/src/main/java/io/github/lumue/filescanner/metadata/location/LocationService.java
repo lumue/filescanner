@@ -10,6 +10,8 @@ import reactor.core.publisher.Flux;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -74,13 +76,13 @@ public class LocationService {
 	public Location createOrUpdateFingerprint(Location inlocation) {
 		LOGGER.debug("refreshing fingerprint for "+inlocation);
 		try {
-			final String pathname = inlocation.getUrl().replaceFirst("file://", "");
+			final String pathname = Paths.get(new URI(inlocation.getUrl())).toAbsolutePath().toString();
 			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(new File(pathname).toPath());
 			final Location location = locationRepository.findById(inlocation.getUrl()).orElse(inlocation);
 			Location.fingerprintLocation(location, fileAttributeAccessor);
 			location.setLastScanTime(LocalDateTime.now());
 			return locationRepository.save(location);
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			LOGGER.error("error accessing file "+inlocation.getUrl(),e);
 			throw new RuntimeException(e);
 		}
@@ -90,7 +92,7 @@ public class LocationService {
 	public Location resolveMetadataLocations(Location location) {
 		LOGGER.debug("resolving metadata locations for "+location);
 		try {
-			final String filename = location.getUrl().replaceFirst("file://","");
+			final String filename = Paths.get(new URI(location.getUrl())).toAbsolutePath().toString();
 			
 			String infoJsonFilename = FileNamingUtils.getInfoJsonFilename(filename);
 			createMetadataLocation(infoJsonFilename)
@@ -103,7 +105,7 @@ public class LocationService {
 			
 			return locationRepository.save(location);
 			
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			LOGGER.error("error ",e);
 			throw new RuntimeException(e);
 		}
