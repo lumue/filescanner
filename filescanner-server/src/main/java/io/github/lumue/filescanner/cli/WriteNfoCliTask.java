@@ -2,7 +2,7 @@ package io.github.lumue.filescanner.cli;
 
 import io.github.lumue.filescanner.metadata.Tags;
 import io.github.lumue.filescanner.discover.FilesystemScanTask;
-import io.github.lumue.filescanner.util.FileExtensionUtils;
+import io.github.lumue.filescanner.util.FileNamingUtils;
 import io.github.lumue.infojson.DownloadMetadata;
 import io.github.lumue.infojson.DownloadMetadataStreamParser;
 import io.github.lumue.nfotools.Movie;
@@ -48,7 +48,7 @@ public void execute() throws Exception {
 		try {
 			String filename = file.toString();
 			String extension = FilenameUtils.getExtension(filename);
-			if (FileExtensionUtils.isVideoFileExtension(file)) {
+			if (FileNamingUtils.isVideoFileExtension(file)) {
 				String baseName = FilenameUtils.getBaseName(filename);
 				Movie.MovieBuilder movieBuilder = Movie.builder().withTitle(baseName);
 				String infoJsonFilename = FilenameUtils.getFullPath(filename) + baseName + ".info.json";

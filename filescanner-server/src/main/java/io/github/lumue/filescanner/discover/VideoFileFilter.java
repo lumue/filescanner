@@ -1,8 +1,7 @@
 package io.github.lumue.filescanner.discover;
 
-import io.github.lumue.filescanner.util.FileExtensionUtils;
+import io.github.lumue.filescanner.util.FileNamingUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.integration.file.filters.AbstractFileListFilter;
@@ -22,7 +21,7 @@ public class VideoFileFilter extends AbstractFileListFilter<File> {
 	@Override
 	public boolean accept(File file) {
 		try {
-			return hiddenFilter.accept(file) && FileExtensionUtils.isVideoFileExtension(file);
+			return hiddenFilter.accept(file) && FileNamingUtils.isVideoFileExtension(file);
 		}
 		catch (Throwable t){
 			LOGGER.error("error filtering "+file,t);

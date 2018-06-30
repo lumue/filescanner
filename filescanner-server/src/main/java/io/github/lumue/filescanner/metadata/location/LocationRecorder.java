@@ -3,7 +3,7 @@ package io.github.lumue.filescanner.metadata.location;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import io.github.lumue.filescanner.util.FileExtensionUtils;
+import io.github.lumue.filescanner.util.FileNamingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class LocationRecorder {
 
 	public void recordMetadata(Path path) {
 		
-		if (!FileExtensionUtils.isVideoFileExtension(path))
+		if (!FileNamingUtils.isVideoFileExtension(path))
 			return;
 		
 		LOGGER.debug("recording metadata for" + path);

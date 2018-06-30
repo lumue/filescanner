@@ -1,5 +1,6 @@
 package io.github.lumue.filescanner.metadata.location;
 
+import io.github.lumue.filescanner.util.FileNamingUtils;
 import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,8 @@ import reactor.core.publisher.Flux;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -64,6 +67,40 @@ public class LocationService {
 			LOGGER.error("error accessing file "+file,e);
 			throw new RuntimeException(e);
 		}
+	}
+	
+	@Timed("filescanner.location_service.discover_metadata")
+	public Location resolveMetadataLocations(Location location) {
+		LOGGER.debug("resolving metadata locations for "+location);
+		try {
+			final String filename = location.getUrl().replaceFirst("file://","");
+			
+			String infoJsonFilename = FileNamingUtils.getInfoJsonFilename(filename);
+			createMetadataLocation(infoJsonFilename)
+			.ifPresent(location::setInfoJsonLocation);
+			
+			String nfoFilename = FileNamingUtils.getNfoFilename(filename);
+			createMetadataLocation(nfoFilename)
+			.ifPresent(location::setNfoLocation);
+			
+			
+			return locationRepository.save(location);
+			
+		} catch (IOException e) {
+			LOGGER.error("error ",e);
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private Optional<MetadataLocation> createMetadataLocation(String infoJsonFilename) throws IOException {
+		final File infoJsonFile = new File(infoJsonFilename);
+		Optional<MetadataLocation> infoJsonLocation=Optional.empty();
+		if(infoJsonFile.exists()){
+			final Path path = infoJsonFile.toPath();
+			final FileAttributeAccessor attributeAccessor = new FileAttributeAccessor(path);
+			infoJsonLocation=Optional.of(new MetadataLocation(attributeAccessor.getUrl(), Files.readAllBytes(path)));
+		}
+		return infoJsonLocation;
 	}
 	
 	@Timed("filescanner.location_service.is_current")

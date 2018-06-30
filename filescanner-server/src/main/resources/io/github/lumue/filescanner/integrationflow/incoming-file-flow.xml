@@ -66,15 +66,34 @@
 	               queue-capacity="${filescanner.locationupdater.queue}" />
 
 
+	<int:publish-subscribe-channel id="scannedLocationChannel" >
+
+	</int:publish-subscribe-channel>
 
 
 
-	<int:channel id="scannedLocationChannel">
+	<int:filter input-channel="scannedLocationChannel"
+	            ref="missingMetadataLocationSelector"
+	            output-channel="missingMetadataLocationChannel"
+	            discard-channel="completeLocationChannel"
+	/>
+
+	<int:channel id="missingMetadataLocationChannel">
 		<int:queue capacity="10000"/>
 	</int:channel>
 
+	<int:service-activator input-channel="missingMetadataLocationChannel"
+	                       ref="locationService"
+	                       method="resolveMetadataLocations"
+	                       output-channel="completeLocationChannel">
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="createOrUpdateLocationExecutor"/>
+	</int:service-activator>
 
-	<int:service-activator input-channel="scannedLocationChannel"
+	<int:channel id="completeLocationChannel">
+		<int:queue capacity="10000"/>
+	</int:channel>
+
+	<int:service-activator input-channel="completeLocationChannel"
 	                       ref="contentService"
 	                       method="updateOrCreateContent"
 	                       output-channel="nullChannel">

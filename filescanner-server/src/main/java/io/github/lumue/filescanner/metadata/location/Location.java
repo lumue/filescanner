@@ -1,6 +1,7 @@
 package io.github.lumue.filescanner.metadata.location;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.lumue.filescanner.util.FileNamingUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,6 +25,11 @@ public class Location {
 	@Indexed
 	private String mimeType;
 	
+	@JsonProperty("infoJsonLocation")
+	private MetadataLocation infoJsonLocation;
+	
+	@JsonProperty("nfoLocation")
+	private MetadataLocation nfoLocation;
 	
 	@JsonProperty("creationTime")
 	@Indexed
@@ -119,6 +125,22 @@ public class Location {
 		return creationTime;
 	}
 	
+	public MetadataLocation getInfoJsonLocation() {
+		return infoJsonLocation;
+	}
+	
+	public void setInfoJsonLocation(MetadataLocation infoJsonLocation) {
+		this.infoJsonLocation = infoJsonLocation;
+	}
+	
+	public MetadataLocation getNfoLocation() {
+		return nfoLocation;
+	}
+	
+	public void setNfoLocation(MetadataLocation nfoLocation) {
+		this.nfoLocation = nfoLocation;
+	}
+	
 	public void setType(String type) {
 		if(hash!=null && this.type!=null && type!=null) {
 			hash = hash.replace("GENERIC",this.type).replace(this.type, type);
@@ -169,7 +191,8 @@ public class Location {
 			final LocalDateTime modificationTime = accessor.getModificationTime();
 			final LocalDateTime metadataModificationTime = Optional.ofNullable(location.getLastScanTime())
 					.orElse(LocalDateTime.MIN);
-			if ((location.getHash() == null || location.getHash().isEmpty())
+			if (    !FileNamingUtils.isMetadataFileExtension(accessor.getUrl()) &&
+					(location.getHash() == null || location.getHash().isEmpty())
 					|| (metadataModificationTime.isBefore(modificationTime))
 			) {
 				location.setHash(accessor.getType() + "_" + accessor.getSize() + "_" + accessor.getHash());
