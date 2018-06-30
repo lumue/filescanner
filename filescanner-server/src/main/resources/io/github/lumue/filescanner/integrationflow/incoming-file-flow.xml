@@ -89,7 +89,7 @@
 	                       ref="locationService"
 	                       method="resolveMetadataLocations"
 	                       output-channel="locationWithMetadataChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor" max-messages-per-poll="100"/>
 	</int:service-activator>
 
 	<int:publish-subscribe-channel id="locationWithMetadataChannel">
@@ -114,7 +114,7 @@
 	                       ref="locationService"
 	                       method="createOrUpdateFingerprint"
 	                       output-channel="completeLocationChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="fingerprintLocationExecutor"/>
+		<int:poller fixed-delay="5000" time-unit="MILLISECONDS" task-executor="fingerprintLocationExecutor" max-messages-per-poll="2"/>
 	</int:service-activator>
 
 	<int:transformer id="contentResolverTransformer"
