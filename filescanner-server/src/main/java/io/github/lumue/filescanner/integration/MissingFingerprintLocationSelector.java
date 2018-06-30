@@ -23,6 +23,7 @@ public class MissingFingerprintLocationSelector implements MessageSelector {
 			Location location= (Location) message.getPayload();
 			return StringUtils.isEmpty(location.getHash());
 		}catch (Throwable t) {
+			LOGGER.error("error filtering for missing hash",t);
 			return false;
 		}
 	}
