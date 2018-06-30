@@ -74,7 +74,8 @@ public class LocationService {
 	public Location createOrUpdateFingerprint(Location inlocation) {
 		LOGGER.debug("refreshing fingerprint for "+inlocation);
 		try {
-			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(Paths.get(inlocation.getUrl()));
+			final String pathname = inlocation.getUrl().replaceFirst("file://", "");
+			FileAttributeAccessor fileAttributeAccessor = new FileAttributeAccessor(new File(pathname).toPath());
 			final Location location = locationRepository.findById(inlocation.getUrl()).orElse(inlocation);
 			Location.fingerprintLocation(location, fileAttributeAccessor);
 			location.setLastScanTime(LocalDateTime.now());
