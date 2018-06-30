@@ -52,7 +52,7 @@
 	                       ref="locationService"
 	                       method="createOrUpdate"
 	                       output-channel="updatedLocationChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor" max-messages-per-poll="100"/>
 	</int:transformer>
 
 	<int:transformer       id="fileToLocationTransformer"
@@ -60,7 +60,7 @@
 	                       ref="locationService"
 	                       method="getForFileOrNull"
 	                       output-channel="updatedLocationChannel">
-		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor"/>
+		<int:poller fixed-delay="100" time-unit="MILLISECONDS" task-executor="serviceExecutor" max-messages-per-poll="100"/>
 	</int:transformer>
 
 	<task:executor id="fingerprintLocationExecutor"
