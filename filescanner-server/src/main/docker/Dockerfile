@@ -1,4 +1,4 @@
-FROM jboss/base-jdk:8
+FROM lumue/jdkydl:alpine
 MAINTAINER lm "mueller.lutz@gmail.com"
 
 ADD *.jar /app.jar
