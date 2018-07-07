@@ -42,7 +42,6 @@ import java.util.stream.Stream;
 		"io.github.lumue.filescanner.metadata.content",
 		"io.github.lumue.filescanner.config"})
 @EnableAspectJAutoProxy
-@PropertySource(ignoreResourceNotFound = true, value = "file://${filescanner.properties}")
 public class WebappConfiguration  {
 	
 	
