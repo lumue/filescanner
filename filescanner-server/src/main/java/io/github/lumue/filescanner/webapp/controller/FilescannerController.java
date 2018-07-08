@@ -1,16 +1,16 @@
 package io.github.lumue.filescanner.webapp.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.github.lumue.filescanner.discover.Pathmonitor;
 import io.github.lumue.filescanner.discover.Pathscanner;
+import reactor.core.publisher.Flux;
 
 @RestController
 public class FilescannerController {
@@ -27,9 +27,14 @@ public class FilescannerController {
 		this.pathmonitor = pathmonitor;
 	}
 
-	@RequestMapping("/startScan")
+	@GetMapping("/startScan")
 	public void startScan(@RequestParam String path) {
 		filescanner.startScan( path);
+	}
+	
+	@GetMapping("/files")
+	public Flux<File> files() {
+		return filescanner.scan("/mnt/nasbox/media/adult");
 	}
 
 	@RequestMapping("/startMonitoring")

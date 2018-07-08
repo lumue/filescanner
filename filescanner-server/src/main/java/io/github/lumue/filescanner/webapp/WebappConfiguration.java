@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.reactive.config.EnableWebFlux;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -42,6 +43,7 @@ import java.util.stream.Stream;
 		"io.github.lumue.filescanner.metadata.content",
 		"io.github.lumue.filescanner.config"})
 @EnableAspectJAutoProxy
+@EnableWebFlux
 public class WebappConfiguration  {
 	
 	

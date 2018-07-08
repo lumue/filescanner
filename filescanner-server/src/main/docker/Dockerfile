@@ -11,4 +11,4 @@ EXPOSE 8002
 VOLUME ["/filescanner"]
 VOLUME ["/mnt/nasbox/media"]
 
-ENTRYPOINT ["java","-jar","-Dspring.data.mongodb.host=mongo","-Dfilescanner.path.contentroot=file:///mnt/nasbox/media","-Dfilescanner.path.home=/filescanner","-Dfilescanner.properties=/filescanner/config/filescanner.properties","/app.jar"]
+ENTRYPOINT ["java","-jar","-Dspring.data.mongodb.host=mongo","-Dfilescanner.path.contentroot=file:///mnt/nasbox/media","-Dfilescanner.path.home=/filescanner","/app.jar","--spring.config.location=file:/filescanner/config/filescanner.properties"]

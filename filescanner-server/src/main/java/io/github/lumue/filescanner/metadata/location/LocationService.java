@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -144,5 +146,38 @@ public class LocationService {
 	
 	public Flux<Location> findAll(){
 		return reactiveLocationRepository.findAll();
+	}
+	
+	
+	public List<Location> findByHash(String contentKey) {
+		return locationRepository.findByHash(contentKey);
+	}
+	
+	public Mono<Void> remove(Location location) {
+		return Mono.fromRunnable(()->deleteFiles(location)
+		).and(reactiveLocationRepository.deleteById(location.getUrl()));
+	}
+	
+	private void deleteFiles(Location location) {
+		final String filename;
+			final String locationUrl = location.getUrl();
+			deleteFileAtUrl(locationUrl);
+		Optional.ofNullable(location.getInfoJsonLocation())
+				.map(MetadataLocation::getUrl)
+				.ifPresent(this::deleteFileAtUrl);
+		Optional.ofNullable(location.getNfoLocation())
+				.map(MetadataLocation::getUrl)
+				.ifPresent(this::deleteFileAtUrl);
+	}
+	
+	private boolean deleteFileAtUrl(String locationUrl) {
+		String filename;
+		try {
+			filename = Paths.get(new URI(locationUrl)).toAbsolutePath().toString();
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException("not an url: "+locationUrl,e);
+		}
+		LOGGER.debug("deleting file "+filename);
+		return new File(filename).delete();
 	}
 }

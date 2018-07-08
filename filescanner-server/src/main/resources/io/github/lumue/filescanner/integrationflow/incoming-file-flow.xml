@@ -23,15 +23,9 @@
 	</bean>
 
 
-	<int-file:inbound-channel-adapter id="inboundFileChannel"
-	                                  directory="${filescanner.path.contentroot}"
-	                                  scanner="recursiveScanner"
 
-	>
-		<int:poller fixed-delay="3600"
-		            max-messages-per-poll="-1"
-		/>
-	</int-file:inbound-channel-adapter>
+
+	<int:publish-subscribe-channel id="inboundFileChannel" />
 
 	<int:filter input-channel="inboundFileChannel"
 	            ref="unknownOrModifiedFileSelector"
