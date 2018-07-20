@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 @EnableReactiveMongoRepositories(basePackages = {
 		"io.github.lumue.filescanner.metadata.location",
 		"io.github.lumue.filescanner.metadata.content",
-		"io.github.lumue.filescanner.config"})
+		"io.github.lumue.filescanner.discover"})
 @EnableAspectJAutoProxy
 @EnableWebFlux
 public class WebappConfiguration  {

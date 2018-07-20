@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.config;
+package io.github.lumue.filescanner.discover;
 
 /**
  * Created by lm on 09.12.15.

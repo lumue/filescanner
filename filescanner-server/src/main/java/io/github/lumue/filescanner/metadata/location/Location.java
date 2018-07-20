@@ -1,10 +1,8 @@
 package io.github.lumue.filescanner.metadata.location;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.lumue.filescanner.util.FileNamingUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.IOException;

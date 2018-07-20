@@ -17,7 +17,7 @@ public class FluxMessageSource<T> extends AbstractMessageSource<T> {
 	
 	public FluxMessageSource(Flux<T> all) {
 		this.flux=all;
-		this.flux.subscribe(l->itemQueue.add(l));
+		this.flux.subscribe(itemQueue::add);
 	}
 	
 	

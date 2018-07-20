@@ -78,7 +78,6 @@ public class Content {
 	@JsonProperty("url")
 	private final String contentKey;
 	
-	@DBRef
 	private List<Location> locations = new LinkedList<>();
 	
 	@JsonProperty("contentType")
