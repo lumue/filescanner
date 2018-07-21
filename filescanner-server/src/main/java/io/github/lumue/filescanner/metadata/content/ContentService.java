@@ -48,8 +48,10 @@ public class ContentService {
 				.map(c -> {
 					if(c.getContentType()==null)
 						return Content.fromLocations(locations);
-					else
+					else{
+						c.setLocations(locations);
 						return c;
+					}
 				})
 				.orElse(Content.fromLocations(locations));
 		
@@ -57,15 +59,14 @@ public class ContentService {
 		return contentRepository.save(content);
 	}
 	
+	@Timed("filescanner.content_service.updateOrCreate")
 	public Flux<Content> findAll() {
 		return reactiveContentRepository.findAll();
 	}
 	
-	public Flux<Location> findDuplicateLocations() {
-		return reactiveContentRepository.findWithSecondaryLocations()
-				.map(Content::getSecondaryLocations)
-				.flatMap(Flux::fromIterable);
+	
+	
+	public Flux<Content> findWithSecondaryLocations() {
+		return reactiveContentRepository.findWithSecondaryLocations();
 	}
-	
-	
 }

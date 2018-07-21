@@ -1,5 +1,7 @@
 package io.github.lumue.filescanner.metadata.location;
 
+import io.github.lumue.filescanner.metadata.content.Content;
+import io.github.lumue.filescanner.metadata.content.ReactiveContentRepository;
 import io.github.lumue.filescanner.util.FileNamingUtils;
 import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
@@ -28,10 +30,20 @@ public class LocationService {
 	
 	private final ReactiveLocationRepository reactiveLocationRepository;
 	
+	private final ReactiveContentRepository reactiveContentRepository;
+	
+	@Timed("filescanner.content_service.updateOrCreate")
+	public Flux<Location> findDuplicateLocations() {
+		return reactiveContentRepository.findWithSecondaryLocations()
+				.map(Content::getSecondaryLocations)
+				.flatMap(Flux::fromIterable);
+	}
+	
 	@Autowired
-	public LocationService(LocationRepository locationRepository, ReactiveLocationRepository reactiveLocationRepository) {
+	public LocationService(LocationRepository locationRepository, ReactiveLocationRepository reactiveLocationRepository, ReactiveContentRepository reactiveContentRepository) {
 		this.locationRepository = locationRepository;
 		this.reactiveLocationRepository = reactiveLocationRepository;
+		this.reactiveContentRepository = reactiveContentRepository;
 	}
 	
 	@Timed("filescanner.location_service.get_for_url")
@@ -153,7 +165,9 @@ public class LocationService {
 		return locationRepository.findByHash(contentKey);
 	}
 	
+	@Timed("filescanner.location_service.remove")
 	public Mono<Void> remove(Location location) {
+		LOGGER.info("removing location "+location.getUrl());
 		return Mono.fromRunnable(()->deleteFiles(location)
 		).and(reactiveLocationRepository.deleteById(location.getUrl()));
 	}
@@ -179,5 +193,14 @@ public class LocationService {
 		}
 		LOGGER.debug("deleting file "+filename);
 		return new File(filename).delete();
+	}
+	
+	public Mono<Void> deleteDuplicateLocations() {
+		return reactiveContentRepository.findWithSecondaryLocations()
+				.map(Content::getSecondaryLocations)
+				.flatMap(Flux::fromIterable)
+				.flatMap(this::remove)
+				.collectList()
+				.then();
 	}
 }

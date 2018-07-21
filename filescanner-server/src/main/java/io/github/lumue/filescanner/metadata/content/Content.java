@@ -42,7 +42,8 @@ public class Content {
 	public List<Location>   getSecondaryLocations() {
 		if(locations.size()<2)
 			return Collections.emptyList();
-		return Collections.unmodifiableList(locations.subList(1,locations.size()-1));
+		final List<Location> secondaries = Collections.unmodifiableList(this.locations.subList(1, this.locations.size() ));
+		return secondaries;
 	}
 	
 	private static class LocationComparator implements Comparator<Location> {

@@ -16,11 +16,7 @@
 
 
 
-	<bean id="recursiveScanner" class="org.springframework.integration.file.RecursiveDirectoryScanner">
-		<property name="filter">
-			<bean class="io.github.lumue.filescanner.discover.IncomingFilesFilter"/>
-		</property>
-	</bean>
+
 
 
 
