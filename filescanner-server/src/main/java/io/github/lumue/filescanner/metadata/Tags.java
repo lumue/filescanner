@@ -1,5 +1,7 @@
 package io.github.lumue.filescanner.metadata;
 
+import org.springframework.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -33,9 +35,17 @@ private final static class ExistingTag{
 	private final Map<String,ExistingTag> tags=new HashMap<>();
 	
 	public synchronized void add(String tag){
+		if(!isValid(tag))
+			return;
 		String key=tag.toLowerCase();
 		tags.putIfAbsent(key,new ExistingTag(key,1));
 		tags.computeIfPresent(key,(s, existingTag) -> new ExistingTag(key,existingTag.getCount()+1));
+	}
+	
+	private boolean isValid(String tag) {
+		if (StringUtils.isEmpty(tag)||tag.length()<=3)
+			return false;
+		return true;
 	}
 	
 	public synchronized void removeTagsWithCountLowerThan(int threshhold){

@@ -60,7 +60,7 @@ public class PathController {
 	}
 
     @PostMapping("/{pathname}/scanning")
-    public Mono<Void> delete(@PathVariable String pathname){
+    public Mono<Void> startScanning(@PathVariable String pathname){
         return pathManager.get(pathname).flatMap(pathManager::startScanning);
     }
 }

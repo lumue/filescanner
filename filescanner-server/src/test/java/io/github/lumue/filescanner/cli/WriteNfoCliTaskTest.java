@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class WriteNfoCliTaskTest {
 	@Test
 	public void execute() throws Exception {
-		WriteNfoCliTask task = new WriteNfoCliTask("/mnt/nasbox/media/adult");
+		WriteNfoCliTask task = new WriteNfoCliTask("/mnt/nasbox/media/adult/incoming");
 		task.execute();
 	}
 

@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+import java.net.URL;
+
 @RestController
 @RequestMapping("/locations")
 public class LocationController {
@@ -25,15 +28,20 @@ public class LocationController {
 		return locationService.findAll();
 	}
 	
-	@GetMapping("/{query}")
-	public Flux<Location> findByQuery(@PathVariable("query") String query){
+	@GetMapping("/{url}")
+	public Mono<Location> findByUrl(@PathVariable("url") URI url){
+		return locationService.findByURI(url);
+	}
+	
+	@GetMapping("/")
+	public Flux<Location> findByQuery(@RequestParam("q") String query){
 		
 			return locationService.findDuplicateLocations();
 		
 	}
 	
-	@DeleteMapping("/{query}")
-	public Mono<Void> deleteByQuery(@PathVariable("query") String query){
+	@DeleteMapping("/")
+	public Mono<Void> deleteByQuery(@RequestParam("q") String query){
 		
 		return locationService.deleteDuplicateLocations();
 		
