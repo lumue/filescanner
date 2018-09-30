@@ -33,15 +33,15 @@ public class LocationController {
 		return locationService.findByURI(url);
 	}
 	
-	@GetMapping("/")
-	public Flux<Location> findByQuery(@RequestParam("q") String query){
+	@GetMapping(params ="q" )
+	public Flux<Location> findByQuery(@RequestParam(value = "q",required = true) String query){
 		
 			return locationService.findDuplicateLocations();
 		
 	}
 	
-	@DeleteMapping("/")
-	public Mono<Void> deleteByQuery(@RequestParam("q") String query){
+	@DeleteMapping("/duplicates")
+	public Mono<Void> deleteDuplicates(){
 		
 		return locationService.deleteDuplicateLocations();
 		

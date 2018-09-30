@@ -26,6 +26,9 @@ public class Location {
 	
 	@JsonProperty("infoJsonLocation")
 	private MetadataLocation infoJsonLocation;
+
+	@JsonProperty("infoJsonLocation")
+	private MetadataLocation metaJsonLocation;
 	
 	@JsonProperty("nfoLocation")
 	private MetadataLocation nfoLocation;
@@ -167,8 +170,22 @@ public class Location {
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
-	
-	public static Location createWithAccessor(FileAttributeAccessor accessor) throws IOException {
+
+
+@Override
+public String toString() {
+	return "Location{" +
+			"url='" + url + '\'' +
+			", mimeType='" + mimeType + '\'' +
+			", creationTime=" + creationTime +
+			", lastScanTime=" + lastScanTime +
+			", lastAccessTime=" + lastAccessTime +
+			", modificationTime=" + modificationTime +
+			", hash='" + hash + '\'' +
+			'}';
+}
+
+public static Location createWithAccessor(FileAttributeAccessor accessor) throws IOException {
 		try {
 			Location location = new DocumentMetadataBuilder()
 					.setName(accessor.getName())
@@ -236,10 +253,17 @@ public class Location {
 	public void setLastScanTime(LocalDateTime lastScanTime) {
 		this.lastScanTime = lastScanTime;
 	}
-	
-	
-	
-	public static class DocumentMetadataBuilder {
+
+public MetadataLocation getMetaJsonLocation() {
+	return metaJsonLocation;
+}
+
+public void setMetaJsonLocation(MetadataLocation metaJsonLocation) {
+	this.metaJsonLocation = metaJsonLocation;
+}
+
+
+public static class DocumentMetadataBuilder {
 		private String name;
 		private String url;
 		private String mimeType = null;

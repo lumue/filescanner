@@ -44,6 +44,14 @@ public class MissingMetadataLocationSelector implements MessageSelector {
 				return true;
 			}
 			
+			String metaJsonFilename = FileNamingUtils.getMetaJsonFilename(filename);
+			LOGGER.debug("looking up metaJson metadata for "+filename+" under "+metaJsonFilename);
+			final File metaJsonFile = new File(metaJsonFilename);
+			if(metaJsonFile.exists()&&location.getMetaJsonLocation()==null){
+				LOGGER.info("discovered meta.json metadata for "+filename+" under "+metaJsonFilename);
+				return true;
+			}
+			
 			
 			
 			return false;

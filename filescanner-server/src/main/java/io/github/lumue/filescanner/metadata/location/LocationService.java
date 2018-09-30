@@ -117,6 +117,10 @@ public class LocationService {
 			createMetadataLocation(nfoFilename)
 			.ifPresent(location::setNfoLocation);
 			
+			String metajsonFilename = FileNamingUtils.getMetaJsonFilename(filename);
+			createMetadataLocation(metajsonFilename)
+			.ifPresent(location::setMetaJsonLocation);
+			
 			
 			return locationRepository.save(location);
 			
@@ -126,15 +130,15 @@ public class LocationService {
 		}
 	}
 	
-	private Optional<MetadataLocation> createMetadataLocation(String infoJsonFilename) throws IOException {
-		final File infoJsonFile = new File(infoJsonFilename);
-		Optional<MetadataLocation> infoJsonLocation=Optional.empty();
-		if(infoJsonFile.exists()){
-			final Path path = infoJsonFile.toPath();
+	private Optional<MetadataLocation> createMetadataLocation(String metadataFilename) throws IOException {
+		final File metadataFile = new File(metadataFilename);
+		Optional<MetadataLocation> metadataLocation=Optional.empty();
+		if(metadataFile.exists()){
+			final Path path = metadataFile.toPath();
 			final FileAttributeAccessor attributeAccessor = new FileAttributeAccessor(path);
-			infoJsonLocation=Optional.of(new MetadataLocation(attributeAccessor.getUrl(), Files.readAllBytes(path)));
+			metadataLocation=Optional.of(new MetadataLocation(attributeAccessor.getUrl(), Files.readAllBytes(path)));
 		}
-		return infoJsonLocation;
+		return metadataLocation;
 	}
 	
 	@Timed("filescanner.location_service.is_current")
