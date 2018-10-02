@@ -13,7 +13,7 @@ import java.util.Set;
 public class FileNamingUtils {
 
 
-private final static Set<String> MOVIE_EXTENSIONS = new HashSet<>(Arrays.asList("flv", "mp4", "avi"));
+private final static Set<String> MOVIE_EXTENSIONS = new HashSet<>(Arrays.asList("flv", "mp4", "avi","mkv"));
 private final static Set<String> METADATA_EXTENSIONS = new HashSet<>(Arrays.asList("nfo", "info.json","meta.json"));
 
 public static boolean isVideoFileExtension(Path path) {
