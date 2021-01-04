@@ -56,8 +56,9 @@ public class NfoWriterFileHandler implements FileHandler {
   }
 
   private Path resolveInfoJsonPath(final File file) {
-    String fileName = file.getName();
-    return Paths.get(FileNamingUtils.getInfoJsonFilename(fileName));
+    String fileName = file.getAbsolutePath();
+    String infoJsonFilename = FileNamingUtils.getInfoJsonFilename(fileName);
+    return Paths.get(infoJsonFilename);
   }
 
   private void writeNfoFile( final Movie movie, final String mediaFileName)
