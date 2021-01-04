@@ -1,19 +1,17 @@
 buildscript {
-    ext {
-        springBootVersion ='2.0.3.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-		
-    }
-    dependencies {
-        classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
-	    classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
-    	classpath('se.transmode.gradle:gradle-docker:1.2')
-    }
+  ext {
+    springBootVersion = '2.0.3.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+
+  }
+  dependencies {
+    classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    classpath('se.transmode.gradle:gradle-docker:1.2')
+  }
 }
-
-
 
 
 apply plugin: 'java'
@@ -23,29 +21,42 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
 
 sourceSets {
-    integrationTest {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integrationTest/java')
-        }
-        resources.srcDir file('src/integrationTest/resources')
-    }
+  integrationTest {
+    compileClasspath += main.output + test.output
+    runtimeClasspath += main.output + test.output
+  }
 }
+
+sourceSets {
+  integrationtest {
+    compileClasspath += sourceSets.main.output
+    runtimeClasspath += sourceSets.main.output
+  }
+}
+
 
 configurations {
-    runtime
-    testCompile
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
+  runtime
+  testCompile
+  integrationTestCompile.extendsFrom testCompile
+  integrationTestRuntime.extendsFrom testRuntime
 }
 
 
+idea {
+  module {
+    downloadJavadoc = true
+    downloadSources = true
+
+    testSourceDirs += file('src/integrationTest/java')
+    testResourceDirs += file('src/integrationTest/resources')
+  }
+}
 
 
 jar {
-    baseName = 'filescanner-server'
-    version = '0.0.1-SNAPSHOT'
+  baseName = 'filescanner-server'
+  version = '0.0.1-SNAPSHOT'
 }
 
 sourceCompatibility = 1.8
@@ -53,63 +64,69 @@ targetCompatibility = 1.8
 
 
 repositories {
-    mavenCentral()
-	maven{
-		url('http://maven.springframework.org/milestone/')
-		}
-    maven { url('http://repo.springsource.org/libs-milestone/') }
-	maven { url "https://jitpack.io" }
-    maven { url('http://download.oracle.com/maven')}
-	maven { url "http://repo.spring.io/snapshot" }
-	maven { url "http://repo.spring.io/milestone" }
-	maven { url 'http://repo.spring.io/plugins-release' }
+  mavenCentral()
+  maven {
+    url('http://maven.springframework.org/milestone/')
+  }
+  maven { url('http://repo.springsource.org/libs-milestone/') }
+  maven { url "https://jitpack.io" }
+  maven { url('http://download.oracle.com/maven') }
+  maven { url "http://repo.spring.io/snapshot" }
+  maven { url "http://repo.spring.io/milestone" }
+  maven { url 'http://repo.spring.io/plugins-release' }
 }
 
 
 dependencies {
 
-    //spring
-    compile("org.springframework.boot:spring-boot-starter-webflux")
-    compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
-	compile("org.springframework.boot:spring-boot-starter-integration")
-	compile("org.springframework.boot:spring-boot-starter-actuator")
-	compile 'io.micrometer:micrometer-registry-prometheus:latest.release'
-	compile("org.springframework.integration:spring-integration-core")
-	compile("org.springframework.integration:spring-integration-event")
-	compile("org.springframework.integration:spring-integration-file")
-	//json serializer
-    compile group: 'com.google.guava', name: 'guava', version: '12.0'
-	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
-	compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.5.1'
+  //spring
+  compile("org.springframework.boot:spring-boot-starter-webflux")
+  compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+  compile("org.springframework.boot:spring-boot-starter-integration")
+  compile("org.springframework.boot:spring-boot-starter-actuator")
+  compile 'io.micrometer:micrometer-registry-prometheus:latest.release'
+  compile("org.springframework.integration:spring-integration-core")
+  compile("org.springframework.integration:spring-integration-event")
+  compile("org.springframework.integration:spring-integration-file")
+  //json serializer
+  compile group: 'com.google.guava', name: 'guava', version: '12.0'
+  compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.5.1'
+  compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.5.1'
+	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+  compile group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.1'
 
-    //tika parser
-    compile 'org.apache.tika:tika-core:1.10'
-    compile 'org.apache.tika:tika-parsers:1.10'
 
-    //nfo
-    compile 'com.github.lumue:nfotools:master-SNAPSHOT'
-	compile 'com.github.lumue:infojsontools:master-SNAPSHOT'
 
-    compile 'commons-io:commons-io:2.4'
+  //tika parser
+  compile 'org.apache.tika:tika-core:1.10'
+  compile 'org.apache.tika:tika-parsers:1.10'
 
-	//logging
-	compile 'org.slf4j:slf4j-api:1.7.18'
+  //nfo
+  compile 'com.github.lumue:nfotools:master-SNAPSHOT'
+  compile 'com.github.lumue:infojsontools:master-SNAPSHOT'
 
-	// https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
-	compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.1'
+  compile 'commons-io:commons-io:2.4'
 
-	//test
-    testCompile 'junit:junit:4.11'
+  //logging
+  compile 'org.slf4j:slf4j-api:1.7.18'
 
-    //integration-test
-    integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
+  // https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
+  compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.1'
+
+  //test
+  testCompile 'junit:junit:4.11'
+
+  //integration-test
+  integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 
 task integrationTest(type: Test) {
-    testClassesDir = sourceSets.integrationTest.output.classesDir
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    outputs.upToDateWhen { false }
+  useJUnitPlatform()
+  group = 'verification'
+
+  testClassesDirs = sourceSets.integrationtest.output.classesDirs
+  classpath = sourceSets.integrationtest.runtimeClasspath
 }
 
 
@@ -117,84 +134,84 @@ group = 'media:5000'
 
 task docker(dependsOn: build) {
 
-	dependsOn 'dockerBuild'
+  dependsOn 'dockerBuild'
 
 }
 
-task dockerBuild(type: Exec,dependsOn: bootJar){
-	def stageDir = file(project.buildDir.absolutePath + '/docker')
-	def bootJarDir = file(project.buildDir.absolutePath + '/libs')
+task dockerBuild(type: Exec, dependsOn: bootJar) {
+  def stageDir = file(project.buildDir.absolutePath + '/docker')
+  def bootJarDir = file(project.buildDir.absolutePath + '/libs')
 
-	workingDir stageDir
-	executable = 'docker'
-	args=['build', '-t', "lumue/filescanner-server:${project.version}", '.']
+  workingDir stageDir
+  executable = 'docker'
+  args = ['build', '-t', "lumue/filescanner-server:${project.version}", '.']
 
-	doFirst {
-		copy {
-			from bootJarDir
-			into stageDir
-		}
-		copy {
-			from file('src/main/docker/Dockerfile')
-			into stageDir
-		}
-	}
-
-}
-
-task dockerRun(type: Exec){
-
-	dependsOn 'dockerBuild'
-
-	def stageDir = file(project.buildDir.absolutePath + '/docker')
-
-	workingDir stageDir
-	executable = 'docker'
-	args=['run','-d',
-	      '--name',"filescanner-server_${project.version}",
-	      '-p','8001:8001',
-	      "lumue/filescanner-server:${project.version}"]
-
-	doLast{
-		sleep(10*1000)
-	}
+  doFirst {
+    copy {
+      from bootJarDir
+      into stageDir
+    }
+    copy {
+      from file('src/main/docker/Dockerfile')
+      into stageDir
+    }
+  }
 
 }
 
-task dockerStop(type: Exec){
+task dockerRun(type: Exec) {
 
-	def stageDir = file(project.buildDir.absolutePath + '/docker')
+  dependsOn 'dockerBuild'
 
-	workingDir stageDir
-	executable = 'docker'
-	args=['stop',"filescanner-server_${project.version}"]
+  def stageDir = file(project.buildDir.absolutePath + '/docker')
 
-	ignoreExitValue true
+  workingDir stageDir
+  executable = 'docker'
+  args = ['run', '-d',
+          '--name', "filescanner-server_${project.version}",
+          '-p', '8001:8001',
+          "lumue/filescanner-server:${project.version}"]
+
+  doLast {
+    sleep(10 * 1000)
+  }
 
 }
 
-task dockerRemove(type: Exec){
+task dockerStop(type: Exec) {
 
-	dependsOn 'dockerStop'
+  def stageDir = file(project.buildDir.absolutePath + '/docker')
 
-	def stageDir = file(project.buildDir.absolutePath + '/docker')
+  workingDir stageDir
+  executable = 'docker'
+  args = ['stop', "filescanner-server_${project.version}"]
 
-	workingDir stageDir
-	executable = 'docker'
-	args=['rm','-f',"filescanner-server_${project.version}"]
+  ignoreExitValue true
 
-	ignoreExitValue true
 }
 
-task dockerTagLatest(type: Exec){
+task dockerRemove(type: Exec) {
 
-	mustRunAfter 'dockerBuild'
+  dependsOn 'dockerStop'
 
-	def stageDir = file(project.buildDir.absolutePath + '/docker')
+  def stageDir = file(project.buildDir.absolutePath + '/docker')
 
-	workingDir stageDir
-	executable = 'docker'
-	args= ['tag', "lumue/filescanner-server:${project.version}", 'lumue/filescanner-server:latest']
+  workingDir stageDir
+  executable = 'docker'
+  args = ['rm', '-f', "filescanner-server_${project.version}"]
+
+  ignoreExitValue true
+}
+
+task dockerTagLatest(type: Exec) {
+
+  mustRunAfter 'dockerBuild'
+
+  def stageDir = file(project.buildDir.absolutePath + '/docker')
+
+  workingDir stageDir
+  executable = 'docker'
+  args = ['tag', "lumue/filescanner-server:${project.version}", 'lumue/filescanner-server:latest']
 
 }
 

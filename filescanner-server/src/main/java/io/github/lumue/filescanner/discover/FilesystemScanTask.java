@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-
 import io.github.lumue.filescanner.util.FileNamingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +22,15 @@ public class FilesystemScanTask implements Runnable {
 
 	private boolean running=false;
 
-	public FilesystemScanTask(String path,
-			PathEventCallback pathEventCallback) {
+	public FilesystemScanTask(String path, FileHandler fileHandler) {
 		super();
 		this.path = Paths.get(path);
-		this.pathEventCallback = pathEventCallback;
+		this.pathEventCallback = new PathEventCallback() {
+			@Override
+			public void onPathEvent(final Path path) {
+				fileHandler.handleFile(path.toFile());
+			}
+		};
 	}
 
 
@@ -43,7 +46,7 @@ public class FilesystemScanTask implements Runnable {
 				Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
 						     @Override
 						     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-						          if(!attrs.isDirectory() && FileNamingUtils.isVideoFileExtension(file)){
+						          if(!attrs.isDirectory()){
 							//LOGGER.debug("file discovered " + file.toString());
 						        	  pathEventCallback.onPathEvent(file);
 						          }

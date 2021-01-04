@@ -44,14 +44,14 @@ public class Pathscanner {
 	}
 	
 	public ListenableFuture<?> startScan(final String path) {
-		final PathEventCallback pathEventCallback = (file) -> inboundFileChannel.send(MessageBuilder.withPayload(file.toFile()).build());
+		final FileHandler pathEventCallback = (file) -> inboundFileChannel.send(MessageBuilder.withPayload(file).build());
 		final Consumer<Throwable> errorHandler=null;
 		final Consumer<Object> successHandler=null;
 		return startScanInternal(path, pathEventCallback, errorHandler, successHandler);
 		
 	}
 	
-	private ListenableFuture<?> startScanInternal(String path, PathEventCallback pathEventCallback, Consumer<Throwable> errorHandler, Consumer<Object> successHandler) {
+	private ListenableFuture<?> startScanInternal(String path, FileHandler pathEventCallback, Consumer<Throwable> errorHandler, Consumer<Object> successHandler) {
 		LOGGER.info(" start scanning " + path);
 		return runningTasks.computeIfAbsent(path, (p) -> {
 					final FilesystemScanTask task = new FilesystemScanTask(
@@ -77,14 +77,12 @@ public class Pathscanner {
 	
 	public Flux<File> scan(final String path) {
 		
-		return Flux.<Path>create(fluxSinkConsumer->startScanInternal(
+		return Flux.<File>create(fluxSinkConsumer->startScanInternal(
 				path,
 				fluxSinkConsumer::next,
 				fluxSinkConsumer::error,
 				o -> fluxSinkConsumer.complete()
-		))
-		.map(Path::toFile);
-		
+		));
 	}
 	
 	public Boolean isScanning(String path) {

@@ -6,7 +6,8 @@ package io.github.lumue.filescanner.cli;
 public class CliTaskFactory {
 
     public static CliTask createTaskForArguments(CliArguments args) throws Exception{
-        return new WriteNfoCliTask(args.getPath());
+        final boolean overrideExistingNfo=!args.getCustomArgs().isEmpty()&&Boolean.parseBoolean(args.getCustomArgs().get(0));
+        return new WriteNfoCliTask(args.getPath(), overrideExistingNfo);
     }
 
 }
