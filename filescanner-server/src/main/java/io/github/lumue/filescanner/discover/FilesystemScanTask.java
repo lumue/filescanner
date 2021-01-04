@@ -25,12 +25,7 @@ public class FilesystemScanTask implements Runnable {
 	public FilesystemScanTask(String path, FileHandler fileHandler) {
 		super();
 		this.path = Paths.get(path);
-		this.pathEventCallback = new PathEventCallback() {
-			@Override
-			public void onPathEvent(final Path path) {
-				fileHandler.handleFile(path.toFile());
-			}
-		};
+		this.pathEventCallback = path1 -> fileHandler.handleFile(path1.toFile());
 	}
 
 

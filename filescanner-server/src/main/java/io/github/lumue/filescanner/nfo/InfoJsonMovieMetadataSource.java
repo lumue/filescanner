@@ -30,9 +30,9 @@ public class InfoJsonMovieMetadataSource implements NfoMovieMetadataUpdater {
     DownloadMetadata downloadMetadata;
     downloadMetadata = readDownloadMetadata();
 
-    LocalDateTime uploadDate = null;
     final String uploadDateAsString = downloadMetadata.getUploadDate();
     if (uploadDateAsString != null && !uploadDateAsString.isEmpty()) {
+      LocalDateTime uploadDate;
       int year = Integer.parseInt(uploadDateAsString.substring(0, 4));
       int month = Integer.parseInt(uploadDateAsString.substring(4, 6));
       int day = Integer.parseInt(uploadDateAsString.substring(6, 8));
@@ -40,7 +40,6 @@ public class InfoJsonMovieMetadataSource implements NfoMovieMetadataUpdater {
       movieBuilder.withYear(Long.toString(uploadDate.getYear()));
       movieBuilder.withAired(uploadDate);
     }
-
     try {
       final LocalDateTime downloadDate= FileAttributeUtils.readCreationTime(file);
       movieBuilder.withDateAdded(downloadDate);

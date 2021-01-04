@@ -14,7 +14,6 @@ public class FileAttributeUtils {
     final long lastModified = attr.creationTime().toInstant().getEpochSecond();
     final ZoneOffset offset = ZoneOffset
         .ofTotalSeconds(TimeZone.getDefault().getOffset(lastModified * 1000) / 1000);
-    LocalDateTime downloadDate = LocalDateTime.ofEpochSecond(lastModified, 0, offset);
-    return downloadDate;
+    return LocalDateTime.ofEpochSecond(lastModified, 0, offset);
   }
 }

@@ -27,7 +27,6 @@ public class NfoWriterFileHandler implements FileHandler {
     this.overwriteExistingNfo = overwriteExistingNfo;
     JAXBContext jaxbContext = JAXBContext.newInstance(Movie.class, Movie.Actor.class);
     this.movieSerializer = new NfoMovieSerializer(jaxbContext);
-    ;
   }
 
   @Override
@@ -58,8 +57,7 @@ public class NfoWriterFileHandler implements FileHandler {
 
   private Path resolveInfoJsonPath(final File file) {
     String fileName = file.getName();
-    String baseName = FilenameUtils.getBaseName(fileName);
-    return Paths.get(FilenameUtils.getFullPath(fileName) + baseName + ".info.json");
+    return Paths.get(FileNamingUtils.getInfoJsonFilename(fileName));
   }
 
   private void writeNfoFile( final Movie movie, final String mediaFileName)
@@ -95,12 +93,7 @@ public class NfoWriterFileHandler implements FileHandler {
   }
 
   private boolean nfoMetadataFileExists(final String filename) {
-    String baseName = FilenameUtils.getBaseName(filename);
-    String nfoFilename = FilenameUtils.getFullPath(filename) + baseName + ".nfo";
-    if (Files.exists(Paths.get(nfoFilename))) {
-      return true;
-    }
-    return false;
+    return Files.exists(Paths.get(FileNamingUtils.getNfoFilename(filename)));
   }
 
 
