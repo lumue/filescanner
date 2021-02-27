@@ -1,8 +1,9 @@
-package io.github.lumue.filescanner.nfo;
+package io.github.lumue.filescanner.metadata.nfo;
 
 import io.github.lumue.filescanner.discover.FileHandler;
 import io.github.lumue.filescanner.util.FileNamingUtils;
 import io.github.lumue.nfotools.Movie;
+import io.github.lumue.nfotools.Movie.MovieBuilder;
 import io.github.lumue.nfotools.NfoMovieSerializer;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -36,18 +37,36 @@ public class NfoWriterFileHandler implements FileHandler {
       String extension = FilenameUtils.getExtension(filename);
       if (FileNamingUtils.isVideoFileExtension(file)) {
 
-        if (!overwriteExistingNfo && nfoMetadataFileExists(filename)) {
+        boolean nfoMetadataFileExists = nfoMetadataFileExists(filename);
+        if (!overwriteExistingNfo && nfoMetadataFileExists) {
           LOGGER.warn("nfo file already exists for" + filename);
           return;
         }
 
-        Movie.MovieBuilder movieBuilder=Movie.builder();
+
+        MovieBuilder movieBuilder;
+        if(nfoMetadataFileExists)
+        {
+          File nfoLocation = resolveNfoPath(file).toFile();
+          movieBuilder=createBuilderFromNfo(file);
+        }
+        else
+          movieBuilder=Movie.builder();
 
         configureFromMediafile(file,movieBuilder);
 
         File infoJsonLocation = resolveInfoJsonPath(file).toFile();
-        configureFromInfoJson(infoJsonLocation, movieBuilder);
+        File metaJsonLocation=resolveMetaJsonPath(file).toFile();
 
+        if(!infoJsonLocation.exists() && !metaJsonLocation.exists()){
+          LOGGER.warn("no download metadata found for "+file);
+          if(!nfoMetadataFileExists)
+            writeNfoFile(movieBuilder.build(),filename);
+          return;
+        }else {
+          configureFromInfoJson(infoJsonLocation, movieBuilder);
+          configureFromMetaJson(metaJsonLocation,movieBuilder);
+        }
         writeNfoFile(movieBuilder.build(), filename);
       }
     } catch (Exception e) {
@@ -55,9 +74,21 @@ public class NfoWriterFileHandler implements FileHandler {
     }
   }
 
+  private Path resolveNfoPath(final File file) {
+    String fileName = file.getAbsolutePath();
+    String nfoFilename = FileNamingUtils.getNfoFilename(fileName);
+    return Paths.get(nfoFilename);
+  }
+
   private Path resolveInfoJsonPath(final File file) {
     String fileName = file.getAbsolutePath();
     String infoJsonFilename = FileNamingUtils.getInfoJsonFilename(fileName);
+    return Paths.get(infoJsonFilename);
+  }
+
+  private Path resolveMetaJsonPath(final File file) {
+    String fileName = file.getAbsolutePath();
+    String infoJsonFilename = FileNamingUtils.getMetaJsonFilename(fileName);
     return Paths.get(infoJsonFilename);
   }
 
@@ -70,7 +101,18 @@ public class NfoWriterFileHandler implements FileHandler {
     LOGGER.debug(nfoFilename + " created");
   }
 
-  private Movie.MovieBuilder configureFromMediafile(final File file, final Movie.MovieBuilder movieBuilder)
+  private MovieBuilder createBuilderFromNfo(final File file) {
+
+    try {
+      return movieSerializer.deserialize(new FileInputStream(file)).copyBuilder();
+    } catch (Exception e) {
+      LOGGER.error("could not load nfo ",e);
+      return Movie.builder();
+    }
+
+  }
+
+  private MovieBuilder configureFromMediafile(final File file, final MovieBuilder movieBuilder)
       throws IOException {
 
     if(!file.exists()) {
@@ -82,7 +124,7 @@ public class NfoWriterFileHandler implements FileHandler {
     return mediaFileMovieMetadataSource.configureNfoMovieBuilder(movieBuilder);
   }
 
-  private Movie.MovieBuilder configureFromInfoJson(File infoJsonPath, Movie.MovieBuilder movieBuilder) {
+  private MovieBuilder configureFromInfoJson(File infoJsonPath, MovieBuilder movieBuilder) {
 
     if(!infoJsonPath.exists()) {
       LOGGER.warn("no youtube-dl metadatafile found for " + infoJsonPath);
@@ -91,6 +133,17 @@ public class NfoWriterFileHandler implements FileHandler {
 
     final InfoJsonMovieMetadataSource infoJsonMovieMetadataSource = new InfoJsonMovieMetadataSource(infoJsonPath);
     return infoJsonMovieMetadataSource.configureNfoMovieBuilder( movieBuilder);
+  }
+
+  private MovieBuilder configureFromMetaJson(File metaJsonPath, MovieBuilder movieBuilder) {
+
+    if(!metaJsonPath.exists()) {
+       return movieBuilder;
+    }
+
+    final MetaJsonMovieMetadataSource metaJsonMovieMetadataSource = new MetaJsonMovieMetadataSource(metaJsonPath);
+    return metaJsonMovieMetadataSource.configureNfoMovieBuilder( movieBuilder);
+
   }
 
   private boolean nfoMetadataFileExists(final String filename) {

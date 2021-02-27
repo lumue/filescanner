@@ -1,20 +1,24 @@
 buildscript {
+  ext.kotlin_version = '1.4.30-M1'
   ext {
-    springBootVersion = '2.0.3.RELEASE'
+    springBootVersion = '2.4.0'
   }
   repositories {
     mavenCentral()
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 
   }
   dependencies {
     classpath('io.spring.gradle:dependency-management-plugin:0.5.4.RELEASE')
     classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
     classpath('se.transmode.gradle:gradle-docker:1.2')
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
 
 
 apply plugin: 'java'
+apply plugin: 'kotlin'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -59,8 +63,8 @@ jar {
   version = '0.0.1-SNAPSHOT'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 
 repositories {
@@ -74,11 +78,12 @@ repositories {
   maven { url "http://repo.spring.io/snapshot" }
   maven { url "http://repo.spring.io/milestone" }
   maven { url 'http://repo.spring.io/plugins-release' }
+  maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 }
 
 
 dependencies {
-
+  project (":mdresolver-generated-client")
   //spring
   compile("org.springframework.boot:spring-boot-starter-webflux")
   compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
@@ -102,8 +107,9 @@ dependencies {
   compile 'org.apache.tika:tika-parsers:1.10'
 
   //nfo
-  compile 'com.github.lumue:nfotools:master-SNAPSHOT'
+  compile 'com.github.lumue:nfotools:1.6.RELEASE'
   compile 'com.github.lumue:infojsontools:master-SNAPSHOT'
+  compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6")
 
   compile 'commons-io:commons-io:2.4'
 
@@ -118,6 +124,7 @@ dependencies {
 
   //integration-test
   integrationTestCompile 'org.springframework.boot:spring-boot-starter-test'
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 
@@ -213,6 +220,16 @@ task dockerTagLatest(type: Exec) {
   executable = 'docker'
   args = ['tag', "lumue/filescanner-server:${project.version}", 'lumue/filescanner-server:latest']
 
+}
+compileKotlin {
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+}
+compileTestKotlin {
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
 }
 
 

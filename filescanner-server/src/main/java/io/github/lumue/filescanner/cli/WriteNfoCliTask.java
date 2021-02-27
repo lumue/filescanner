@@ -2,7 +2,7 @@ package io.github.lumue.filescanner.cli;
 
 
 import io.github.lumue.filescanner.discover.FilesystemScanTask;
-import io.github.lumue.filescanner.nfo.NfoWriterFileHandler;
+import io.github.lumue.filescanner.metadata.nfo.NfoWriterFileHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

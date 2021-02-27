@@ -1,4 +1,4 @@
-package io.github.lumue.filescanner.nfo;
+package io.github.lumue.filescanner.metadata.nfo;
 
 import io.github.lumue.nfotools.Movie;
 

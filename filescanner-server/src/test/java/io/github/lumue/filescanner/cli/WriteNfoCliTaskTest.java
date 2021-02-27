@@ -8,7 +8,7 @@ import org.junit.Test;
 public class WriteNfoCliTaskTest {
 	@Test
 	public void execute() throws Exception {
-		WriteNfoCliTask task = new WriteNfoCliTask("/mnt/vm-mediafiles/video/neu", true);
+		WriteNfoCliTask task = new WriteNfoCliTask("/mnt/vm-mediafiles/video/adult", false);
 		task.execute();
 	}
 
